@@ -8,9 +8,14 @@
         Guest:
         <router-link :to="{ name: 'register' }">Register</router-link>|
         <router-link :to="{ name: 'login' }">Login</router-link>|
+        <b-button-group>
+          <b-button :to="{ name: 'register' }">Button 1</b-button>
+          <b-button :to="{ name: 'login' }">Button 3</b-button>
+        </b-button-group>
       </span>
       <span v-else>
-        {{ $root.store.username }}: <button @click="Logout">Logout</button>|
+        {{ $root.store.username }}:
+        <b-button variant="outline-danger" @click="Logout">Danger</b-button>|
       </span>
     </div>
     <router-view />
@@ -18,6 +23,7 @@
 </template>
 
 <script>
+import { BButtonGroup, BButton } from "bootstrap-vue";
 export default {
   name: "App",
   methods: {
@@ -43,6 +49,11 @@ export default {
 }
 #nav {
   padding: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  gap: 2vw;
 }
 #nav a {
   font-weight: bold;

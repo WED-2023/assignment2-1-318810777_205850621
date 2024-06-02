@@ -27,14 +27,14 @@ export default {
   },
   data() {
     return {
-      image_load: false
+      image_load: false,
     };
   },
   props: {
     recipe: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
 
     // id: {
     //   type: Number,
@@ -59,7 +59,7 @@ export default {
     //     return undefined;
     //   }
     // }
-  }
+  },
 };
 </script>
 
@@ -73,8 +73,9 @@ export default {
 }
 .recipe-preview > .recipe-body {
   width: 100%;
-  height: 200px;
+  height: 35vh;
   position: relative;
+  display: flex;
 }
 
 .recipe-preview .recipe-body .recipe-image {
@@ -85,6 +86,9 @@ export default {
   display: block;
   width: 98%;
   height: auto;
+  aspect-ratio: 16/9;
+  max-width: 98%;
+  max-height: 98%;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   background-size: cover;
