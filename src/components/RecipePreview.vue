@@ -7,13 +7,33 @@
       <img v-if="image_load" :src="recipe.image" class="recipe-image" />
     </div>
     <div class="recipe-footer">
-      <div :title="recipe.title" class="recipe-title">
+      <div class="recipe-title" :title="recipe.title">
         {{ recipe.title }}
       </div>
-      <ul class="recipe-overview">
-        <li>{{ recipe.readyInMinutes }} minutes</li>
-        <li>{{ recipe.aggregateLikes }} likes</li>
-      </ul>
+      <div class="recipe-details">
+        <span class="detail-item">
+          <i class="fas fa-clock"></i> {{ recipe.readyInMinutes }} mins
+        </span>
+        <span class="detail-item">
+          <i class="fas fa-heart"></i> {{ recipe.aggregateLikes }} likes
+        </span>
+        <span class="detail-item" v-if="recipe.vegetarian">
+          <i class="fas fa-seedling"></i> Vegetarian
+        </span>
+        <span class="detail-item" v-else>
+          <i class="fas fa-drumstick-bite"></i> Non-Vegetarian
+        </span>
+        <span class="detail-item" v-if="recipe.glutenFree">
+          <i class="fas fa-bread-slice"></i> Gluten-Free
+        </span>
+        <span class="detail-item" v-else>
+          <i class="fas fa-bread-slice"></i> Contains Gluten
+        </span>
+      </div>
+      <div class="recipe-indicators">
+        <span v-if="recipe.isViewed" class="indicator viewed">Viewed</span>
+        <span v-if="recipe.isFavorited" class="indicator favorited">Favorited</span>
+      </div>
     </div>
   </router-link>
 </template>
@@ -21,7 +41,7 @@
 <script>
 export default {
   mounted() {
-    this.axios.get(this.recipe.image).then((i) => {
+    this.axios.get(this.recipe.image).then(() => {
       this.image_load = true;
     });
   },
@@ -34,112 +54,90 @@ export default {
     recipe: {
       type: Object,
       required: true,
-    },
-
-    // id: {
-    //   type: Number,
-    //   required: true
-    // },
-    // title: {
-    //   type: String,
-    //   required: true
-    // },
-    // readyInMinutes: {
-    //   type: Number,
-    //   required: true
-    // },
-    // image: {
-    //   type: String,
-    //   required: true
-    // },
-    // aggregateLikes: {
-    //   type: Number,
-    //   required: false,
-    //   default() {
-    //     return undefined;
-    //   }
-    // }
-  },
+    }
+  }
 };
 </script>
 
 <style scoped>
 .recipe-preview {
-  display: inline-block;
-  width: 90%;
-  height: 100%;
-  position: relative;
-  margin: 10px 10px;
-}
-.recipe-preview > .recipe-body {
-  width: 100%;
-  height: 35vh;
-  position: relative;
-  display: flex;
-}
-
-.recipe-preview .recipe-body .recipe-image {
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: auto;
-  margin-bottom: auto;
   display: block;
-  width: 98%;
-  height: auto;
-  aspect-ratio: 16/9;
-  max-width: 98%;
-  max-height: 98%;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  background-size: cover;
+  width: 100%;
+  max-width: 300px;
+  margin: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+  text-decoration: none;
+  color: inherit;
+}
+.recipe-preview:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-.recipe-preview .recipe-footer {
+.recipe-body {
   width: 100%;
-  height: 50%;
+  height: 200px;
   overflow: hidden;
 }
 
-.recipe-preview .recipe-footer .recipe-title {
-  padding: 10px 10px;
+.recipe-image {
   width: 100%;
-  font-size: 12pt;
-  text-align: left;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.recipe-preview:hover .recipe-image {
+  transform: scale(1.05);
+}
+
+.recipe-footer {
+  padding: 15px;
+  background-color: #fff;
+}
+
+.recipe-title {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  -o-text-overflow: ellipsis;
-  text-overflow: ellipsis;
 }
 
-.recipe-preview .recipe-footer ul.recipe-overview {
-  padding: 5px 10px;
-  width: 100%;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
+.recipe-details {
   display: flex;
-  -webkit-box-flex: 1;
-  -moz-box-flex: 1;
-  -o-box-flex: 1;
-  box-flex: 1;
-  -webkit-flex: 1 auto;
-  -ms-flex: 1 auto;
-  flex: 1 auto;
-  table-layout: fixed;
-  margin-bottom: 0px;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
-.recipe-preview .recipe-footer ul.recipe-overview li {
-  -webkit-box-flex: 1;
-  -moz-box-flex: 1;
-  -o-box-flex: 1;
-  -ms-box-flex: 1;
-  box-flex: 1;
-  -webkit-flex-grow: 1;
-  flex-grow: 1;
-  width: 90px;
-  display: table-cell;
-  text-align: center;
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.9em;
+}
+
+.recipe-indicators {
+  display: flex;
+  justify-content: space-between;
+}
+
+.indicator {
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+.viewed {
+  background-color: #e0e0e0;
+}
+
+.favorited {
+  background-color: #ffe0e0;
+  color: #ff0000;
 }
 </style>
