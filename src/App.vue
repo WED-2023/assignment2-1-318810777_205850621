@@ -3,14 +3,12 @@
     <div id="nav">
       <router-link :to="{ name: 'main' }">Ido and Timor's Recipes</router-link>|
       <router-link :to="{ name: 'search' }">Search</router-link>|
-      {{ !$root.store.username }}
+
       <span v-if="!$root.store.username">
-        Guest:
-        <router-link :to="{ name: 'register' }">Register</router-link>|
-        <router-link :to="{ name: 'login' }">Login</router-link>|
+        <span class="mr-5">Hello Guest!</span>
         <b-button-group>
-          <b-button :to="{ name: 'register' }">Button 1</b-button>
-          <b-button :to="{ name: 'login' }">Button 3</b-button>
+          <b-button :to="{ name: 'register' }">Register</b-button>
+          <b-button :to="{ name: 'login' }">Login</b-button>
         </b-button-group>
       </span>
       <span v-else>
@@ -23,7 +21,6 @@
 </template>
 
 <script>
-import { BButtonGroup, BButton } from "bootstrap-vue";
 export default {
   name: "App",
   methods: {

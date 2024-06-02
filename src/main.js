@@ -25,6 +25,9 @@ import {
   ToastPlugin,
   LayoutPlugin,
 } from "bootstrap-vue";
+
+import { BButtonGroup, BButton } from "bootstrap-vue";
+Vue.component("b-button-group", BButtonGroup);
 [
   FormGroupPlugin,
   FormPlugin,
