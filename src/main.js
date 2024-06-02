@@ -24,10 +24,14 @@ import {
   AlertPlugin,
   ToastPlugin,
   LayoutPlugin,
+  InputGroupPlugin,
+  BInputGroupAppend,
 } from "bootstrap-vue";
 
 import { BButtonGroup, BButton } from "bootstrap-vue";
 Vue.component("b-button-group", BButtonGroup);
+Vue.component("b-input-group", InputGroupPlugin);
+Vue.component("b-input-group-append", BInputGroupAppend);
 [
   FormGroupPlugin,
   FormPlugin,

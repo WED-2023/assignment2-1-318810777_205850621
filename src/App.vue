@@ -1,14 +1,15 @@
 <template>
+    
   <div id="app">
     <b-navbar
       pills
       toggleable="lg"
       type="dark"
       variant="dark"
-      size="lg"
       sticky
       id="nav"
-    >
+      class="py-3 py-lg-3.2 mb-5"
+      >
       <b-navbar-brand :to="{ name: 'main' }"
         >Ido and Timor's Recipes</b-navbar-brand
       >
@@ -17,8 +18,19 @@
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
+
           <b-nav-item :to="{ name: 'main' }">Home</b-nav-item>
+          
           <b-nav-item :to="{ name: 'search' }">Search</b-nav-item>
+          
+          <div id="search"><b-nav-form>
+                    <b-form-input size="sm" class="mr-sm-2" placeholder="Search" @input="event => onchange(event)"></b-form-input>
+                    
+                
+            </b-nav-form></div>
+            
+
+          
 
           <b-nav-item-dropdown v-if="!$root.store.username" text="Guest" right>
             <b-dropdown-item :to="{ name: 'register' }"
@@ -51,7 +63,15 @@ export default {
       this.$router.push("/").catch(() => {
         this.$forceUpdate();
       });
+
+      
     },
+    onchange(e) {
+        // Get value from the search input
+        let searchValue = document.querySelector("#search input").value;
+
+        console.log(e);
+      },
   },
 };
 </script>
@@ -68,16 +88,24 @@ export default {
   color: #2c3e50;
 }
 #nav {
-  padding: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-  margin-bottom: 2em;
+  font-family: Heebo, Helvetica, Arial, sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2c3e50;
+  
 }
+.navbar {
+  height: 80px; // Adjust this value to your desired height
+  display: flex;
+  align-items: center;
+  padding: 0 15px; // Adjust padding to center content vertically
+}
+
 #nav a {
   font-weight: 800;
 }
+
 #nav a.router-link-exact-active {
+  color: #fff;
 }
 </style>
