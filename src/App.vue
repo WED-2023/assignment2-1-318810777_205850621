@@ -1,14 +1,14 @@
 <template>
     
   <div id="app">
+    <div id="nav">
     <b-navbar
       pills
       toggleable="lg"
       type="dark"
       variant="dark"
       sticky
-      id="nav"
-      class="py-3 py-lg-3.2 mb-5"
+      class="py-3 py-lg-3.2 mb-5 d-flex align-content-around flex-wrap "
       >
       <b-navbar-brand :to="{ name: 'main' }"
         >Ido and Timor's Recipes</b-navbar-brand
@@ -23,7 +23,7 @@
           
           <b-nav-item :to="{ name: 'search' }">Search</b-nav-item>
           
-          <div id="search"><b-nav-form>
+          <div id="search" style="display: flex; align-items: center; height: 100%;"><b-nav-form>
                     <b-form-input size="sm" class="mr-sm-2" placeholder="Search" @input="event => onchange(event)"></b-form-input>
                     
                 
@@ -50,6 +50,7 @@
     </b-navbar>
 
     <router-view />
+    </div>
   </div>
 </template>
 
@@ -92,6 +93,8 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+  display: flex;
+  align-items: center;
   
 }
 .navbar {
@@ -103,6 +106,10 @@ export default {
 
 #nav a {
   font-weight: 800;
+}
+
+#search{
+    align-self: center;
 }
 
 #nav a.router-link-exact-active {
