@@ -32,7 +32,9 @@
       </div>
       <div class="recipe-indicators">
         <span v-if="recipe.isViewed" class="indicator viewed">Viewed</span>
-        <span v-if="recipe.isFavorited" class="indicator favorited">Favorited</span>
+        <span v-if="recipe.isFavorited" class="indicator favorited"
+          >Favorited</span
+        >
       </div>
     </div>
   </router-link>
@@ -54,8 +56,8 @@ export default {
     recipe: {
       type: Object,
       required: true,
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -73,7 +75,7 @@ export default {
   color: inherit;
 }
 .recipe-preview:hover {
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .recipe-body {

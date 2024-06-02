@@ -1,21 +1,42 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link :to="{ name: 'main' }">Ido and Timor's Recipes</router-link>|
-      <router-link :to="{ name: 'search' }">Search</router-link>|
+    <b-navbar
+      pills
+      toggleable="lg"
+      type="dark"
+      variant="dark"
+      size="lg"
+      sticky
+      id="nav"
+    >
+      <b-navbar-brand :to="{ name: 'main' }"
+        >Ido and Timor's Recipes</b-navbar-brand
+      >
 
-      <span v-if="!$root.store.username">
-        <span class="mr-5">Hello Guest!</span>
-        <b-button-group>
-          <b-button :to="{ name: 'register' }">Register</b-button>
-          <b-button :to="{ name: 'login' }">Login</b-button>
-        </b-button-group>
-      </span>
-      <span v-else>
-        {{ $root.store.username }}:
-        <b-button variant="outline-danger" @click="Logout">Danger</b-button>|
-      </span>
-    </div>
+      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+
+      <b-collapse id="nav-collapse" is-nav>
+        <b-navbar-nav class="ml-auto">
+          <b-nav-item :to="{ name: 'main' }">Home</b-nav-item>
+          <b-nav-item :to="{ name: 'search' }">Search</b-nav-item>
+
+          <b-nav-item-dropdown v-if="!$root.store.username" text="Guest" right>
+            <b-dropdown-item :to="{ name: 'register' }"
+              >Register</b-dropdown-item
+            >
+            <b-dropdown-item :to="{ name: 'login' }">Login</b-dropdown-item>
+          </b-nav-item-dropdown>
+
+          <b-nav-item-dropdown v-else right>
+            <template #button-content>
+              {{ $root.store.username }}
+            </template>
+            <b-dropdown-item @click="Logout">Logout</b-dropdown-item>
+          </b-nav-item-dropdown>
+        </b-navbar-nav>
+      </b-collapse>
+    </b-navbar>
+
     <router-view />
   </div>
 </template>
@@ -34,15 +55,17 @@ export default {
   },
 };
 </script>
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@100..900&display=swap" rel="stylesheet"></link>
 <style lang="scss">
+
 @import "@/scss/form-style.scss";
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Heebo, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  min-height: 100vh;
 }
 #nav {
   padding: 30px;
@@ -50,13 +73,11 @@ export default {
   justify-content: center;
   align-items: center;
   flex-direction: row;
-  gap: 2vw;
+  margin-bottom: 2em;
 }
 #nav a {
-  font-weight: bold;
-  color: #2c3e50;
+  font-weight: 800;
 }
 #nav a.router-link-exact-active {
-  color: #42b983;
 }
 </style>
