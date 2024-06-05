@@ -44,7 +44,8 @@
             variant="primary"
             style="width:100px;display:block;"
             class="mx-auto w-100"
-          >Login</b-button>
+            >Login</b-button
+          >
           <div class="mt-2">
             Do not have an account yet?
             <router-link to="register"> Register here</router-link>
@@ -97,7 +98,11 @@ export default {
     async Login() {
       try {
         const success = true; // modify this to test the error handling
-        const response = mockLogin(this.form.username, this.form.password, success);
+        const response = mockLogin(
+          this.form.username,
+          this.form.password,
+          success
+        );
 
         console.log(this.$root.store.login);
         this.$root.store.login(this.form.username);
@@ -122,20 +127,26 @@ export default {
 <style lang="scss" scoped>
 .login-container {
   display: grid;
+  position: absolute;
+  inset: 0;
   grid-template-columns: 1fr 1fr;
-  min-height: 100vh;
+  height: 100%;
+  width: 100%;
 }
 
 .image-section {
-  background: url('@/assets/food-background.jpg') no-repeat center center;
+  /*background: url("@/assets/food-background.jpg") no-repeat center center; NOT WORKING */
+  background-image: url("@/assets/copy-space-italian-food-ingredients.jpg"); /* TODO: Change Me */
   background-size: cover;
 }
 
 .login-form-section {
   display: flex;
+  height: 100vh;
+  width: 100%;
   justify-content: center;
   align-items: center;
-
+  margin: auto;
 }
 
 .login-form {

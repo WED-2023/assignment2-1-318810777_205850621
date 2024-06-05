@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container d-flex m-auto">
     <div v-if="recipe">
       <div class="recipe-header mt-3 mb-4">
         <h1>{{ recipe.title }}</h1>
@@ -46,7 +46,7 @@ import { mockGetRecipeFullDetails } from "../services/recipes.js";
 export default {
   data() {
     return {
-      recipe: null
+      recipe: null,
     };
   },
   async created() {
@@ -79,7 +79,7 @@ export default {
         aggregateLikes,
         readyInMinutes,
         image,
-        title
+        title,
       } = response.data.recipe;
 
       let _instructions = analyzedInstructions
@@ -97,14 +97,14 @@ export default {
         aggregateLikes,
         readyInMinutes,
         image,
-        title
+        title,
       };
 
       this.recipe = _recipe;
     } catch (error) {
       console.log(error);
     }
-  }
+  },
 };
 </script>
 
