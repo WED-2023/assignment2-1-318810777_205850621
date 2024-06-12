@@ -28,6 +28,7 @@
         <form class="d-flex" @submit.prevent="onSearch">
           <input
             class="form-control me-2"
+            class="form-control me-2 search-input"
             type="search"
             placeholder="Search"
             aria-label="Search"
@@ -84,6 +85,7 @@ export default {
       search: "",
     };
   },
+  mounted() {},
   methods: {
     navigateTo(routeName) {
       if (this.$route.name !== routeName) {
@@ -112,6 +114,7 @@ export default {
   position: sticky;
   top: 0;
   z-index: 1000;
+  opacity: 0.96;
 }
 .navbar-custom .navbar-brand {
   font-size: 1.25rem;
@@ -120,6 +123,11 @@ export default {
 .navbar-custom .form-control {
   width: 20rem;
 }
+a {
+  text-decoration: none;
+  color: #2c3e50;
+}
+
 .dropdown-menu[data-bs-popper] {
   left: -3rem;
 }

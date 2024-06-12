@@ -32,6 +32,7 @@
           </span>
         </div>
         <div class="recipe-indicators">
+          <i class="fa-regular fa-heart"></i>
           <span v-if="recipe.isViewed" class="indicator viewed">Viewed</span>
           <span v-if="recipe.isFavorited" class="indicator favorited">Favorited</span>
         </div>
