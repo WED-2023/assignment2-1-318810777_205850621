@@ -27,7 +27,6 @@
         </ul>
         <form class="d-flex" @submit.prevent="onSearch">
           <input
-            class="form-control me-2"
             class="form-control me-2 search-input"
             type="search"
             placeholder="Search"
