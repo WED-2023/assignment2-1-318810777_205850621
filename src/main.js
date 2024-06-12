@@ -74,6 +74,7 @@ const shared_data = {
   username: localStorage.username,
   randomRecipes: [],
   lastViewedRecipes: [],
+  favoriteRecipes: [],
   lastSearch: JSON.parse(localStorage.getItem("lastSearch")) || null,
   login(username) {
     localStorage.setItem("username", username);
@@ -107,7 +108,7 @@ new Vue({
     },
   },
   watch: {
-    'store.lastSearch': {
+    "store.lastSearch": {
       handler(val) {
         localStorage.setItem("lastSearch", JSON.stringify(val));
       },

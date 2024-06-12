@@ -4,10 +4,10 @@
       :to="{ name: 'recipe', params: { recipeId: recipe.id } }"
       class="recipe-preview"
     >
-      <div class="recipe-body">
+      <div class="recipe-body" @click.stop="onRecipeClick">
         <img v-if="imageLoaded" :src="recipe.image" class="recipe-image" />
       </div>
-      <div class="recipe-footer">
+      <div class="recipe-footer" @click="onRecipeClick">
         <div class="recipe-title" :title="recipe.title">
           {{ recipe.title }}
         </div>
@@ -31,10 +31,20 @@
             <i class="fas fa-bread-slice"></i> Contains Gluten
           </span>
         </div>
-        <div class="recipe-indicators">
-          <i class="fa-regular fa-heart"></i>
+        <div class="recipe-indicators" @click="onRecipeClick">
+          <i
+            class="fa-heart"
+            @click.stop.prevent="onFavoriteClick"
+            :class="{
+              favoritedIcon: isFavorited,
+              'fa-regular': !isFavorited,
+              fas: isFavorited,
+            }"
+          ></i>
           <span v-if="recipe.isViewed" class="indicator viewed">Viewed</span>
-          <span v-if="recipe.isFavorited" class="indicator favorited">Favorited</span>
+          <!-- <span v-if="recipe.isFavorited" class="indicator favorited"
+            >Favorited</span
+          > -->
         </div>
       </div>
     </router-link>
@@ -46,12 +56,30 @@ export default {
   data() {
     return {
       imageLoaded: false,
+      isFavorited: this.recipe.isFavorited,
     };
   },
   props: {
     recipe: {
       type: Object,
       required: true,
+    },
+    markAsViewed: {
+      type: Function,
+      required: false,
+    },
+  },
+  methods: {
+    onRecipeClick() {
+      if (this.markAsViewed) {
+        this.markAsViewed(this.recipe);
+      }
+    },
+    onFavoriteClick() {
+      // this.recipe.isFavorited = !this.recipe.isFavorited;
+      this.$emit("update-favorited", this.recipe.id);
+      this.isFavorited = !this.isFavorited;
+      this.recipe.isFavorited = this.isFavorited;
     },
   },
   mounted() {
@@ -154,6 +182,10 @@ export default {
 
 .favorited {
   background-color: #ffe0e0;
+  color: #ff0000;
+}
+
+.favoritedIcon {
   color: #ff0000;
 }
 </style>

@@ -5,8 +5,13 @@
       <slot></slot>
     </h3>
     <b-row class="text-center" align-v="center">
-      <b-col cols="12" md="4" v-for="recipe in recipes" :key="recipe.id">
-        <RecipePreview class="recipePreview" :recipe="recipe" />
+      <b-col cols="12" md="6" v-for="recipe in recipes" :key="recipe.id">
+        <RecipePreview
+          class="recipePreview"
+          :recipe="recipe"
+          :markAsViewed="markAsViewed"
+          @update-favorited="updateFavorites"
+        />
       </b-col>
     </b-row>
   </b-container>
@@ -30,6 +35,18 @@ export default {
       type: Array,
       required: true,
     },
+    lastViewedRecipes: {
+      type: Array,
+      required: false,
+    },
+    markAsViewed: {
+      type: Function,
+      required: false,
+    },
+    toggleFavorite: {
+      type: Function,
+      required: false,
+    },
   },
   data() {
     return {
@@ -37,7 +54,14 @@ export default {
     };
   },
   mounted() {
-    this.updateRecipes();
+    if (this.recipes.length !== 0) {
+      this.recipes.forEach((recipe) => {
+        // Check if the recipe is in the viewedRecipes array
+        if (this.lastViewedRecipes?.includes(recipe)) {
+          recipe.isViewed = true;
+        }
+      });
+    }
   },
   methods: {
     async updateRecipes() {
@@ -45,10 +69,29 @@ export default {
         const amountToFetch = 10; // Set this to how many recipes you want to fetch
         const response = mockGetRecipesPreview(amountToFetch);
         const recipes = response.data.recipes;
-        this.localRecipes = [];
-        this.localRecipes.push(...recipes);
+        const viewedRecipes =
+          JSON.parse(localStorage.getItem("viewedRecipes")) || []; // Get viewed recipes from local storage
+        this.recipes = [];
+        this.recipes.push(...recipes);
+        this.recipes.forEach((recipe) => {
+          if (viewedRecipes.includes(recipe.id)) {
+            recipe.isViewed = true;
+            console.log(`Recipe ${recipe.id} is viewed`);
+          }
+        });
       } catch (error) {
         console.log(error);
+      }
+    },
+    updateFavorites(recipeId) {
+      console.log(`Recipe ${recipeId} was emitted from RecipePreview`);
+      let recipe = this.recipes.find((r) => r.id === recipeId);
+
+      if (recipe) {
+        console.log(recipe);
+        this.toggleFavorite(recipe.id);
+      } else {
+        console.log(`Recipe with id ${recipeId} not found`);
       }
     },
   },

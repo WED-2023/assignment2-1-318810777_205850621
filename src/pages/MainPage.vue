@@ -2,23 +2,37 @@
   <div class="container">
     <div class="columns">
       <div class="left-column">
-        <h2>Explore these recipes</h2>
-        <RecipePreviewList :recipes="randomRecipes" />
-        <button @click="fetchRandomRecipes">More</button>
+        <RecipePreviewList
+          :recipes="randomRecipes"
+          :lastViewedRecipes="lastViewedRecipes"
+          :markAsViewed="markAsViewed"
+          :toggleFavorite="toggleFavorite"
+          :title="`Explore These Recipes`"
+        />
+        <button @click.stop="fetchRandomRecipes">More</button>
       </div>
       <div class="right-column">
         <div v-if="!username" class="guest-message">
           <p class="welcome-text">
             Hello, Guest! Please
-            <button class="link-button" @click="navigateTo('login')">Login</button>
+            <button class="link-button" @click="navigateTo('login')">
+              Login
+            </button>
             or
-            <button class="link-button" @click="navigateTo('register')">Register</button>
+            <button class="link-button" @click="navigateTo('register')">
+              Register
+            </button>
             to view personalized content.
           </p>
         </div>
         <div v-else>
-          <h2>Last Watched Recipes</h2>
-          <RecipePreviewList :recipes="lastViewedRecipes" />
+          <RecipePreviewList
+            :recipes="lastViewedRecipes"
+            :markAsViewed="markAsViewed"
+            :toggleFavorite="toggleFavorite"
+            :title="`Last Watched Recipes`"
+          />
+          <button class="" @click="clearHistory">Clear History</button>
         </div>
       </div>
     </div>
@@ -27,7 +41,7 @@
 
 <script>
 import RecipePreviewList from "../components/RecipePreviewList.vue";
-import { mockGetRecipesPreview } from '../services/recipes.js';
+import { mockGetRecipesPreview } from "../services/recipes.js";
 
 export default {
   components: {
@@ -37,16 +51,65 @@ export default {
     return {
       randomRecipes: [],
       username: this.$root.store.username,
-      lastViewedRecipes: this.$root.store.lastViewedRecipes
+      lastViewedRecipes: this.$root.store.lastViewedRecipes,
+      favorites: this.$root.store.favoriteRecipes,
     };
   },
   methods: {
     fetchRandomRecipes() {
-      const response = mockGetRecipesPreview(3);
-      this.randomRecipes = response.data.recipes;
+      const response = mockGetRecipesPreview(10, {}, this.randomRecipes.length);
+      // Push the new recipes to the randomRecipes array
+      this.randomRecipes.push(...response.data.recipes);
+      // Check if the recipe is in the viewedRecipes array
+      this.randomRecipes.forEach((recipe) => {
+        recipe.isViewed = this.lastViewedRecipes?.filter(
+          (r) => r.id === recipe.id
+        ).length;
+        recipe.isFavorited = this.favorites?.some((r) => r.id === recipe.id);
+      });
+    },
+    markAsViewed(recipe) {
+      if (
+        this.lastViewedRecipes.filter((r) => r.id === recipe.id).length === 0
+      ) {
+        this.lastViewedRecipes.push({
+          ...recipe,
+          addedDate: new Date(),
+          lastViewedDate: new Date(),
+        });
+      } else {
+        this.lastViewedRecipes.find(
+          (r) => r.id === recipe.id
+        ).lastViewedDate = new Date();
+      }
+      if (this.lastViewedRecipes.length > 1) {
+        this.lastViewedRecipes.sort(
+          (a, b) => b.lastViewedDate - a.lastViewedDate
+        );
+      }
     },
     navigateTo(routeName) {
       this.$router.push({ name: routeName });
+    },
+    clearHistory() {
+      this.lastViewedRecipes = [];
+      localStorage.removeItem("viewedRecipes");
+    },
+    toggleFavorite(recipeId) {
+      console.log(`Emitted toggleFavorite: ${recipeId} from MainPage`);
+      if (!this.favorites) {
+        this.favorites = [];
+      }
+      const recipe = this.randomRecipes.find((r) => r.id === recipeId);
+      if (!recipe || this.favorites.length === 0) {
+        this.favorites.push({ ...recipe, addedDate: new Date() });
+        console.log(`Added to favorites: ${recipeId}`);
+      } else {
+        this.favorites = this.favorites.filter((r) => r.id !== recipeId);
+        console.log(`Removed from favorites: ${recipeId}`);
+      }
+      console.log(`New favorites:`);
+      console.log(this.favorites);
     },
   },
   created() {
@@ -123,7 +186,7 @@ export default {
 }
 
 .guest-message {
-  background-image: url('@/assets/copy-space-italian-food-ingredients.jpg');
+  background-image: url("@/assets/copy-space-italian-food-ingredients.jpg");
   background-size: cover;
   background-position: center;
   color: white;
@@ -136,7 +199,7 @@ export default {
 }
 
 .guest-message::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   right: 0;
