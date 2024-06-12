@@ -17,9 +17,7 @@
               type="text"
               :state="validateState('username')"
             ></b-form-input>
-            <b-form-invalid-feedback>
-              Username is required
-            </b-form-invalid-feedback>
+            <b-form-invalid-feedback>Username is required</b-form-invalid-feedback>
           </b-form-group>
 
           <b-form-group
@@ -34,30 +32,15 @@
               v-model="$v.form.password.$model"
               :state="validateState('password')"
             ></b-form-input>
-            <b-form-invalid-feedback>
-              Password is required
-            </b-form-invalid-feedback>
+            <b-form-invalid-feedback>Password is required</b-form-invalid-feedback>
           </b-form-group>
 
-          <b-button
-            type="submit"
-            variant="primary"
-            style="width:100px;display:block;"
-            class="mx-auto w-100"
-            >Login</b-button
-          >
+          <b-button type="submit" variant="primary" class="w-100">Login</b-button>
           <div class="mt-2">
-            Do not have an account yet?
-            <router-link to="register"> Register here</router-link>
+            Do not have an account yet? <router-link to="register">Register here</router-link>
           </div>
         </b-form>
-        <b-alert
-          class="mt-2"
-          v-if="form.submitError"
-          variant="warning"
-          dismissible
-          show
-        >
+        <b-alert class="mt-2" v-if="form.submitError" variant="warning" dismissible show>
           Login failed: {{ form.submitError }}
         </b-alert>
       </div>
@@ -82,12 +65,8 @@ export default {
   },
   validations: {
     form: {
-      username: {
-        required,
-      },
-      password: {
-        required,
-      },
+      username: { required },
+      password: { required },
     },
   },
   methods: {
@@ -95,20 +74,12 @@ export default {
       const { $dirty, $error } = this.$v.form[param];
       return $dirty ? !$error : null;
     },
-    async Login() {
+    async login() {
       try {
-        const success = true; // modify this to test the error handling
-        const response = mockLogin(
-          this.form.username,
-          this.form.password,
-          success
-        );
-
-        console.log(this.$root.store.login);
+        const response = await mockLogin(this.form.username, this.form.password);
         this.$root.store.login(this.form.username);
         this.$router.push("/");
       } catch (err) {
-        console.log(err.response);
         this.form.submitError = err.response.data.message;
       }
     },
@@ -118,13 +89,13 @@ export default {
       if (this.$v.form.$anyError) {
         return;
       }
-      this.Login();
+      this.login();
     },
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .login-container {
   display: grid;
   position: absolute;
@@ -133,13 +104,10 @@ export default {
   height: 100%;
   width: 100%;
 }
-
 .image-section {
-  /*background: url("@/assets/food-background.jpg") no-repeat center center; NOT WORKING */
-  background-image: url("@/assets/copy-space-italian-food-ingredients.jpg"); /* TODO: Change Me */
+  background-image: url("@/assets/copy-space-italian-food-ingredients.jpg");
   background-size: cover;
 }
-
 .login-form-section {
   display: flex;
   height: 100vh;
@@ -148,17 +116,7 @@ export default {
   align-items: center;
   margin: auto;
 }
-
 .login-form {
   background-color: rgba(255, 255, 255, 0.991);
-  padding: 20px;
-  border-radius: 8px;
-  max-width: 400px;
-  width: 100%;
-}
-
-.title {
-  text-align: center;
-  margin-bottom: 20px;
 }
 </style>

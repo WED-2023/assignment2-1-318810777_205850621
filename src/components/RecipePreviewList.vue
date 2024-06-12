@@ -5,8 +5,8 @@
       <slot></slot>
     </h3>
     <b-row class="text-center" align-v="center">
-      <b-col cols="12" md="4" v-for="r in recipes" :key="r.id">
-        <RecipePreview class="recipePreview" :recipe="r" />
+      <b-col cols="12" md="4" v-for="recipe in recipes" :key="recipe.id">
+        <RecipePreview class="recipePreview" :recipe="recipe" />
       </b-col>
     </b-row>
   </b-container>
@@ -15,6 +15,7 @@
 <script>
 import RecipePreview from "./RecipePreview.vue";
 import { mockGetRecipesPreview } from "../services/recipes.js";
+
 export default {
   name: "RecipePreviewList",
   components: {
@@ -25,10 +26,14 @@ export default {
       type: String,
       required: true,
     },
+    recipes: {
+      type: Array,
+      required: true,
+    },
   },
   data() {
     return {
-      recipes: [],
+      localRecipes: [],
     };
   },
   mounted() {
@@ -37,18 +42,11 @@ export default {
   methods: {
     async updateRecipes() {
       try {
-        // const response = await this.axios.get(
-        //   this.$root.store.server_domain + "/recipes/random",
-        // );
-
         const amountToFetch = 10; // Set this to how many recipes you want to fetch
         const response = mockGetRecipesPreview(amountToFetch);
-
-        console.log(response);
         const recipes = response.data.recipes;
-        console.log(recipes);
-        this.recipes = [];
-        this.recipes.push(...recipes);
+        this.localRecipes = [];
+        this.localRecipes.push(...recipes);
       } catch (error) {
         console.log(error);
       }
@@ -57,8 +55,24 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .container {
   min-height: 400px;
+}
+
+.recipe-preview-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.recipe-preview {
+  margin: 10px 0;
+  text-align: center;
+}
+
+.recipe-preview img {
+  max-width: 100%;
+  border-radius: 8px;
 }
 </style>

@@ -5,7 +5,7 @@
       class="recipe-preview"
     >
       <div class="recipe-body">
-        <img v-if="image_load" :src="recipe.image" class="recipe-image" />
+        <img v-if="imageLoaded" :src="recipe.image" class="recipe-image" />
       </div>
       <div class="recipe-footer">
         <div class="recipe-title" :title="recipe.title">
@@ -33,9 +33,7 @@
         </div>
         <div class="recipe-indicators">
           <span v-if="recipe.isViewed" class="indicator viewed">Viewed</span>
-          <span v-if="recipe.isFavorited" class="indicator favorited"
-            >Favorited</span
-          >
+          <span v-if="recipe.isFavorited" class="indicator favorited">Favorited</span>
         </div>
       </div>
     </router-link>
@@ -44,14 +42,9 @@
 
 <script>
 export default {
-  mounted() {
-    this.axios.get(this.recipe.image).then(() => {
-      this.image_load = true;
-    });
-  },
   data() {
     return {
-      image_load: false,
+      imageLoaded: false,
     };
   },
   props: {
@@ -59,6 +52,13 @@ export default {
       type: Object,
       required: true,
     },
+  },
+  mounted() {
+    const img = new Image();
+    img.src = this.recipe.image;
+    img.onload = () => {
+      this.imageLoaded = true;
+    };
   },
 };
 </script>
@@ -84,6 +84,7 @@ export default {
   text-decoration: none;
   color: inherit;
 }
+
 .recipe-preview:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
@@ -101,6 +102,7 @@ export default {
   object-fit: cover;
   transition: transform 0.3s ease;
 }
+
 .recipe-preview:hover .recipe-image {
   transform: scale(1.05);
 }

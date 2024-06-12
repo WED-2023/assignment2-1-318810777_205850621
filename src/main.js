@@ -2,9 +2,9 @@ import Vue from "vue";
 import App from "./App.vue";
 import VueAxios from "vue-axios";
 import axios from "axios";
-
 import routes from "./routes";
 import VueRouter from "vue-router";
+
 Vue.use(VueRouter);
 const router = new VueRouter({
   routes,
@@ -49,23 +49,18 @@ Vue.use(Vuelidate);
 
 axios.interceptors.request.use(
   function(config) {
-    // Do something before request is sent
     return config;
   },
   function(error) {
-    // Do something with request error
     return Promise.reject(error);
   }
 );
 
-// Add a response interceptor
 axios.interceptors.response.use(
   function(response) {
-    // Do something with response data
     return response;
   },
   function(error) {
-    // Do something with response error
     return Promise.reject(error);
   }
 );
@@ -77,6 +72,9 @@ Vue.config.productionTip = false;
 const shared_data = {
   server_domain: "http://localhost:3000",
   username: localStorage.username,
+  randomRecipes: [],
+  lastViewedRecipes: [],
+  lastSearch: JSON.parse(localStorage.getItem("lastSearch")) || null,
   login(username) {
     localStorage.setItem("username", username);
     this.username = username;
@@ -88,8 +86,6 @@ const shared_data = {
     this.username = undefined;
   },
 };
-console.log(shared_data);
-// Vue.prototype.$root.store = shared_data;
 
 new Vue({
   router,
@@ -108,6 +104,14 @@ new Vue({
         appendToast: append,
         autoHideDelay: 3000,
       });
+    },
+  },
+  watch: {
+    'store.lastSearch': {
+      handler(val) {
+        localStorage.setItem("lastSearch", JSON.stringify(val));
+      },
+      deep: true,
     },
   },
   render: (h) => h(App),
