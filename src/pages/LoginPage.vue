@@ -17,7 +17,9 @@
               type="text"
               :state="validateState('username')"
             ></b-form-input>
-            <b-form-invalid-feedback>Username is required</b-form-invalid-feedback>
+            <b-form-invalid-feedback
+              >Username is required</b-form-invalid-feedback
+            >
           </b-form-group>
 
           <b-form-group
@@ -32,15 +34,26 @@
               v-model="$v.form.password.$model"
               :state="validateState('password')"
             ></b-form-input>
-            <b-form-invalid-feedback>Password is required</b-form-invalid-feedback>
+            <b-form-invalid-feedback
+              >Password is required</b-form-invalid-feedback
+            >
           </b-form-group>
 
-          <b-button type="submit" variant="primary" class="w-100">Login</b-button>
+          <b-button type="submit" variant="primary" class="w-100"
+            >Login</b-button
+          >
           <div class="mt-2">
-            Do not have an account yet? <router-link to="register">Register here</router-link>
+            Do not have an account yet?
+            <router-link to="register">Register here</router-link>
           </div>
         </b-form>
-        <b-alert class="mt-2" v-if="form.submitError" variant="warning" dismissible show>
+        <b-alert
+          class="mt-2"
+          v-if="form.submitError"
+          variant="warning"
+          dismissible
+          show
+        >
           Login failed: {{ form.submitError }}
         </b-alert>
       </div>
@@ -60,6 +73,7 @@ export default {
         username: "",
         password: "",
         submitError: undefined,
+        invalidCredentials: false,
       },
     };
   },
@@ -76,11 +90,36 @@ export default {
     },
     async login() {
       try {
-        const response = await mockLogin(this.form.username, this.form.password);
+        if (!this.form.password || !this.form.username) {
+          console.error("Invalid credentials");
+          this.form.invalidCredentials = true;
+          this.form.submitError = "Invalid credentials";
+          return;
+        }
+        const response = await mockLogin({
+          username: this.form.username,
+          password: this.form.password,
+        }).response;
+        console.log("Response", response);
+        this.form.invalidCredentials = response.data.invalidCredentials;
+        if (response.data.invalidCredentials) {
+          console.error("Invalid credentials");
+          console.error(response.data);
+          console.warn(this.form.invalidCredentials);
+          this.form.submitError = response.data.message;
+          return;
+        }
+        if (!response.data.success) {
+          console.error("Login failed");
+          console.error(response.data);
+          this.form.submitError = response.data.message;
+          return;
+        }
         this.$root.store.login(this.form.username);
         this.$router.push("/");
       } catch (err) {
-        this.form.submitError = err.response.data.message;
+        console.error(err);
+        this.form.submitError = err.data.message;
       }
     },
     onLogin() {

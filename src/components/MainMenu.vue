@@ -1,7 +1,9 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-custom">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#" @click.prevent="navigateTo('main')">Logo</a>
+      <a class="navbar-brand" href="#" @click.prevent="navigateTo('main')"
+        >Logo</a
+      >
       <button
         class="navbar-toggler"
         type="button"
@@ -16,13 +18,19 @@
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav ms-auto pe-2 mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link" href="#" @click.prevent="navigateTo('main')">Main</a>
+            <a class="nav-link" href="#" @click.prevent="navigateTo('main')"
+              >Main</a
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" @click.prevent="navigateTo('search')">Search</a>
+            <a class="nav-link" href="#" @click.prevent="navigateTo('search')"
+              >Search</a
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" @click.prevent="navigateTo('about')">About</a>
+            <a class="nav-link" href="#" @click.prevent="navigateTo('about')"
+              >About</a
+            >
           </li>
         </ul>
         <form class="d-flex" @submit.prevent="onSearch">
@@ -46,29 +54,58 @@
             >
               {{ $root.store.username }}
             </a>
-            <ul class="dropdown-menu me-3" aria-labelledby="navbarDropdownMenuLink">
+            <ul
+              class="dropdown-menu me-3"
+              aria-labelledby="navbarDropdownMenuLink"
+            >
               <li>
-                <a class="dropdown-item" href="#" @click.prevent="navigateTo('favorites')">Favorites</a>
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  @click.prevent="navigateTo('favorites')"
+                  >Favorites</a
+                >
               </li>
               <li>
-                <a class="dropdown-item" href="#" @click.prevent="navigateTo('my-recipes')">My Recipes</a>
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  @click.prevent="navigateTo('my-recipes')"
+                  >My Recipes</a
+                >
               </li>
               <li>
-                <a class="dropdown-item" href="#" @click.prevent="navigateTo('family')">Family Recipes</a>
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  @click.prevent="navigateTo('family')"
+                  >Family Recipes</a
+                >
               </li>
               <li>
-                <a class="dropdown-item" href="#" @click.prevent="navigateTo('add-recipe')">Add Recipe</a>
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  @click.prevent="navigateTo('add-recipe')"
+                  >Add Recipe</a
+                >
               </li>
               <li>
-                <a class="dropdown-item" href="#" @click.prevent="logout">Sign Out</a>
+                <a class="dropdown-item" href="#" @click.prevent="logout"
+                  >Sign Out</a
+                >
               </li>
             </ul>
           </li>
           <li v-else>
-            <a class="nav-link" href="#" @click.prevent="navigateTo('login')">Login</a>
+            <a class="nav-link" href="#" @click.prevent="navigateTo('login')"
+              >Login</a
+            >
           </li>
           <li v-if="!$root.store.username">
-            <a class="nav-link" href="#" @click.prevent="navigateTo('register')">Register</a>
+            <a class="nav-link" href="#" @click.prevent="navigateTo('register')"
+              >Register</a
+            >
           </li>
         </ul>
       </div>
@@ -128,6 +165,6 @@ a {
 }
 
 .dropdown-menu[data-bs-popper] {
-  left: -3rem;
+  left: -5rem;
 }
 </style>

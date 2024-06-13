@@ -5,16 +5,29 @@
       <div class="register-form">
         <h1 class="title">Register</h1>
         <b-form @submit.prevent="onRegister" @reset.prevent="onReset">
-          <b-form-group label="Username" label-for="username" label-cols-md="4" label-cols-lg="4">
+          <b-form-group
+            label="Username"
+            label-for="username"
+            label-cols-md="4"
+            label-cols-lg="4"
+          >
             <b-form-input
               id="username"
               v-model="$v.form.username.$model"
               :state="validateState('username')"
+              @blur="checkUsername"
             ></b-form-input>
             <b-form-invalid-feedback v-if="!$v.form.username.required">
               Username is required
             </b-form-invalid-feedback>
-            <b-form-invalid-feedback v-else-if="!$v.form.username.minLength || !$v.form.username.maxLength">
+            <b-form-invalid-feedback v-if="form.usernameIsTaken">
+              Username is already taken
+            </b-form-invalid-feedback>
+            <b-form-invalid-feedback
+              v-else-if="
+                !$v.form.username.minLength || !$v.form.username.maxLength
+              "
+            >
               Username length should be between 3-8 characters long
             </b-form-invalid-feedback>
             <b-form-invalid-feedback v-if="!$v.form.username.alpha">
@@ -22,7 +35,12 @@
             </b-form-invalid-feedback>
           </b-form-group>
 
-          <b-form-group label="First Name" label-for="firstName" label-cols-md="4" label-cols-lg="4">
+          <b-form-group
+            label="First Name"
+            label-for="firstName"
+            label-cols-md="4"
+            label-cols-lg="4"
+          >
             <b-form-input
               id="firstName"
               v-model="$v.form.firstName.$model"
@@ -33,7 +51,12 @@
             </b-form-invalid-feedback>
           </b-form-group>
 
-          <b-form-group label="Last Name" label-for="lastName" label-cols-md="4" label-cols-lg="4">
+          <b-form-group
+            label="Last Name"
+            label-for="lastName"
+            label-cols-md="4"
+            label-cols-lg="4"
+          >
             <b-form-input
               id="lastName"
               v-model="$v.form.lastName.$model"
@@ -44,7 +67,12 @@
             </b-form-invalid-feedback>
           </b-form-group>
 
-          <b-form-group label="Country" label-for="country" label-cols-md="4" label-cols-lg="4">
+          <b-form-group
+            label="Country"
+            label-for="country"
+            label-cols-md="4"
+            label-cols-lg="4"
+          >
             <b-form-select
               id="country"
               v-model="$v.form.country.$model"
@@ -56,7 +84,12 @@
             </b-form-invalid-feedback>
           </b-form-group>
 
-          <b-form-group label="Email" label-for="email" label-cols-md="4" label-cols-lg="4">
+          <b-form-group
+            label="Email"
+            label-for="email"
+            label-cols-md="4"
+            label-cols-lg="4"
+          >
             <b-form-input
               id="email"
               type="email"
@@ -71,7 +104,12 @@
             </b-form-invalid-feedback>
           </b-form-group>
 
-          <b-form-group label="Password" label-for="password" label-cols-md="4" label-cols-lg="4">
+          <b-form-group
+            label="Password"
+            label-for="password"
+            label-cols-md="4"
+            label-cols-lg="4"
+          >
             <b-form-input
               id="password"
               type="password"
@@ -81,12 +119,24 @@
             <b-form-invalid-feedback v-if="!$v.form.password.required">
               Password is required
             </b-form-invalid-feedback>
-            <b-form-invalid-feedback v-if="!$v.form.password.minLength || !$v.form.password.maxLength || !$v.form.password.validPassword">
-              Password must be 5-10 characters long, contain at least one number and one special character
+            <b-form-invalid-feedback
+              v-if="
+                !$v.form.password.minLength ||
+                  !$v.form.password.maxLength ||
+                  !$v.form.password.validPassword
+              "
+            >
+              Password must be 5-10 characters long, contain at least one number
+              and one special character
             </b-form-invalid-feedback>
           </b-form-group>
 
-          <b-form-group label="Confirm Password" label-for="confirmPassword" label-cols-md="4" label-cols-lg="4">
+          <b-form-group
+            label="Confirm Password"
+            label-for="confirmPassword"
+            label-cols-md="4"
+            label-cols-lg="4"
+          >
             <b-form-input
               id="confirmPassword"
               type="password"
@@ -96,20 +146,31 @@
             <b-form-invalid-feedback v-if="!$v.form.confirmPassword.required">
               Password confirmation is required
             </b-form-invalid-feedback>
-            <b-form-invalid-feedback v-if="!$v.form.confirmPassword.sameAsPassword">
+            <b-form-invalid-feedback
+              v-if="!$v.form.confirmPassword.sameAsPassword"
+            >
               Passwords must match
             </b-form-invalid-feedback>
           </b-form-group>
 
           <div class="buttons">
             <b-button type="reset" variant="danger">Reset</b-button>
-            <b-button type="submit" variant="primary" class="ml-3">Register</b-button>
+            <b-button type="submit" variant="primary" class="ml-3"
+              >Register</b-button
+            >
           </div>
           <div class="mt-2 text-center">
-            Already have an account? <router-link to="login">Log in here</router-link>
+            Already have an account?
+            <router-link to="login">Log in here</router-link>
           </div>
         </b-form>
-        <b-alert class="mt-2" v-if="form.submitError" variant="warning" dismissible show>
+        <b-alert
+          class="mt-2"
+          v-if="form.submitError"
+          variant="warning"
+          dismissible
+          show
+        >
           Register failed: {{ form.submitError }}
         </b-alert>
       </div>
@@ -118,10 +179,19 @@
 </template>
 
 <script>
-import axios from 'axios';
-import { required, minLength, maxLength, alpha, email, sameAs } from 'vuelidate/lib/validators';
+import axios from "axios";
+import {
+  required,
+  minLength,
+  maxLength,
+  alpha,
+  email,
+  sameAs,
+} from "vuelidate/lib/validators";
 
-const passwordValidation = value => {
+import { mockGetUser } from "../services/auth.js";
+
+const passwordValidation = (value) => {
   return /[0-9]/.test(value) && /[!@#$%^&*(),.?":{}|<>]/.test(value);
 };
 
@@ -138,6 +208,7 @@ export default {
         password: "",
         confirmPassword: "",
         submitError: undefined,
+        usernameIsTaken: false,
       },
       countries: [],
     };
@@ -149,6 +220,9 @@ export default {
         minLength: minLength(3),
         maxLength: maxLength(8),
         alpha,
+        isTaken(value) {
+          return !this.form.usernameIsTaken;
+        },
       },
       firstName: { required },
       lastName: { required },
@@ -171,15 +245,18 @@ export default {
   },
   methods: {
     fetchCountries() {
-      axios.get('https://restcountries.com/v3.1/all')
-        .then(response => {
-          this.countries = response.data.map(country => ({
-            value: country.name.common,
-            text: country.name.common
-          })).sort((a, b) => a.text.localeCompare(b.text));
+      axios
+        .get("https://restcountries.com/v3.1/all")
+        .then((response) => {
+          this.countries = response.data
+            .map((country) => ({
+              value: country.name.common,
+              text: country.name.common,
+            }))
+            .sort((a, b) => a.text.localeCompare(b.text));
         })
-        .catch(error => {
-          console.error('Error fetching countries:', error);
+        .catch((error) => {
+          console.error("Error fetching countries:", error);
         });
     },
     validateState(param) {
@@ -224,6 +301,28 @@ export default {
         this.$v.$reset();
       });
     },
+    async checkUsername() {
+      if (
+        !this.$v.form.username.required ||
+        !this.$v.form.username.alpha ||
+        !this.$v.form.username.minLength ||
+        !this.$v.form.username.maxLength
+      ) {
+        console.log("out");
+        return;
+      }
+      try {
+        const response = mockGetUser(this.form.username);
+        console.log(response);
+        if (response.status === 200) {
+          this.form.usernameIsTaken = true;
+        } else {
+          this.form.usernameIsTaken = false;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
 };
 </script>
@@ -236,7 +335,8 @@ export default {
 }
 .image-section {
   flex: 1;
-  background: url("@/assets/pexels-vanmalidate-784633.jpg") no-repeat center center;
+  background: url("@/assets/pexels-vanmalidate-784633.jpg") no-repeat center
+    center;
   background-size: cover;
 }
 .register-form-section {
