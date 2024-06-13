@@ -20,6 +20,9 @@
             <b-form-invalid-feedback v-if="!$v.form.username.required">
               Username is required
             </b-form-invalid-feedback>
+            <b-form-invalid-feedback v-if="$v.form.username.isTaken">
+              Username is already taken
+            </b-form-invalid-feedback>
             <b-form-invalid-feedback v-else-if="!$v.form.username.length">
               Username length should be between 3-8 characters long
             </b-form-invalid-feedback>
@@ -133,7 +136,7 @@ import {
   sameAs,
   email,
 } from "vuelidate/lib/validators";
-import { mockRegister } from "../services/auth.js";
+import { mockGetUser, mockRegister } from "../services/auth.js";
 export default {
   name: "Register",
   data() {
@@ -159,6 +162,20 @@ export default {
         required,
         length: (u) => minLength(3)(u) && maxLength(8)(u),
         alpha,
+        isTaken: {
+          async validator(u) {
+            if (!u) return true;
+            try {
+              console.log("checking username", u);
+              const response = await mockGetUser(u);
+              return response.status === 200 ? false : true;
+            } catch (err) {
+              console.log(err.response);
+              return false;
+            }
+          },
+          async: true,
+        },
       },
       country: {
         required,

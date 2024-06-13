@@ -22,6 +22,16 @@
               >Main</a
             >
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" @click.prevent="navigateTo('search')"
+              >Search</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" @click.prevent="navigateTo('about')"
+              >About</a
+            >
+          </li>
         </ul>
         <form class="d-flex" @submit.prevent="onSearch">
           <input
@@ -42,7 +52,7 @@
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              Account
+              {{ $root.store.username ? $root.store.username : "Account" }}
             </a>
             <ul
               class="dropdown-menu me-3"
@@ -53,6 +63,7 @@
                   class="dropdown-item"
                   href="#"
                   @click.prevent="navigateTo('login')"
+                  v-if="!$root.store.username"
                   >Login</a
                 >
               </li>
@@ -60,12 +71,47 @@
                 <a
                   class="dropdown-item"
                   href="#"
-                  @click.prevent="navigateTo('register')"
-                  >Register</a
+                  @click.prevent="navigateTo('my-recipes')"
+                  >My Recipes</a
+                >
+              </li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  @click.prevent="navigateTo('family')"
+                  >Family Recipes</a
+                >
+              </li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  @click.prevent="navigateTo('add-recipe')"
+                  >Add Recipe</a
+                >
+              </li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  @click.prevent="logout"
+                  v-if="$root.store.username"
+                  >Sign Out</a
                 >
               </li>
             </ul>
           </li>
+          <!-- <li v-if="!$root.store.username">
+            <a class="nav-link" href="#" @click.prevent="navigateTo('register')"
+              >Register</a
+            >
+          </li>
+          <li v-else>
+            <a class="nav-link" href="#" @click.prevent="navigateTo('login')"
+              >Login</a
+            >
+          </li> -->
         </ul>
       </div>
     </div>
@@ -89,6 +135,9 @@ export default {
     onSearch() {
       this.$router.push({ name: "search", query: { search: this.search } });
     },
+    logout() {
+      this.$root.store.username = null;
+    },
   },
 };
 </script>
@@ -111,6 +160,6 @@ export default {
 }
 
 .dropdown-menu[data-bs-popper] {
-  left: -3rem;
+  left: -90%;
 }
 </style>
