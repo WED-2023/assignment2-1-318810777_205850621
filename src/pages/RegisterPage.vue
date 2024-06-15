@@ -20,13 +20,11 @@
             <b-form-invalid-feedback v-if="!$v.form.username.required">
               Username is required
             </b-form-invalid-feedback>
-            <b-form-invalid-feedback v-if="form.usernameIsTaken">
+            <b-form-invalid-feedback v-if="$v.form.username.$error && form.usernameIsTaken">
               Username is already taken
             </b-form-invalid-feedback>
             <b-form-invalid-feedback
-              v-else-if="
-                !$v.form.username.minLength || !$v.form.username.maxLength
-              "
+              v-else-if="!$v.form.username.minLength || !$v.form.username.maxLength"
             >
               Username length should be between 3-8 characters long
             </b-form-invalid-feedback>
@@ -120,14 +118,9 @@
               Password is required
             </b-form-invalid-feedback>
             <b-form-invalid-feedback
-              v-if="
-                !$v.form.password.minLength ||
-                  !$v.form.password.maxLength ||
-                  !$v.form.password.validPassword
-              "
+              v-if="!$v.form.password.minLength || !$v.form.password.maxLength || !$v.form.password.validPassword"
             >
-              Password must be 5-10 characters long, contain at least one number
-              and one special character
+              Password must be 5-10 characters long, contain at least one number and one special character
             </b-form-invalid-feedback>
           </b-form-group>
 
@@ -146,31 +139,21 @@
             <b-form-invalid-feedback v-if="!$v.form.confirmPassword.required">
               Password confirmation is required
             </b-form-invalid-feedback>
-            <b-form-invalid-feedback
-              v-if="!$v.form.confirmPassword.sameAsPassword"
-            >
+            <b-form-invalid-feedback v-if="!$v.form.confirmPassword.sameAsPassword">
               Passwords must match
             </b-form-invalid-feedback>
           </b-form-group>
 
           <div class="buttons">
             <b-button type="reset" variant="danger">Reset</b-button>
-            <b-button type="submit" variant="primary" class="ml-3"
-              >Register</b-button
-            >
+            <b-button type="submit" variant="primary" class="ml-3">Register</b-button>
           </div>
           <div class="mt-2 text-center">
             Already have an account?
             <router-link to="login">Log in here</router-link>
           </div>
         </b-form>
-        <b-alert
-          class="mt-2"
-          v-if="form.submitError"
-          variant="warning"
-          dismissible
-          show
-        >
+        <b-alert class="mt-2" v-if="form.submitError" variant="warning" dismissible show>
           Register failed: {{ form.submitError }}
         </b-alert>
       </div>
@@ -180,16 +163,8 @@
 
 <script>
 import axios from "axios";
-import {
-  required,
-  minLength,
-  maxLength,
-  alpha,
-  email,
-  sameAs,
-} from "vuelidate/lib/validators";
-
-import { mockGetUser } from "../services/auth.js";
+import { required, minLength, maxLength, alpha, email, sameAs } from "vuelidate/lib/validators";
+import { mockGetUser, mockRegister } from "../services/auth.js";
 
 const passwordValidation = (value) => {
   return /[0-9]/.test(value) && /[!@#$%^&*(),.?":{}|<>]/.test(value);
@@ -220,8 +195,10 @@ export default {
         minLength: minLength(3),
         maxLength: maxLength(8),
         alpha,
-        isTaken(value) {
-          return !this.form.usernameIsTaken;
+        async isTaken(value) {
+          if (!value) return true;
+          const response = await mockGetUser(value);
+          return response.status !== 200;
         },
       },
       firstName: { required },
@@ -273,8 +250,11 @@ export default {
           email: this.form.email,
           password: this.form.password,
         };
-        // Add your registration logic here
-        this.$router.push("/login");
+        const response = await mockRegister(userDetails);
+        console.log(response);
+        if (response.status === 200) {
+          this.$router.push("/login");
+        }
       } catch (err) {
         this.form.submitError = err.response.data.message;
       }
@@ -296,6 +276,7 @@ export default {
         password: "",
         confirmPassword: "",
         submitError: undefined,
+        usernameIsTaken: false,
       };
       this.$nextTick(() => {
         this.$v.$reset();
@@ -308,12 +289,10 @@ export default {
         !this.$v.form.username.minLength ||
         !this.$v.form.username.maxLength
       ) {
-        console.log("out");
         return;
       }
       try {
-        const response = mockGetUser(this.form.username);
-        console.log(response);
+        const response = await mockGetUser(this.form.username);
         if (response.status === 200) {
           this.form.usernameIsTaken = true;
         } else {

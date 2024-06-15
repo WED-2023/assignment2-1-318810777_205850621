@@ -1,5 +1,5 @@
 <template>
-  <b-container>
+  <b-container class="recipe-container">
     <h3>
       {{ title }}:
       <slot></slot>
@@ -99,8 +99,12 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  min-height: 400px;
+.recipe-container {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
 }
 
 .recipe-preview-list {

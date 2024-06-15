@@ -31,6 +31,11 @@
           </span>
         </div>
       </div>
+      <div class="additional-info mt-4 text-center">
+        <p><strong>Ready in:</strong> {{ recipe.readyInMinutes }} minutes</p>
+        <p><strong>Likes:</strong> {{ recipe.aggregateLikes }} likes</p>
+        <p><strong>Servings:</strong> {{ recipe.servings }}</p>
+      </div>
       <div class="recipe-body">
         <div class="d-flex justify-content-between">
           <div class="p-2 w-50">
@@ -49,11 +54,6 @@
               </li>
             </ol>
           </div>
-        </div>
-        <div class="additional-info mt-4">
-          <p><strong>Ready in:</strong> {{ recipe.readyInMinutes }} minutes</p>
-          <p><strong>Likes:</strong> {{ recipe.aggregateLikes }} likes</p>
-          <p><strong>Servings:</strong> {{ recipe.servings }}</p>
         </div>
       </div>
     </div>

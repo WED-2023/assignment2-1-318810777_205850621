@@ -7,6 +7,9 @@
     <p>
       We are committed to offering you the best user experience with detailed instructions, high-quality images, and tips to make your cooking journey enjoyable. Join us and be part of a vibrant community that loves to cook and share delicious food.
     </p>
+    <p>
+      Our development team is dedicated to constantly improving this platform. We have worked on various exercises to enhance our skills and bring the best features to you. You can check out our previous exercises on our <a href="https://github.com/WED-2023/205850621" target="_blank">GitHub repository</a>.
+    </p>
   </div>
 </template>
 
@@ -35,5 +38,12 @@ export default {
   font-size: 1.2em;
   line-height: 1.6;
   color: #555;
+}
+.about-container a {
+  color: #007bff;
+  text-decoration: none;
+}
+.about-container a:hover {
+  text-decoration: underline;
 }
 </style>

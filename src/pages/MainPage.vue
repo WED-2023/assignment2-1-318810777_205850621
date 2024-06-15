@@ -2,37 +2,41 @@
   <div class="container">
     <div class="columns">
       <div class="left-column">
-        <RecipePreviewList
-          :recipes="randomRecipes"
-          :lastViewedRecipes="lastViewedRecipes"
-          :markAsViewed="markAsViewed"
-          :toggleFavorite="toggleFavorite"
-          :title="`Explore These Recipes`"
-        />
-        <button @click.stop="fetchRandomRecipes">More</button>
-      </div>
-      <div class="right-column">
-        <div v-if="!username" class="guest-message">
-          <p class="welcome-text">
-            Hello, Guest! Please
-            <button class="link-button" @click="navigateTo('login')">
-              Login
-            </button>
-            or
-            <button class="link-button" @click="navigateTo('register')">
-              Register
-            </button>
-            to view personalized content.
-          </p>
-        </div>
-        <div v-else>
+        <div class="recipe-section white-background">
           <RecipePreviewList
-            :recipes="lastViewedRecipes"
+            :recipes="randomRecipes.slice(0, 3)"
+            :lastViewedRecipes="lastViewedRecipes"
             :markAsViewed="markAsViewed"
             :toggleFavorite="toggleFavorite"
-            :title="`Last Watched Recipes`"
+            :title="`Explore These Recipes`"
           />
-          <button class="" @click="clearHistory">Clear History</button>
+          <button @click.stop="fetchRandomRecipes">More</button>
+        </div>
+      </div>
+      <div class="right-column">
+        <div class="recipe-section white-background">
+          <div v-if="!username" class="guest-message">
+            <p class="welcome-text">
+              Hello, Guest! Please
+              <button class="link-button" @click="navigateTo('login')">
+                Login
+              </button>
+              or
+              <button class="link-button" @click="navigateTo('register')">
+                Register
+              </button>
+              to view personalized content.
+            </p>
+          </div>
+          <div v-else>
+            <RecipePreviewList
+              :recipes="lastViewedRecipes.slice(0, 3)"
+              :markAsViewed="markAsViewed"
+              :toggleFavorite="toggleFavorite"
+              :title="`Last Watched Recipes`"
+            />
+            <button class="" @click="clearHistory">Clear History</button>
+          </div>
         </div>
       </div>
     </div>
@@ -58,9 +62,7 @@ export default {
   methods: {
     fetchRandomRecipes() {
       const response = mockGetRecipesPreview(10, {}, this.randomRecipes.length);
-      // Push the new recipes to the randomRecipes array
-      this.randomRecipes.push(...response.data.recipes);
-      // Check if the recipe is in the viewedRecipes array
+      this.randomRecipes = response.data.recipes;
       this.randomRecipes.forEach((recipe) => {
         recipe.isViewed = this.lastViewedRecipes?.filter(
           (r) => r.id === recipe.id
@@ -123,6 +125,14 @@ export default {
   max-width: 1200px;
   margin: auto;
   padding: 20px;
+  background-image: url("@/assets/mainbackground.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .columns {
@@ -138,6 +148,14 @@ export default {
 
 .left-column {
   text-align: center;
+}
+
+.recipe-section.white-background {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
 .right-column .sign-in {
@@ -198,19 +216,7 @@ export default {
   position: relative;
 }
 
-.guest-message::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: rgba(141, 137, 137, 0.5);
-  border-radius: 8px;
-}
-
 .welcome-text {
-  position: relative;
   font-size: 1.2em;
   color: white;
   text-shadow: 2px 2px 4px rgba(95, 91, 91, 0.7);

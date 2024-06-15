@@ -1,9 +1,9 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-custom">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#" @click.prevent="navigateTo('main')"
-        >Logo</a
-      >
+      <a class="navbar-brand" href="#" @click.prevent="navigateTo('main')">
+        <img src="@/assets/logo.webp" alt="Logo" class="navbar-logo" />
+      </a>
       <button
         class="navbar-toggler"
         type="button"
@@ -18,19 +18,13 @@
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav ms-auto pe-2 mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link" href="#" @click.prevent="navigateTo('main')"
-              >Main</a
-            >
+            <a class="nav-link" href="#" @click.prevent="navigateTo('main')">Main</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" @click.prevent="navigateTo('search')"
-              >Search</a
-            >
+            <a class="nav-link" href="#" @click.prevent="navigateTo('search')">Search</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" @click.prevent="navigateTo('about')"
-              >About</a
-            >
+            <a class="nav-link" href="#" @click.prevent="navigateTo('about')">About</a>
           </li>
         </ul>
         <form class="d-flex" @submit.prevent="onSearch">
@@ -43,6 +37,12 @@
           />
         </form>
         <ul class="navbar-nav ml-auto me-3">
+          <li v-if="$root.store.username">
+            <span class="nav-link bold-message">Hello, {{ $root.store.username }}</span>
+          </li>
+          <li class="nav-item" v-if="$root.store.username">
+            <a class="nav-link" href="#" @click.prevent="navigateTo('add-recipe')">Add Recipe</a>
+          </li>
           <li class="nav-item dropdown" v-if="$root.store.username">
             <a
               class="nav-link dropdown-toggle"
@@ -52,60 +52,31 @@
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              {{ $root.store.username }}
+              Personal Area
             </a>
-            <ul
-              class="dropdown-menu me-3"
-              aria-labelledby="navbarDropdownMenuLink"
-            >
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
               <li>
-                <a
-                  class="dropdown-item"
-                  href="#"
-                  @click.prevent="navigateTo('favorites')"
-                  >Favorites</a
-                >
+                <a class="dropdown-item" href="#" @click.prevent="navigateTo('favorites')">My Favorite Recipes</a>
               </li>
               <li>
-                <a
-                  class="dropdown-item"
-                  href="#"
-                  @click.prevent="navigateTo('my-recipes')"
-                  >My Recipes</a
-                >
+                <a class="dropdown-item" href="#" @click.prevent="navigateTo('my-recipes')">My Recipes</a>
               </li>
               <li>
-                <a
-                  class="dropdown-item"
-                  href="#"
-                  @click.prevent="navigateTo('family')"
-                  >Family Recipes</a
-                >
-              </li>
-              <li>
-                <a
-                  class="dropdown-item"
-                  href="#"
-                  @click.prevent="navigateTo('add-recipe')"
-                  >Add Recipe</a
-                >
-              </li>
-              <li>
-                <a class="dropdown-item" href="#" @click.prevent="logout"
-                  >Sign Out</a
-                >
+                <a class="dropdown-item" href="#" @click.prevent="navigateTo('family')">Family Recipes</a>
               </li>
             </ul>
           </li>
+          <li class="nav-item" v-if="$root.store.username">
+            <a class="nav-link" href="#" @click.prevent="logout">Sign Out</a>
+          </li>
           <li v-else>
-            <a class="nav-link" href="#" @click.prevent="navigateTo('login')"
-              >Login</a
-            >
+            <span class="nav-link bold-message">Hello, Guest</span>
           </li>
           <li v-if="!$root.store.username">
-            <a class="nav-link" href="#" @click.prevent="navigateTo('register')"
-              >Register</a
-            >
+            <a class="nav-link" href="#" @click.prevent="navigateTo('login')">Login</a>
+          </li>
+          <li v-if="!$root.store.username">
+            <a class="nav-link" href="#" @click.prevent="navigateTo('register')">Register</a>
           </li>
         </ul>
       </div>
@@ -121,7 +92,6 @@ export default {
       search: "",
     };
   },
-  mounted() {},
   methods: {
     navigateTo(routeName) {
       if (this.$route.name !== routeName) {
@@ -159,11 +129,19 @@ export default {
 .navbar-custom .form-control {
   width: 20rem;
 }
+.navbar-logo {
+  height: 60px; /* Increased height */
+  /* Optional: Adjust width if needed */
+  /* width: auto; */
+}
 a {
   text-decoration: none;
   color: #2c3e50;
 }
-
+.bold-message {
+  font-weight: bold;
+  color: #000;
+}
 .dropdown-menu[data-bs-popper] {
   left: -5rem;
 }
