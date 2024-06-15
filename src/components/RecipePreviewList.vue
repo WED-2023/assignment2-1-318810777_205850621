@@ -10,7 +10,7 @@
           class="recipePreview"
           :recipe="recipe"
           :markAsViewed="markAsViewed"
-          @update-favorited="updateFavorites"
+          :toggleFavorite="toggleFavorite"
         />
       </b-col>
     </b-row>
@@ -47,6 +47,10 @@ export default {
       type: Function,
       required: false,
     },
+    favorites: {
+      type: Array,
+      required: false,
+    },
   },
   data() {
     return {
@@ -59,6 +63,9 @@ export default {
         // Check if the recipe is in the viewedRecipes array
         if (this.lastViewedRecipes?.includes(recipe)) {
           recipe.isViewed = true;
+        }
+        if (this.favorites?.includes(recipe)) {
+          recipe.isFavorited = true;
         }
       });
     }
@@ -81,17 +88,6 @@ export default {
         });
       } catch (error) {
         console.log(error);
-      }
-    },
-    updateFavorites(recipeId) {
-      console.log(`Recipe ${recipeId} was emitted from RecipePreview`);
-      let recipe = this.recipes.find((r) => r.id === recipeId);
-
-      if (recipe) {
-        console.log(recipe);
-        this.toggleFavorite(recipe.id);
-      } else {
-        console.log(`Recipe with id ${recipeId} not found`);
       }
     },
   },

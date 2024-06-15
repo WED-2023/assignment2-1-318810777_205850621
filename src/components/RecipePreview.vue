@@ -36,9 +36,9 @@
             class="fa-heart"
             @click.stop.prevent="onFavoriteClick"
             :class="{
-              favoritedIcon: isFavorited,
-              'fa-regular': !isFavorited,
-              fas: isFavorited,
+              favoritedIcon: this.isFavorited,
+              'fa-regular': !this.isFavorited,
+              fas: this.isFavorited,
             }"
           ></i>
           <span v-if="recipe.isViewed" class="indicator viewed">Viewed</span>
@@ -68,6 +68,10 @@ export default {
       type: Function,
       required: false,
     },
+    toggleFavorite: {
+      type: Function,
+      required: false,
+    },
   },
   methods: {
     onRecipeClick() {
@@ -76,10 +80,9 @@ export default {
       }
     },
     onFavoriteClick() {
-      // this.recipe.isFavorited = !this.recipe.isFavorited;
-      this.$emit("update-favorited", this.recipe.id);
       this.isFavorited = !this.isFavorited;
-      this.recipe.isFavorited = this.isFavorited;
+      this.recipe.isFavorited = !this.recipe.isFavorited;
+      if (this.toggleFavorite) this.toggleFavorite(this.recipe);
     },
   },
   mounted() {

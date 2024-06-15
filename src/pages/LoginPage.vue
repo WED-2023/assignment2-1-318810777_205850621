@@ -1,4 +1,3 @@
-
 <template>
   <div class="login-container">
     <div class="image-section"></div>
@@ -18,7 +17,9 @@
               type="text"
               :state="validateState('username')"
             ></b-form-input>
-            <b-form-invalid-feedback>Username is required</b-form-invalid-feedback>
+            <b-form-invalid-feedback
+              >Username is required</b-form-invalid-feedback
+            >
           </b-form-group>
 
           <b-form-group
@@ -33,15 +34,26 @@
               v-model="$v.form.password.$model"
               :state="validateState('password')"
             ></b-form-input>
-            <b-form-invalid-feedback>Password is required</b-form-invalid-feedback>
+            <b-form-invalid-feedback
+              >Password is required</b-form-invalid-feedback
+            >
           </b-form-group>
 
-          <b-button type="submit" variant="primary" class="w-100">Login</b-button>
+          <b-button type="submit" variant="primary" class="w-100 mt-4"
+            >Login</b-button
+          >
           <div class="mt-2">
-            Do not have an account yet? <router-link to="register">Register here</router-link>
+            Do not have an account yet?
+            <router-link to="register">Register here</router-link>
           </div>
         </b-form>
-        <b-alert class="mt-2" v-if="form.submitError" variant="warning" dismissible show>
+        <b-alert
+          class="mt-2"
+          v-if="form.submitError"
+          variant="warning"
+          dismissible
+          show
+        >
           Login failed: {{ form.submitError }}
         </b-alert>
       </div>
@@ -77,7 +89,10 @@ export default {
     },
     async login() {
       try {
-        const response = await mockLogin(this.form.username, this.form.password);
+        const response = await mockLogin(
+          this.form.username,
+          this.form.password
+        );
         this.$root.store.login(this.form.username);
         this.$router.push("/");
       } catch (err) {
@@ -95,7 +110,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped>
 .login-container {

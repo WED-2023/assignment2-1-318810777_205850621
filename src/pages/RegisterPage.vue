@@ -20,11 +20,15 @@
             <b-form-invalid-feedback v-if="!$v.form.username.required">
               Username is required
             </b-form-invalid-feedback>
-            <b-form-invalid-feedback v-if="$v.form.username.$error && form.usernameIsTaken">
+            <b-form-invalid-feedback
+              v-if="$v.form.username.$error && form.usernameIsTaken"
+            >
               Username is already taken
             </b-form-invalid-feedback>
             <b-form-invalid-feedback
-              v-else-if="!$v.form.username.minLength || !$v.form.username.maxLength"
+              v-else-if="
+                !$v.form.username.minLength || !$v.form.username.maxLength
+              "
             >
               Username length should be between 3-8 characters long
             </b-form-invalid-feedback>
@@ -118,9 +122,14 @@
               Password is required
             </b-form-invalid-feedback>
             <b-form-invalid-feedback
-              v-if="!$v.form.password.minLength || !$v.form.password.maxLength || !$v.form.password.validPassword"
+              v-if="
+                !$v.form.password.minLength ||
+                  !$v.form.password.maxLength ||
+                  !$v.form.password.validPassword
+              "
             >
-              Password must be 5-10 characters long, contain at least one number and one special character
+              Password must be 5-10 characters long, contain at least one number
+              and one special character
             </b-form-invalid-feedback>
           </b-form-group>
 
@@ -139,21 +148,31 @@
             <b-form-invalid-feedback v-if="!$v.form.confirmPassword.required">
               Password confirmation is required
             </b-form-invalid-feedback>
-            <b-form-invalid-feedback v-if="!$v.form.confirmPassword.sameAsPassword">
+            <b-form-invalid-feedback
+              v-if="!$v.form.confirmPassword.sameAsPassword"
+            >
               Passwords must match
             </b-form-invalid-feedback>
           </b-form-group>
 
-          <div class="buttons">
+          <div class="buttons mt-3">
             <b-button type="reset" variant="danger">Reset</b-button>
-            <b-button type="submit" variant="primary" class="ml-3">Register</b-button>
+            <b-button type="submit" variant="primary" class="ml-3"
+              >Register</b-button
+            >
           </div>
           <div class="mt-2 text-center">
             Already have an account?
             <router-link to="login">Log in here</router-link>
           </div>
         </b-form>
-        <b-alert class="mt-2" v-if="form.submitError" variant="warning" dismissible show>
+        <b-alert
+          class="mt-2"
+          v-if="form.submitError"
+          variant="warning"
+          dismissible
+          show
+        >
           Register failed: {{ form.submitError }}
         </b-alert>
       </div>
@@ -163,7 +182,14 @@
 
 <script>
 import axios from "axios";
-import { required, minLength, maxLength, alpha, email, sameAs } from "vuelidate/lib/validators";
+import {
+  required,
+  minLength,
+  maxLength,
+  alpha,
+  email,
+  sameAs,
+} from "vuelidate/lib/validators";
 import { mockGetUser, mockRegister } from "../services/auth.js";
 
 const passwordValidation = (value) => {
@@ -309,11 +335,13 @@ export default {
 <style scoped>
 .register-container {
   display: flex;
-  height: 100vh;
-  width: 100vw;
+  max-height: 100%;
+  max-width: 100vw;
+  margin-top: 0;
 }
 .image-section {
   flex: 1;
+  overflow: hidden;
   background: url("@/assets/pexels-vanmalidate-784633.jpg") no-repeat center
     center;
   background-size: cover;
@@ -323,6 +351,9 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 100%;
 }
 .register-form {
   background-color: rgba(255, 255, 255, 0.9);

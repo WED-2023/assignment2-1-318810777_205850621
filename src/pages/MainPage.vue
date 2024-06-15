@@ -4,13 +4,15 @@
       <div class="left-column">
         <div class="recipe-section white-background">
           <RecipePreviewList
-            :recipes="randomRecipes.slice(0, 3)"
+            :recipes="randomRecipes"
             :lastViewedRecipes="lastViewedRecipes"
             :markAsViewed="markAsViewed"
             :toggleFavorite="toggleFavorite"
             :title="`Explore These Recipes`"
           />
-          <button @click.stop="fetchRandomRecipes">More</button>
+          <button class="btn btn-primary mt-3" @click.stop="fetchRandomRecipes">
+            More
+          </button>
         </div>
       </div>
       <div class="right-column">
@@ -18,24 +20,26 @@
           <div v-if="!username" class="guest-message">
             <p class="welcome-text">
               Hello, Guest! Please
-              <button class="link-button" @click="navigateTo('login')">
+              <a @click="navigateTo('login')">
                 Login
-              </button>
+              </a>
               or
-              <button class="link-button" @click="navigateTo('register')">
+              <a @click="navigateTo('register')">
                 Register
-              </button>
+              </a>
               to view personalized content.
             </p>
           </div>
-          <div v-else>
+          <div v-else class="">
             <RecipePreviewList
               :recipes="lastViewedRecipes.slice(0, 3)"
               :markAsViewed="markAsViewed"
               :toggleFavorite="toggleFavorite"
               :title="`Last Watched Recipes`"
             />
-            <button class="" @click="clearHistory">Clear History</button>
+            <button class="btn btn-primary mt-3 " @click="clearHistory">
+              Clear History
+            </button>
           </div>
         </div>
       </div>
@@ -61,12 +65,16 @@ export default {
   },
   methods: {
     fetchRandomRecipes() {
-      const response = mockGetRecipesPreview(10, {}, this.randomRecipes.length);
+      const response = mockGetRecipesPreview(3, {}, this.randomRecipes.length);
       this.randomRecipes = response.data.recipes;
       this.randomRecipes.forEach((recipe) => {
         recipe.isViewed = this.lastViewedRecipes?.filter(
           (r) => r.id === recipe.id
         ).length;
+        recipe.isFavorited = this.favorites?.some((r) => r.id === recipe.id);
+      });
+      this.lastViewedRecipes.forEach((recipe) => {
+        recipe.isViewed = true;
         recipe.isFavorited = this.favorites?.some((r) => r.id === recipe.id);
       });
     },
@@ -89,6 +97,7 @@ export default {
           (a, b) => b.lastViewedDate - a.lastViewedDate
         );
       }
+      this.$root.store.lastViewedRecipes = this.lastViewedRecipes;
     },
     navigateTo(routeName) {
       this.$router.push({ name: routeName });
@@ -97,21 +106,22 @@ export default {
       this.lastViewedRecipes = [];
       localStorage.removeItem("viewedRecipes");
     },
-    toggleFavorite(recipeId) {
-      console.log(`Emitted toggleFavorite: ${recipeId} from MainPage`);
-      if (!this.favorites) {
-        this.favorites = [];
-      }
-      const recipe = this.randomRecipes.find((r) => r.id === recipeId);
-      if (!recipe || this.favorites.length === 0) {
-        this.favorites.push({ ...recipe, addedDate: new Date() });
-        console.log(`Added to favorites: ${recipeId}`);
+    toggleFavorite(recipe) {
+      console.log("Toggling favorite", recipe.id, this.favorites);
+      if (this.favorites.filter((r) => r.id === recipe.id).length === 0) {
+        this.favorites.push({
+          ...recipe,
+          addedDate: new Date(),
+        });
       } else {
-        this.favorites = this.favorites.filter((r) => r.id !== recipeId);
-        console.log(`Removed from favorites: ${recipeId}`);
+        this.favorites = this.favorites.filter((r) => r.id !== recipe.id);
       }
-      console.log(`New favorites:`);
-      console.log(this.favorites);
+      if (this.favorites.length > 1) {
+        this.lastViewedRecipes.sort((a, b) => b.addedDate - a.addedDate);
+      }
+      // Update the last viewed recipes as well
+
+      this.$root.store.favoriteRecipes = this.favorites;
     },
   },
   created() {
@@ -125,7 +135,6 @@ export default {
   max-width: 1200px;
   margin: auto;
   padding: 20px;
-  background-image: url("@/assets/mainbackground.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -144,9 +153,6 @@ export default {
 .left-column,
 .right-column {
   width: 45%;
-}
-
-.left-column {
   text-align: center;
 }
 
@@ -204,7 +210,6 @@ export default {
 }
 
 .guest-message {
-  background-image: url("@/assets/copy-space-italian-food-ingredients.jpg");
   background-size: cover;
   background-position: center;
   color: white;
@@ -212,27 +217,40 @@ export default {
   padding: 20px;
   margin-bottom: 20px;
   text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
   position: relative;
 }
 
 .welcome-text {
   font-size: 1.2em;
-  color: white;
-  text-shadow: 2px 2px 4px rgba(95, 91, 91, 0.7);
+  color: black;
+  /*text-shadow: 2px 2px 4px rgba(95, 91, 91, 0.7);*/
+  position: relative;
 }
 
-.link-button {
+.welcome-text > a {
   padding: 0;
   font-size: 1em;
-  margin: 0 5px;
-  color: #007bff;
+  color: #007bff !important;
   background: none;
   border: none;
   cursor: pointer;
+  position: relative;
 }
 
-.link-button:hover {
-  text-decoration: underline;
+.welcome-text > a:after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background: #007bff;
+  transition: width 0.3s;
+  bottom: -2px;
+  left: 0;
+}
+
+.welcome-text > a:hover:after {
+  width: 90%;
+  transition: width 0.3s ease-in-out;
 }
 </style>

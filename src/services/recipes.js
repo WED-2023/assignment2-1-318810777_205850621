@@ -1,5 +1,6 @@
 import recipe_full_view from "../assets/mocks/recipe_full_view.json";
 import recipe_preview from "../assets/mocks/recipe_preview.json";
+import sampleRecipes from "../assets/mocks/sample_recipes.json";
 
 export function mockGetRecipesPreview(amount = 1, filters = {}, offset = 0) {
   let recipes = [];
@@ -27,57 +28,97 @@ export function mockGetRecipesPreview(amount = 1, filters = {}, offset = 0) {
 
   return { data: { recipes: recipes } };
 }
-export function mockSearchRecipes(query, resultsPerPage, filters) {
-  // Sample data for testing
-  const sampleRecipes = [
-    {
-      id: 1,
-      title: "Pasta with Garlic",
-      image: "https://via.placeholder.com/150",
-      readyInMinutes: 30,
-      aggregateLikes: 100,
-      vegetarian: true,
-      glutenFree: false,
-      instructions: "Boil pasta. Saute garlic. Mix together.",
-    },
-    {
-      id: 2,
-      title: "Vegan Salad",
-      image: "https://via.placeholder.com/150",
-      readyInMinutes: 20,
-      aggregateLikes: 50,
-      vegetarian: true,
-      glutenFree: true,
-      instructions: "Chop veggies. Mix together. Serve.",
-    },
-    {
-      id: 3,
-      title: "Gluten-Free Pancakes",
-      image: "https://via.placeholder.com/150",
-      readyInMinutes: 15,
-      aggregateLikes: 200,
-      vegetarian: true,
-      glutenFree: true,
-      instructions: "Mix ingredients. Cook on griddle. Serve.",
-    },
-  ];
 
-  // Filter recipes based on query and filters
-  const filteredRecipes = sampleRecipes.filter((recipe) => {
-    const matchesQuery = recipe.title.toLowerCase().includes(query.toLowerCase());
-    const matchesCuisine = !filters.cuisine || recipe.cuisine === filters.cuisine;
-    const matchesDiet = !filters.diet || recipe.diet === filters.diet;
-    const matchesIntolerance = !filters.intolerance || recipe.intolerance === filters.intolerance;
+export function mockSearchRecipes(
+  query = "",
+  page = 1,
+  resultsPerPage = 5,
+  filters = {}
+) {
+  let filteredRecipes = sampleRecipes;
+  console.log("Filters: ", filters);
+  console.log("Recipes input: ", sampleRecipes.length);
 
-    return matchesQuery && matchesCuisine && matchesDiet && matchesIntolerance;
+  // Filter by query
+  if (query || query.length > 0) {
+    console.log("Query: ", query);
+    filteredRecipes = filteredRecipes.filter(
+      (recipe) =>
+        recipe.title.toLowerCase().includes(query.toLowerCase()) ||
+        recipe.instructions.toLowerCase().includes(query.toLowerCase())
+    );
+  }
+
+  // Filter by diet
+  if (filters.diet && filters.diet !== "" && filters.diet !== "No Filter") {
+    console.log("Diet: ", filters.diet);
+    filteredRecipes = filteredRecipes.filter((recipe) =>
+      recipe.diets?.some(
+        (diet) => diet.toLowerCase() === filters.diet.toLowerCase()
+      )
+    );
+  }
+
+  // Filter by cuisines
+  if (
+    filters.cuisines &&
+    filters.cuisines !== "" &&
+    filters.cuisines !== "No Filter"
+  ) {
+    console.log("Cuisines: ", filters.cuisines);
+    filteredRecipes = filteredRecipes.filter((recipe) =>
+      recipe.cuisines?.some((cuisine) => {
+        return cuisine.toLowerCase() === filters.cuisines.toLowerCase();
+      })
+    );
+  }
+
+  // Filter by intolerances
+  if (
+    filters.intolerances &&
+    filters.intolerances !== "" &&
+    filters.intolerances !== "No Filter"
+  ) {
+    console.log("Intolerances: ", filters.intolerances);
+    filteredRecipes = filteredRecipes.filter(
+      (recipe) =>
+        !recipe.intolerances?.some(
+          (intolerance) =>
+            intolerance.toLowerCase() === filters.intolerances.toLowerCase()
+        )
+    );
+  }
+
+  // Paginate results
+  const startIndex = (page - 1) * resultsPerPage;
+  console.log("Filtered recipes: ", filteredRecipes.length);
+  const paginatedRecipes = filteredRecipes.slice(
+    startIndex,
+    startIndex + resultsPerPage
+  );
+
+  paginatedRecipes.forEach((recipe) => {
+    recipe.vegetarian = recipe.diets?.some(
+      (diet) => diet.toLowerCase() === "vegetarian"
+    );
+    recipe.vegan =
+      recipe.diets?.some((diet) => diet.toLowerCase() === "vegan") &&
+      !recipe.intolerances?.some(
+        (intolerance) => intolerance.toLowerCase() === "dairy"
+      );
+    recipe.glutenFree = !recipe.intolerances?.some(
+      (intolerance) => intolerance.toLowerCase() === "gluten"
+    );
+    recipe.summary = recipe.instructions;
   });
 
   return {
     data: {
-      recipes: filteredRecipes.slice(0, resultsPerPage),
+      recipes: paginatedRecipes,
     },
   };
 }
+
 export function mockGetLastViewedRecipes() {
   return { data: { recipes: [] } };
 }

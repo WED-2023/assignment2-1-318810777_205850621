@@ -75,6 +75,7 @@ const shared_data = {
   randomRecipes: [],
   lastViewedRecipes: [],
   favoriteRecipes: [],
+  lastQuery: "",
   lastSearch: JSON.parse(localStorage.getItem("lastSearch")) || null,
   login(username) {
     localStorage.setItem("username", username);

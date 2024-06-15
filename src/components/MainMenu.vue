@@ -18,30 +18,44 @@
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav ms-auto pe-2 mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link" href="#" @click.prevent="navigateTo('main')">Main</a>
+            <a class="nav-link" href="#" @click.prevent="navigateTo('main')"
+              >Main</a
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" @click.prevent="navigateTo('search')">Search</a>
+            <a class="nav-link" href="#" @click.prevent="navigateTo('search')"
+              >Search</a
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" @click.prevent="navigateTo('about')">About</a>
+            <a class="nav-link" href="#" @click.prevent="navigateTo('about')"
+              >About</a
+            >
           </li>
         </ul>
-        <form class="d-flex" @submit.prevent="onSearch">
+        <form class="d-flex">
           <input
             class="form-control me-2 search-input"
             type="search"
             placeholder="Search"
             aria-label="Search"
             v-model="search"
+            @keyup="handleSearchKeyup"
           />
         </form>
         <ul class="navbar-nav ml-auto me-3">
           <li v-if="$root.store.username">
-            <span class="nav-link bold-message">Hello, {{ $root.store.username }}</span>
+            <span class="nav-link bold-message"
+              >Hello, {{ $root.store.username }}</span
+            >
           </li>
           <li class="nav-item" v-if="$root.store.username">
-            <a class="nav-link" href="#" @click.prevent="navigateTo('add-recipe')">Add Recipe</a>
+            <a
+              class="nav-link"
+              href="#"
+              @click.prevent="navigateTo('add-recipe')"
+              >Add Recipe</a
+            >
           </li>
           <li class="nav-item dropdown" v-if="$root.store.username">
             <a
@@ -56,13 +70,28 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
               <li>
-                <a class="dropdown-item" href="#" @click.prevent="navigateTo('favorites')">My Favorite Recipes</a>
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  @click.prevent="navigateTo('favorites')"
+                  >My Favorite Recipes</a
+                >
               </li>
               <li>
-                <a class="dropdown-item" href="#" @click.prevent="navigateTo('my-recipes')">My Recipes</a>
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  @click.prevent="navigateTo('my-recipes')"
+                  >My Recipes</a
+                >
               </li>
               <li>
-                <a class="dropdown-item" href="#" @click.prevent="navigateTo('family')">Family Recipes</a>
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  @click.prevent="navigateTo('family')"
+                  >Family Recipes</a
+                >
               </li>
             </ul>
           </li>
@@ -73,10 +102,14 @@
             <span class="nav-link bold-message">Hello, Guest</span>
           </li>
           <li v-if="!$root.store.username">
-            <a class="nav-link" href="#" @click.prevent="navigateTo('login')">Login</a>
+            <a class="nav-link" href="#" @click.prevent="navigateTo('login')"
+              >Login</a
+            >
           </li>
           <li v-if="!$root.store.username">
-            <a class="nav-link" href="#" @click.prevent="navigateTo('register')">Register</a>
+            <a class="nav-link" href="#" @click.prevent="navigateTo('register')"
+              >Register</a
+            >
           </li>
         </ul>
       </div>
@@ -89,7 +122,7 @@ export default {
   name: "MainMenu",
   data() {
     return {
-      search: "",
+      search: this.$root.store.lastSearch?.searchQuery || "",
     };
   },
   methods: {
@@ -99,7 +132,35 @@ export default {
       }
     },
     onSearch() {
-      this.$router.push({ name: "search", query: { search: this.search } });
+      const newQuery = { search: this.search };
+      const currentQuery = this.$route.query;
+      // Check if the new query is different from the current query
+      const isQueryDifferent = Object.keys(newQuery).some(
+        (key) => newQuery[key] !== currentQuery[key]
+      );
+
+      if (isQueryDifferent) {
+        this.$router.push({ name: "search", query: newQuery }).catch((err) => {
+          if (err.name !== "NavigationDuplicated") {
+            throw err;
+          }
+        });
+      }
+    },
+    handleSearchKeyup(event) {
+      if (event.key === "Enter") {
+        this.onSearch();
+      } else if (event.key === "Backspace" || event.key === "Delete") {
+        this.updateQueryString();
+      } else {
+        if (this.search.length > 3 || this.search.length === 0) {
+          this.onSearch();
+        }
+      }
+    },
+    updateQueryString() {
+      const newQuery = { ...this.$route.query, search: this.search };
+      this.$router.push({ query: newQuery }).catch(() => {});
     },
     logout() {
       this.$root.store.logout();
