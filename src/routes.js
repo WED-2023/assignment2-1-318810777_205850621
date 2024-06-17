@@ -1,7 +1,8 @@
 // src/routes.js
+
 import MainPage from "./pages/MainPage.vue";
 import NotFoundPage from "./pages/NotFoundPage.vue";
-import RecipeViewPage from "./pages/RecipeViewPage.vue"; 
+import RecipeViewPage from "./pages/RecipeViewPage.vue";
 
 const routes = [
   {
@@ -37,7 +38,7 @@ const routes = [
   {
     path: "/recipe/:recipeId",
     name: "recipe",
-    component:RecipeViewPage,
+    component: RecipeViewPage,
   },
   {
     path: "*",
@@ -47,3 +48,8 @@ const routes = [
 ];
 
 export default routes;
+// // {
+//   path: "/add-recipe",
+//   name: "add-recipe",
+//   component: () => import("./pages/AddRecipe.vue"),
+// },

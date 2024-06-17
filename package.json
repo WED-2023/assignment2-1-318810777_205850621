@@ -6,8 +6,13 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@codemirror/basic-setup": "^0.20.0",
+    "@codemirror/lang-markdown": "^6.2.5",
+    "@codemirror/state": "^6.4.1",
+    "@codemirror/view": "^6.28.1",
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@fortawesome/vue-fontawesome": "^2.0.10",
+    "@vueuse/components": "^10.11.0",
     "axios": "^0.19.2",
     "bootstrap": "^5.3.3",
     "bootstrap-vue": "^2.23.1",

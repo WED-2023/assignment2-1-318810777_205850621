@@ -27,11 +27,14 @@ import {
   LayoutPlugin,
   InputGroupPlugin,
   BInputGroupAppend,
+  FormCheckboxPlugin,
+  BFormTextarea,
 } from "bootstrap-vue";
 
 import { BButtonGroup, BButton } from "bootstrap-vue";
 Vue.component("b-button-group", BButtonGroup);
 Vue.component("b-input-group", InputGroupPlugin);
+Vue.component("b-form-textarea", BFormTextarea);
 Vue.component("b-input-group-append", BInputGroupAppend);
 [
   FormGroupPlugin,
@@ -44,6 +47,7 @@ Vue.component("b-input-group-append", BInputGroupAppend);
   AlertPlugin,
   ToastPlugin,
   LayoutPlugin,
+  FormCheckboxPlugin,
 ].forEach((x) => Vue.use(x));
 Vue.use(Vuelidate);
 

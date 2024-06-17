@@ -73,6 +73,15 @@
                 <a
                   class="dropdown-item"
                   href="#"
+                  @click.prevent="navigateTo('profile')"
+                >
+                  My Profile
+                </a>
+              </li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="#"
                   @click.prevent="navigateTo('favorites')"
                   >My Favorite Recipes</a
                 >
