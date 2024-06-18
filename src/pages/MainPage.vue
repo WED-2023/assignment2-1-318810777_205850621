@@ -31,15 +31,20 @@
             </p>
           </div>
           <div v-else class="">
-            <RecipePreviewList
-              :recipes="lastViewedRecipes.slice(0, 3)"
-              :markAsViewed="markAsViewed"
-              :toggleFavorite="toggleFavorite"
-              :title="`Last Watched Recipes`"
-            />
-            <button class="btn btn-primary mt-3 " @click="clearHistory">
-              Clear History
-            </button>
+            <div v-if="lastViewedRecipes.length > 0">
+              <RecipePreviewList
+                :recipes="lastViewedRecipes.slice(0, 3)"
+                :markAsViewed="markAsViewed"
+                :toggleFavorite="toggleFavorite"
+                :title="`Last Watched Recipes`"
+              />
+              <button class="btn btn-primary mt-3 " @click="clearHistory">
+                Clear History
+              </button>
+            </div>
+            <div v-else>
+              <p>Watch a recipe to see it here!</p>
+            </div>
           </div>
         </div>
       </div>
@@ -126,6 +131,14 @@ export default {
   },
   created() {
     this.fetchRandomRecipes();
+  },
+  watch: {
+    "$root.store.username"(newUsername) {
+      if (!newUsername || newUsername === "") {
+        this.lastViewedRecipes = [];
+        this.username = "";
+      }
+    },
   },
 };
 </script>

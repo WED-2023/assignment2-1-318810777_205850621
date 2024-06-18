@@ -1,12 +1,17 @@
 // src/services/auth.js
-export function mockLogin(credentials, success = true) {
+export function mockLogin(credentials) {
+  let success = true;
   // Check if a user is already logged in
-  const loggedInUser = localStorage.getItem("loggedInUser");
+  const loggedInUser = localStorage.getItem("username");
   if (loggedInUser) {
+    console.log("user already logged in: auth.js/7");
     return {
       status: 409,
       response: {
-        data: { message: "A user is already logged in", success: false },
+        data: {
+          message: "A user is already logged in",
+          success: false,
+        },
       },
     };
   }
@@ -16,7 +21,7 @@ export function mockLogin(credentials, success = true) {
       status: 404,
       response: {
         data: {
-          message: "Invalid credentials",
+          message: "Invalid credentials. check your data and try again.",
           success: false,
           invalidCredentials: true,
         },
@@ -24,7 +29,9 @@ export function mockLogin(credentials, success = true) {
     };
   }
 
-  const usersJSON = JSON.parse(localStorage.getItem("users")) || { registered: [] };
+  const usersJSON = JSON.parse(localStorage.getItem("users")) || {
+    registered: [],
+  };
   const users = usersJSON.registered;
   let credentialsAreValid = false;
 
@@ -33,8 +40,11 @@ export function mockLogin(credentials, success = true) {
   }
 
   const user = users.find(
-    (u) => u.username === credentials.username && u.password === credentials.password
+    (u) =>
+      u.username === credentials.username && u.password === credentials.password
   );
+  console.log("user found: auth.js/42");
+  console.log(user);
 
   if (user) {
     credentialsAreValid = true;
@@ -45,7 +55,10 @@ export function mockLogin(credentials, success = true) {
     throw {
       status: 409,
       response: {
-        data: { message: "A user is already logged in", success: false },
+        data: {
+          message: "A user is already logged in",
+          success: false,
+        },
       },
     };
   }
@@ -64,7 +77,7 @@ export function mockLogin(credentials, success = true) {
   }
 
   // Set the logged-in user in localStorage
-  localStorage.setItem("loggedInUser", JSON.stringify(user));
+  // localStorage.setItem("username", JSON.stringify(user));
 
   return {
     status: 200,
@@ -93,7 +106,9 @@ export function mockGetUser(username) {
   return {
     status: user ? 200 : 404,
     response: {
-      data: user ? user.username : { message: "User not found", success: false },
+      data: user
+        ? user.username
+        : { message: "User not found", success: false },
     },
   };
 }
@@ -122,7 +137,7 @@ export function mockRegister(userDetails, success = true) {
 }
 
 export function mockLogout() {
-  localStorage.removeItem("loggedInUser");
+  localStorage.removeItem("username");
   return {
     status: 200,
     response: { data: { message: "logout succeeded", success: true } },

@@ -1,5 +1,5 @@
 <template>
-  <b-modal id="add-recipe-modal" title="Create New Recipe" size="lg">
+  <b-modal id="add-recipe-modal" scrollable title="Create New Recipe" size="lg">
     <b-form @submit.stop.prevent="onSubmit" class="recipe-form">
       <b-form-group label="Title" label-for="title">
         <b-form-input id="title" v-model="form.title" required></b-form-input>
@@ -75,6 +75,7 @@
       >
         <b-form-checkbox-group v-model="form.dietaryOptions" switches>
           <b-form-checkbox value="vegetarian">Vegetarian</b-form-checkbox>
+          <b-form-checkbox value="vegan">Vegan</b-form-checkbox>
           <b-form-checkbox value="glutenFree">Gluten-Free</b-form-checkbox>
         </b-form-checkbox-group>
       </b-form-group>
@@ -153,8 +154,10 @@ export default {
         analyzedInstructions: [
           { name: "Instructions", steps: instructionsArray },
         ],
+        instructions: instructionsArray.map((step) => step.step).join("\n"),
         vegetarian: this.form.dietaryOptions.includes("vegetarian"),
         glutenFree: this.form.dietaryOptions.includes("glutenFree"),
+        vegan: this.form.dietaryOptions.includes("vegan"),
         aggregateLikes: 0,
         isViewed: false,
         isFavorited: false,
@@ -171,9 +174,12 @@ export default {
     },
     saveRecipe(recipe) {
       // This should be replaced with an actual API call to save the recipe to the database
-      const savedRecipes = JSON.parse(localStorage.getItem("recipes") || "[]");
-      savedRecipes.push({ id: Date.now(), ...recipe });
-      localStorage.setItem("recipes", JSON.stringify(savedRecipes));
+      // const savedRecipes = JSON.parse(localStorage.getItem("recipes") || "[]");
+      // savedRecipes.push({ id: Date.now(), ...recipe });
+      // localStorage.setItem("recipes", JSON.stringify(savedRecipes));
+      this.$root.store.myRecipes.push(recipe);
+
+      this.$root.toast("Success", "Recipe added successfully", "success");
     },
     resetForm() {
       this.form = {

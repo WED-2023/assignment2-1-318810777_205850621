@@ -1,7 +1,7 @@
 <template>
   <b-container class="recipe-container">
     <h3>
-      {{ title }}:
+      {{ title ? title + ":" : "" }}
       <slot></slot>
     </h3>
     <b-row class="text-center" align-v="center">

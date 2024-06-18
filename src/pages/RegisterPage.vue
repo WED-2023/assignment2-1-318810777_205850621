@@ -292,6 +292,7 @@ export default {
       }
       this.register();
     },
+
     onReset() {
       this.form = {
         username: "",

@@ -31,9 +31,19 @@ const routes = [
     component: () => import("./pages/AboutPage.vue"),
   },
   {
-    path: "/profile",
-    name: "profile",
-    component: () => import("./pages/ProfilePage.vue"),
+    path: "/add-recipe",
+    name: "add-recipe",
+    component: () => import("./pages/AddRecipe.vue"),
+  },
+  {
+    path: "/my-recipes",
+    name: "my-recipes",
+    component: () => import("./pages/MyRecipesPage.vue"),
+  },
+  {
+    path: "/favorites",
+    name: "favorites",
+    component: () => import("./pages/MyFavorites.vue"),
   },
   {
     path: "/recipe/:recipeId",

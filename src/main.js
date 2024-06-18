@@ -14,6 +14,7 @@ import Vuelidate from "vuelidate";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 
+
 import {
   FormGroupPlugin,
   FormPlugin,
@@ -29,6 +30,7 @@ import {
   BInputGroupAppend,
   FormCheckboxPlugin,
   BFormTextarea,
+  VBModal,
 } from "bootstrap-vue";
 
 import { BButtonGroup, BButton } from "bootstrap-vue";
@@ -36,6 +38,8 @@ Vue.component("b-button-group", BButtonGroup);
 Vue.component("b-input-group", InputGroupPlugin);
 Vue.component("b-form-textarea", BFormTextarea);
 Vue.component("b-input-group-append", BInputGroupAppend);
+Vue.directive("b-modal", VBModal);
+
 [
   FormGroupPlugin,
   FormPlugin,
@@ -75,19 +79,19 @@ Vue.config.productionTip = false;
 
 const shared_data = {
   server_domain: "http://localhost:3000",
-  username: localStorage.username,
+  username: localStorage.getItem("username") || undefined,
   randomRecipes: [],
   lastViewedRecipes: [],
   favoriteRecipes: [],
+  previousSearches: new Set(),
+  myRecipes: [],
   lastQuery: "",
   lastSearch: JSON.parse(localStorage.getItem("lastSearch")) || null,
   login(username) {
     localStorage.setItem("username", username);
     this.username = username;
-    console.log("login", this.username);
   },
   logout() {
-    console.log("logout");
     localStorage.removeItem("username");
     this.username = undefined;
   },
@@ -101,14 +105,13 @@ new Vue({
     };
   },
   methods: {
-    toast(title, content, variant = null, append = false) {
-      this.$bvToast.toast(`${content}`, {
-        title: `${title}`,
-        toaster: "b-toaster-top-center",
+    toast(title, content, variant = null, append = true) {
+      this.toastCount++;
+      this.$bvToast.toast(content, {
+        title: title,
+        appendToast: append,
         variant: variant,
         solid: true,
-        appendToast: append,
-        autoHideDelay: 3000,
       });
     },
   },

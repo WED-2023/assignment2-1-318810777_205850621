@@ -89,13 +89,35 @@ export default {
     },
     async login() {
       try {
-        const response = await mockLogin(
-          this.form.username,
-          this.form.password
+        const response = await mockLogin({
+          username: this.form.username,
+          password: this.form.password,
+        });
+        console.log("Loginpage.vue - login() - 96 - response", response);
+        console.log(
+          "Loginpage.vue - login() - 97 - response.status",
+          response.status
         );
-        this.$root.store.login(this.form.username);
-        this.$router.push("/");
+        console.log(
+          "Loginpage.vue - login() - 98 - response.response.data.success",
+          response.response.data.success
+        );
+        if (response.response.data.success && response.status === 200) {
+          this.$root.store.login(this.form.username);
+          // this.$toast()
+          console.log(
+            "Loginpage.vue - login() - 200 - this.form.username",
+            this.form.username
+          );
+          this.$router.push("/");
+        } else {
+          console.log("Loginpage.vue - login() - response");
+          console.log(response);
+          this.form.submitError = response.response.data.message;
+        }
       } catch (err) {
+        console.log("Loginpage.vue - login() - err");
+        console.log(err);
         this.form.submitError = err.response.data.message;
       }
     },

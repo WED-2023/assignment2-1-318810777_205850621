@@ -1,9 +1,6 @@
 <template>
   <div class="profile-page">
-    <h1>My Profile</h1>
-    <b-button v-b-modal.add-recipe-modal variant="primary"
-      >Create New Recipe</b-button
-    >
+    <h1 class="text-center mb-3">Create New Recipe</h1>
     <AddRecipeModal />
     <!-- Other profile-related content -->
   </div>

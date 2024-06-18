@@ -33,15 +33,8 @@
             >
           </li>
         </ul>
-        <form class="d-flex">
-          <input
-            class="form-control me-2 search-input"
-            type="search"
-            placeholder="Search"
-            aria-label="Search"
-            v-model="search"
-            @keyup="handleSearchKeyup"
-          />
+        <form class="d-flex searchBar">
+          <SearchBar />
         </form>
         <ul class="navbar-nav ml-auto me-3">
           <li v-if="$root.store.username">
@@ -69,15 +62,6 @@
               Personal Area
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <li>
-                <a
-                  class="dropdown-item"
-                  href="#"
-                  @click.prevent="navigateTo('profile')"
-                >
-                  My Profile
-                </a>
-              </li>
               <li>
                 <a
                   class="dropdown-item"
@@ -127,8 +111,13 @@
 </template>
 
 <script>
+import SearchBar from "./SearchBar.vue";
+
 export default {
   name: "MainMenu",
+  components: {
+    SearchBar,
+  },
   data() {
     return {
       search: this.$root.store.lastSearch?.searchQuery || "",
@@ -156,24 +145,31 @@ export default {
         });
       }
     },
-    handleSearchKeyup(event) {
-      if (event.key === "Enter") {
-        this.onSearch();
-      } else if (event.key === "Backspace" || event.key === "Delete") {
-        this.updateQueryString();
-      } else {
-        if (this.search.length > 3 || this.search.length === 0) {
-          this.onSearch();
-        }
-      }
-    },
-    updateQueryString() {
-      const newQuery = { ...this.$route.query, search: this.search };
-      this.$router.push({ query: newQuery }).catch(() => {});
-    },
+    // handleSearchKeyup(event) {
+    //   if (event.key === "Enter") {
+    //     this.onSearch();
+    //   } else if (event.key === "Backspace" || event.key === "Delete") {
+    //     this.updateQueryString();
+    //   } else {
+    //     if (this.search.length > 3 || this.search.length === 0) {
+    //       this.onSearch();
+    //     }
+    //   }
+    // },
+    // updateQueryString() {
+    //   const newQuery = { ...this.$route.query, search: this.search };
+    //   this.$router.push({ query: newQuery }).catch(() => {});
+    // },
     logout() {
       this.$root.store.logout();
       this.$root.toast("Logout", "User logged out successfully", "success");
+      this.$root.store.watchedRecipes = [];
+      this.$root.store.favoriteRecipes = [];
+      this.$root.store.lastViewedRecipes = [];
+      localStorage.removeItem("lastSearch");
+      this.$root.store.lastQuery = null;
+      this.$root.store.myRecipes = [];
+
       this.$router.push("/").catch(() => {
         this.$forceUpdate();
       });
@@ -214,5 +210,14 @@ a {
 }
 .dropdown-menu[data-bs-popper] {
   left: -5rem;
+}
+
+.searchBar {
+  width: 30%;
+  transition: width 0.3s ease-in;
+}
+.searchBar:hover {
+  width: 40%;
+  transition: width 1s ease-in-out;
 }
 </style>

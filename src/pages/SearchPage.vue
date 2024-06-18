@@ -2,17 +2,9 @@
   <div class="search-container">
     <h1>Search Recipes</h1>
     <b-form @submit.prevent="performSearch">
-      <!-- <b-input-group class="mb-3">
-        <b-form-input
-          v-model="searchQuery"
-          placeholder="Search for recipes..."
-        ></b-form-input>
-        <b-input-group-append>
-          <b-button type="submit" variant="primary">Search</b-button>
-        </b-input-group-append>
-      </b-input-group> -->
+      <SearchBar />
 
-      <div class="filter-container ">
+      <div class="filter-container mt-4">
         <b-form-group label="Cuisine">
           <b-form-select
             v-model="selectedCuisine"
@@ -87,12 +79,14 @@
 
 <script>
 import RecipePreviewList from "../components/RecipePreviewList.vue";
+import SearchBar from "../components/SearchBar.vue";
 import { mockSearchRecipes } from "../services/recipes.js";
 
 export default {
   name: "SearchPage",
   components: {
     RecipePreviewList,
+    SearchBar,
   },
   data() {
     return {

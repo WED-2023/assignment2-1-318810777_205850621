@@ -31,6 +31,9 @@
             <i class="fas fa-bread-slice"></i> Contains Gluten
           </span>
         </div>
+        <p v-if="recipe.instructions" >
+          <div v-html="formattedInstructions()" class="text-start ms-3"></div>
+        </p>
         <div class="recipe-indicators" @click="onRecipeClick">
           <i
             class="fa-heart"
@@ -83,6 +86,13 @@ export default {
       this.isFavorited = !this.isFavorited;
       this.recipe.isFavorited = !this.recipe.isFavorited;
       if (this.toggleFavorite) this.toggleFavorite(this.recipe);
+    },
+    formattedInstructions() {
+      if(!this.recipe.instructions) return '';
+      return this.recipe.instructions
+        .substring(0, 100)
+        .replace(/\r\n/g, "<br />")
+        .replace(/\n/g, "<br />");
     },
   },
   mounted() {

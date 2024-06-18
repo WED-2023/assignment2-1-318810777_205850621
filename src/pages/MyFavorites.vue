@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <h1>My Recipes</h1>
+  <div>
+    <h1>My Favorites</h1>
     <div v-if="recipes.length > 0">
       <RecipePreviewList
         :recipes="recipes"
@@ -9,7 +9,7 @@
       />
     </div>
     <div v-else>
-      <p>No recipes found.</p>
+      <p>No favorite recipes found.</p>
     </div>
   </div>
 </template>
@@ -18,18 +18,19 @@
 import RecipePreviewList from "../components/RecipePreviewList.vue";
 
 export default {
+  name: "MyFavorites",
   components: {
     RecipePreviewList,
   },
   data() {
     return {
-      recipes: this.$root.store.myRecipes || [],
+      recipes: this.$root.store.favoriteRecipes || [],
     };
   },
+
   methods: {
-    fetchMyRecipes() {
-      this.recipes = this.$root.store.myRecipes || [];
-      console.log(this.$root.store.myRecipes);
+    fetchFavoriteRecipes() {
+      this.recipes = this.$root.store.favoriteRecipes || [];
     },
     markAsViewed(recipe) {
       // Implement mark as viewed logic
@@ -39,11 +40,9 @@ export default {
     },
   },
   created() {
-    this.fetchMyRecipes();
+    this.fetchFavoriteRecipes();
   },
 };
 </script>
 
-<style scoped>
-/* Add styles if needed */
-</style>
+<style lang="scss" scoped></style>
