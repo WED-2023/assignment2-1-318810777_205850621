@@ -82,9 +82,8 @@
                 <a
                   class="dropdown-item"
                   href="#"
-                  @click.prevent="navigateTo('family')"
-                  >Family Recipes</a
-                >
+                  @click.prevent="navigateTo('family-recipes')">Family Recipes</a>
+                
               </li>
             </ul>
           </li>
