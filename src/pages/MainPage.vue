@@ -1,8 +1,12 @@
 <template>
   <div class="container">
+    <header class="hero-section">
+      <h1>Welcome to Food God</h1>
+      <p>Your ultimate destination for delicious recipes.</p>
+    </header>
     <div class="columns">
       <div class="left-column">
-        <div class="recipe-section white-background">
+        <div class="recipe-section content-background">
           <RecipePreviewList
             :recipes="randomRecipes"
             :lastViewedRecipes="lastViewedRecipes"
@@ -16,21 +20,17 @@
         </div>
       </div>
       <div class="right-column">
-        <div class="recipe-section white-background">
+        <div class="recipe-section content-background">
           <div v-if="!username" class="guest-message">
             <p class="welcome-text">
               Hello, Guest! Please
-              <a @click="navigateTo('login')">
-                Login
-              </a>
+              <a @click="navigateTo('login')">Login</a>
               or
-              <a @click="navigateTo('register')">
-                Register
-              </a>
+              <a @click="navigateTo('register')">Register</a>
               to view personalized content.
             </p>
           </div>
-          <div v-else class="">
+          <div v-else>
             <div v-if="lastViewedRecipes.length > 0">
               <RecipePreviewList
                 :recipes="lastViewedRecipes.slice(0, 3)"
@@ -38,7 +38,7 @@
                 :toggleFavorite="toggleFavorite"
                 :title="`Last Watched Recipes`"
               />
-              <button class="btn btn-primary mt-3 " @click="clearHistory">
+              <button class="btn btn-primary mt-3" @click="clearHistory">
                 Clear History
               </button>
             </div>
@@ -49,6 +49,13 @@
         </div>
       </div>
     </div>
+    <footer>
+      <p>&copy; 2024 Recipe Revel. All rights reserved.</p>
+      <p>
+        <a @click="navigateTo('contact')">Contact Us</a> |
+        <a @click="navigateTo('about')">About Us</a>
+      </p>
+    </footer>
   </div>
 </template>
 
@@ -144,17 +151,41 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  background-color: #f4f4f9;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
 .container {
   max-width: 1200px;
   margin: auto;
   padding: 20px;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   min-height: 100vh;
-  width: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.hero-section {
+  text-align: center;
+  padding: 50px 20px;
+  background-image: linear-gradient(to right, #ff7e5f, #feb47b);
+  color: white;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.hero-section h1 {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+}
+
+.hero-section p {
+  font-size: 1.2em;
 }
 
 .columns {
@@ -169,76 +200,45 @@ export default {
   text-align: center;
 }
 
-.recipe-section.white-background {
-  background-color: white;
+.recipe-section.content-background {
+  background-color: #fff4e6;
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: relative;
 }
 
-.right-column .sign-in {
-  text-align: left;
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
 }
 
-.right-column .sign-in form {
-  display: flex;
-  flex-direction: column;
-}
-
-.right-column .sign-in form div {
-  margin-bottom: 10px;
-}
-
-.right-column .sign-in form label {
-  margin-bottom: 5px;
-}
-
-.right-column .sign-in form input[type="email"],
-.right-column .sign-in form input[type="password"] {
-  padding: 5px;
-}
-
-.right-column .sign-in form button {
-  padding: 10px;
+.btn-primary {
   background-color: #007bff;
   color: white;
-  border: none;
-  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.right-column .sign-in form button:hover {
+.btn-primary:hover {
   background-color: #0056b3;
 }
 
-.right-column .sign-in router-link {
-  margin-top: 10px;
-  display: block;
-  color: #007bff;
-  text-decoration: none;
-}
-
-.right-column .sign-in router-link:hover {
-  text-decoration: underline;
-}
-
 .guest-message {
-  background-size: cover;
-  background-position: center;
-  color: white;
+  background-color: #ffe4e1;
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 20px;
   text-align: center;
-  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: relative;
 }
 
 .welcome-text {
   font-size: 1.2em;
-  color: black;
-  /*text-shadow: 2px 2px 4px rgba(95, 91, 91, 0.7);*/
-  position: relative;
+  color: #333;
 }
 
 .welcome-text > a {
@@ -263,7 +263,28 @@ export default {
 }
 
 .welcome-text > a:hover:after {
-  width: 90%;
+  width: 100%;
   transition: width 0.3s ease-in-out;
+}
+
+footer {
+  text-align: center;
+  margin-top: auto;
+  padding: 20px 0;
+  background-color: #333;
+  color: white;
+}
+
+footer p {
+  margin: 5px 0;
+}
+
+footer a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
 }
 </style>

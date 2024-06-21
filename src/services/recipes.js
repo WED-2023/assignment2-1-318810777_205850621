@@ -36,12 +36,9 @@ export function mockSearchRecipes(
   filters = {}
 ) {
   let filteredRecipes = sampleRecipes;
-  console.log("Filters: ", filters);
-  console.log("Recipes input: ", sampleRecipes.length);
-
+  
   // Filter by query
   if (query || query.length > 0) {
-    console.log("Query: ", query);
     filteredRecipes = filteredRecipes.filter(
       (recipe) =>
         recipe.title.toLowerCase().includes(query.toLowerCase()) ||
@@ -51,7 +48,6 @@ export function mockSearchRecipes(
 
   // Filter by diet
   if (filters.diet && filters.diet !== "" && filters.diet !== "No Filter") {
-    console.log("Diet: ", filters.diet);
     filteredRecipes = filteredRecipes.filter((recipe) =>
       recipe.diets?.some(
         (diet) => diet.toLowerCase() === filters.diet.toLowerCase()
@@ -60,38 +56,25 @@ export function mockSearchRecipes(
   }
 
   // Filter by cuisines
-  if (
-    filters.cuisines &&
-    filters.cuisines !== "" &&
-    filters.cuisines !== "No Filter"
-  ) {
-    console.log("Cuisines: ", filters.cuisines);
+  if (filters.cuisines && filters.cuisines !== "" && filters.cuisines !== "No Filter") {
     filteredRecipes = filteredRecipes.filter((recipe) =>
-      recipe.cuisines?.some((cuisine) => {
-        return cuisine.toLowerCase() === filters.cuisines.toLowerCase();
-      })
+      recipe.cuisines?.some(
+        (cuisine) => cuisine.toLowerCase() === filters.cuisines.toLowerCase()
+      )
     );
   }
 
   // Filter by intolerances
-  if (
-    filters.intolerances &&
-    filters.intolerances !== "" &&
-    filters.intolerances !== "No Filter"
-  ) {
-    console.log("Intolerances: ", filters.intolerances);
+  if (filters.intolerances && filters.intolerances !== "" && filters.intolerances !== "No Filter") {
     filteredRecipes = filteredRecipes.filter(
-      (recipe) =>
-        !recipe.intolerances?.some(
-          (intolerance) =>
-            intolerance.toLowerCase() === filters.intolerances.toLowerCase()
-        )
+      (recipe) => !recipe.intolerances?.some(
+        (intolerance) => intolerance.toLowerCase() === filters.intolerances.toLowerCase()
+      )
     );
   }
 
   // Paginate results
   const startIndex = (page - 1) * resultsPerPage;
-  console.log("Filtered recipes: ", filteredRecipes.length);
   const paginatedRecipes = filteredRecipes.slice(
     startIndex,
     startIndex + resultsPerPage
@@ -101,11 +84,7 @@ export function mockSearchRecipes(
     recipe.vegetarian = recipe.diets?.some(
       (diet) => diet.toLowerCase() === "vegetarian"
     );
-    recipe.vegan =
-      recipe.diets?.some((diet) => diet.toLowerCase() === "vegan") &&
-      !recipe.intolerances?.some(
-        (intolerance) => intolerance.toLowerCase() === "dairy"
-      );
+    recipe.vegan = recipe.diets?.some((diet) => diet.toLowerCase() === "vegan");
     recipe.glutenFree = !recipe.intolerances?.some(
       (intolerance) => intolerance.toLowerCase() === "gluten"
     );
