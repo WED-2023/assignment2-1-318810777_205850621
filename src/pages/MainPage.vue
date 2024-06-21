@@ -6,7 +6,7 @@
     </header>
     <div class="columns">
       <div class="left-column">
-        <div class="recipe-section content-background">
+        <div class="recipe-section content-background gradient-effect">
           <RecipePreviewList
             :recipes="randomRecipes"
             :lastViewedRecipes="lastViewedRecipes"
@@ -20,7 +20,7 @@
         </div>
       </div>
       <div class="right-column">
-        <div class="recipe-section content-background">
+        <div class="recipe-section content-background gradient-effect">
           <div v-if="!username" class="guest-message">
             <p class="welcome-text">
               Hello, Guest! Please
@@ -43,19 +43,12 @@
               </button>
             </div>
             <div v-else>
-              <p>Watch a recipe to see it here!</p>
+              <h3 style="color: black">Watch a recipe to see it here!</h3>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <footer>
-      <p>&copy; 2024 Recipe Revel. All rights reserved.</p>
-      <p>
-        <a @click="navigateTo('contact')">Contact Us</a> |
-        <a @click="navigateTo('about')">About Us</a>
-      </p>
-    </footer>
   </div>
 </template>
 
@@ -79,6 +72,7 @@ export default {
     fetchRandomRecipes() {
       const response = mockGetRecipesPreview(3, {}, this.randomRecipes.length);
       this.randomRecipes = response.data.recipes;
+
       this.randomRecipes.forEach((recipe) => {
         recipe.isViewed = this.lastViewedRecipes?.filter(
           (r) => r.id === recipe.id
@@ -151,10 +145,10 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap");
 
 body {
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   background-color: #f4f4f9;
   margin: 0;
   padding: 0;
@@ -164,7 +158,6 @@ body {
 .container {
   max-width: 1200px;
   margin: auto;
-  padding: 20px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -173,19 +166,27 @@ body {
 .hero-section {
   text-align: center;
   padding: 50px 20px;
-  background-image: linear-gradient(to right, #ff7e5f, #feb47b);
+  background-image: linear-gradient(to right, #f9643f, #feb47b);
+  background-size: 150% 150%;
   color: white;
   border-radius: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 1rem;
+  animation: gradientAnimation 6s ease infinite;
 }
 
 .hero-section h1 {
   font-size: 2.5em;
   margin-bottom: 10px;
+  font-family: "Playwrite NZ", cursive;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-style: normal;
 }
 
 .hero-section p {
+  margin-top: 1em;
   font-size: 1.2em;
+  margin-bottom: -0.8rem;
 }
 
 .columns {

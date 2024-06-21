@@ -1,5 +1,5 @@
 <template>
-  <div class="about-container">
+  <div class="about-container gradient-effect">
     <h1>About Us</h1>
     <p>
       Welcome to our recipe platform! Our mission is to provide you with a rich
@@ -39,6 +39,17 @@
         >Assignment 1</a
       >
     </p>
+    <p></p>
+    <h1>Timor Lankri</h1>
+    <p>
+      Timor Lankri is a dedicated third-year student in Systems Information
+      Engineering, striving to become a proficient full-stack developer. With a
+      keen interest in modern technologies and frameworks, Timor focuses on
+      building robust and user-friendly applications. Always eager to expand her
+      knowledge, she stays current with industry trends and continuously seeks
+      opportunities to improve her skills. Timor’s passion and commitment fuel
+      her journey towards mastering the art of full-stack development.
+    </p>
   </div>
 </template>
 
@@ -56,6 +67,7 @@ export default {
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
 }
 .about-container h1 {
   margin-bottom: 20px;

@@ -277,7 +277,7 @@ export default {
           password: this.form.password,
         };
         const response = await mockRegister(userDetails);
-        console.log(response);
+
         if (response.status === 200) {
           this.$router.push("/login");
         }

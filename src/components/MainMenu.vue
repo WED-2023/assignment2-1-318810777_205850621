@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-custom">
+  <nav class="navbar navbar-expand-lg navbar-custom gradient-effect">
     <div class="container-fluid">
       <a class="navbar-brand" href="#" @click.prevent="navigateTo('main')">
         <img src="@/assets/logo.webp" alt="Logo" class="navbar-logo" />
@@ -7,8 +7,8 @@
       <button
         class="navbar-toggler"
         type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNavDropdown"
+        data-toggle="collapse"
+        data-target="#navbarNavDropdown"
         aria-controls="navbarNavDropdown"
         aria-expanded="false"
         aria-label="Toggle navigation"
@@ -16,7 +16,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav ms-auto pe-2 mb-2 mb-lg-0">
+        <ul class="navbar-nav mr-auto pe-2 mb-2 mb-lg-0">
           <li class="nav-item">
             <a class="nav-link" href="#" @click.prevent="navigateTo('main')"
               >Main</a
@@ -33,10 +33,11 @@
             >
           </li>
         </ul>
-        <form class="d-flex searchBar">
+        <div v-if="!isSearchPage" class="d-flex searchBar ml-0">
           <SearchBar />
-        </form>
-        <ul class="navbar-nav ml-auto me-3">
+        </div>
+
+        <ul class="navbar-nav ml-3 me-3">
           <li v-if="$root.store.username">
             <span class="nav-link bold-message"
               >Hello, {{ $root.store.username }}</span
@@ -56,36 +57,32 @@
               href="#"
               id="navbarDropdownMenuLink"
               role="button"
-              data-bs-toggle="dropdown"
+              data-toggle="dropdown"
+              aria-haspopup="true"
               aria-expanded="false"
             >
               Personal Area
             </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <li>
-                <a
-                  class="dropdown-item"
-                  href="#"
-                  @click.prevent="navigateTo('favorites')"
-                  >My Favorite Recipes</a
-                >
-              </li>
-              <li>
-                <a
-                  class="dropdown-item"
-                  href="#"
-                  @click.prevent="navigateTo('my-recipes')"
-                  >My Recipes</a
-                >
-              </li>
-              <li>
-                <a
-                  class="dropdown-item"
-                  href="#"
-                  @click.prevent="navigateTo('family-recipes')">Family Recipes</a>
-                
-              </li>
-            </ul>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a
+                class="dropdown-item"
+                href="#"
+                @click.prevent="navigateTo('favorites')"
+                >My Favorite Recipes</a
+              >
+              <a
+                class="dropdown-item"
+                href="#"
+                @click.prevent="navigateTo('my-recipes')"
+                >My Recipes</a
+              >
+              <a
+                class="dropdown-item"
+                href="#"
+                @click.prevent="navigateTo('family-recipes')"
+                >Family Recipes</a
+              >
+            </div>
           </li>
           <li class="nav-item" v-if="$root.store.username">
             <a class="nav-link" href="#" @click.prevent="logout">Sign Out</a>
@@ -120,9 +117,19 @@ export default {
   data() {
     return {
       search: this.$root.store.lastSearch?.searchQuery || "",
+      isSearchPage: this.$route.name === "search",
     };
   },
+  mounted() {
+    this.initializeDropdown();
+    this.isSearchPage = this.$route.name === "search";
+  },
   methods: {
+    initializeDropdown() {
+      $(document).ready(function() {
+        $(".dropdown-toggle").dropdown();
+      });
+    },
     navigateTo(routeName) {
       if (this.$route.name !== routeName) {
         this.$router.push({ name: routeName });
@@ -131,7 +138,6 @@ export default {
     onSearch() {
       const newQuery = { search: this.search };
       const currentQuery = this.$route.query;
-      // Check if the new query is different from the current query
       const isQueryDifferent = Object.keys(newQuery).some(
         (key) => newQuery[key] !== currentQuery[key]
       );
@@ -144,21 +150,6 @@ export default {
         });
       }
     },
-    // handleSearchKeyup(event) {
-    //   if (event.key === "Enter") {
-    //     this.onSearch();
-    //   } else if (event.key === "Backspace" || event.key === "Delete") {
-    //     this.updateQueryString();
-    //   } else {
-    //     if (this.search.length > 3 || this.search.length === 0) {
-    //       this.onSearch();
-    //     }
-    //   }
-    // },
-    // updateQueryString() {
-    //   const newQuery = { ...this.$route.query, search: this.search };
-    //   this.$router.push({ query: newQuery }).catch(() => {});
-    // },
     logout() {
       this.$root.store.logout();
       this.$root.toast("Logout", "User logged out successfully", "success");
@@ -172,6 +163,11 @@ export default {
       this.$router.push("/").catch(() => {
         this.$forceUpdate();
       });
+    },
+  },
+  watch: {
+    "$route.name"(newRoute) {
+      this.isSearchPage = newRoute === "search";
     },
   },
 };
@@ -195,9 +191,7 @@ export default {
   width: 20rem;
 }
 .navbar-logo {
-  height: 60px; /* Increased height */
-  /* Optional: Adjust width if needed */
-  /* width: auto; */
+  height: 60px;
 }
 a {
   text-decoration: none;
@@ -207,12 +201,9 @@ a {
   font-weight: bold;
   color: #000;
 }
-.dropdown-menu[data-bs-popper] {
-  left: -5rem;
-}
-
 .searchBar {
   width: 30%;
+  right: 0;
   transition: width 0.3s ease-in;
 }
 .searchBar:hover {

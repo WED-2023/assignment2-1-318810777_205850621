@@ -5,7 +5,12 @@
       <slot></slot>
     </h3>
     <b-row class="text-center" align-v="center">
-      <b-col cols="12" md="6" v-for="recipe in recipes" :key="recipe.id">
+      <b-col
+        cols="12"
+        :md="itemsPerRow"
+        v-for="recipe in recipes"
+        :key="recipe.id"
+      >
         <RecipePreview
           class="recipePreview"
           :recipe="recipe"
@@ -29,7 +34,7 @@ export default {
   props: {
     title: {
       type: String,
-      required: true,
+      required: false,
     },
     recipes: {
       type: Array,
@@ -51,13 +56,19 @@ export default {
       type: Array,
       required: false,
     },
+    perRow: {
+      type: Number,
+      required: false,
+    },
   },
   data() {
     return {
       localRecipes: [],
+      itemsPerRow: this.perRow ? 12 / this.perRow : 12 / 2,
     };
   },
   mounted() {
+    this.itemsPerRow = this.perRow ? 12 / this.perRow : 12 / 2;
     if (this.recipes.length !== 0) {
       this.recipes.forEach((recipe) => {
         // Check if the recipe is in the viewedRecipes array
@@ -83,7 +94,6 @@ export default {
         this.recipes.forEach((recipe) => {
           if (viewedRecipes.includes(recipe.id)) {
             recipe.isViewed = true;
-            console.log(`Recipe ${recipe.id} is viewed`);
           }
         });
       } catch (error) {

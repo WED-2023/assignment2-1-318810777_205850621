@@ -4,7 +4,6 @@ export function mockLogin(credentials) {
   // Check if a user is already logged in
   const loggedInUser = localStorage.getItem("username");
   if (loggedInUser) {
-    console.log("user already logged in: auth.js/7");
     return {
       status: 409,
       response: {
@@ -43,8 +42,6 @@ export function mockLogin(credentials) {
     (u) =>
       u.username === credentials.username && u.password === credentials.password
   );
-  console.log("user found: auth.js/42");
-  console.log(user);
 
   if (user) {
     credentialsAreValid = true;

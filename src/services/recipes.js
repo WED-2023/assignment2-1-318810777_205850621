@@ -3,6 +3,8 @@ import recipe_preview from "../assets/mocks/recipe_preview.json";
 import sampleRecipes from "../assets/mocks/sample_recipes.json";
 
 export function mockGetRecipesPreview(amount = 1, filters = {}, offset = 0) {
+  // Select 3 random recipes from the sample recipes, up to the amount requested
+  const randomRecipes = [...sampleRecipes].sort(() => 0.5 - Math.random());
   let recipes = [];
   for (let i = 0; i < amount; i++) {
     let isVegetarian = Math.random() < 0.5;
@@ -10,13 +12,11 @@ export function mockGetRecipesPreview(amount = 1, filters = {}, offset = 0) {
     let isGlutenFree = Math.random() < 0.5;
 
     let recipe = {
-      ...recipe_preview,
-      id: i + 1 + offset,
-      vegan: isVegan,
-      vegetarian: isVegetarian,
-      glutenFree: isGlutenFree,
+      ...randomRecipes[i],
+      // vegan: isVegan,
+      // vegetarian: isVegetarian,
+      // glutenFree: isGlutenFree,
     }; // Ensure each recipe has a unique ID and random dietary flags
-
     // Apply filters
 
     if (filters.vegetarian && !recipe.vegetarian) continue;
@@ -29,14 +29,14 @@ export function mockGetRecipesPreview(amount = 1, filters = {}, offset = 0) {
   return { data: { recipes: recipes } };
 }
 
-export function mockSearchRecipes(
+export function searchRecipes(
   query = "",
   page = 1,
   resultsPerPage = 5,
   filters = {}
 ) {
   let filteredRecipes = sampleRecipes;
-  
+
   // Filter by query
   if (query || query.length > 0) {
     filteredRecipes = filteredRecipes.filter(
@@ -56,7 +56,11 @@ export function mockSearchRecipes(
   }
 
   // Filter by cuisines
-  if (filters.cuisines && filters.cuisines !== "" && filters.cuisines !== "No Filter") {
+  if (
+    filters.cuisines &&
+    filters.cuisines !== "" &&
+    filters.cuisines !== "No Filter"
+  ) {
     filteredRecipes = filteredRecipes.filter((recipe) =>
       recipe.cuisines?.some(
         (cuisine) => cuisine.toLowerCase() === filters.cuisines.toLowerCase()
@@ -65,16 +69,23 @@ export function mockSearchRecipes(
   }
 
   // Filter by intolerances
-  if (filters.intolerances && filters.intolerances !== "" && filters.intolerances !== "No Filter") {
+  if (
+    filters.intolerances &&
+    filters.intolerances !== "" &&
+    filters.intolerances !== "No Filter"
+  ) {
     filteredRecipes = filteredRecipes.filter(
-      (recipe) => !recipe.intolerances?.some(
-        (intolerance) => intolerance.toLowerCase() === filters.intolerances.toLowerCase()
-      )
+      (recipe) =>
+        !recipe.intolerances?.some(
+          (intolerance) =>
+            intolerance.toLowerCase() === filters.intolerances.toLowerCase()
+        )
     );
   }
 
   // Paginate results
   const startIndex = (page - 1) * resultsPerPage;
+  const totalResults = filteredRecipes.length;
   const paginatedRecipes = filteredRecipes.slice(
     startIndex,
     startIndex + resultsPerPage
@@ -94,6 +105,7 @@ export function mockSearchRecipes(
   return {
     data: {
       recipes: paginatedRecipes,
+      total: totalResults,
     },
   };
 }
@@ -103,11 +115,20 @@ export function mockGetLastViewedRecipes() {
 }
 
 export function mockGetRecipeFullDetails(recipeId) {
+  let recipePreview = sampleRecipes.find((recipe) => recipe.id == recipeId);
+  if (!recipePreview) {
+    console.error("Recipe not found in sample recipes");
+    return { data: { recipe: null } };
+  }
+
   return {
     data: {
       recipe: {
-        ...recipe_full_view,
-        id: recipeId, // Ensure the recipe ID is set correctly
+        ...recipePreview,
+        analyzedInstructions: recipe_full_view.analyzedInstructions,
+        extendedIngredients: recipe_full_view.extendedIngredients,
+        id: recipeId, // Ensure the recipe ID is set correctly,
+        image: recipePreview.image.replace("/150", "/556/370"),
       },
     },
   };

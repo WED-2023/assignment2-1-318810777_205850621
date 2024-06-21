@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1>My Recipes</h1>
+    <h1 class="text-center mb-3">My Recipes</h1>
     <div v-if="recipes.length > 0">
       <RecipePreviewList
         :recipes="recipes"
@@ -9,7 +9,7 @@
       />
     </div>
     <div v-else>
-      <p>No recipes found.</p>
+      <p class="text-center">No recipes found.</p>
     </div>
   </div>
 </template>
@@ -29,7 +29,6 @@ export default {
   methods: {
     fetchMyRecipes() {
       this.recipes = this.$root.store.myRecipes || [];
-      console.log(this.$root.store.myRecipes);
     },
     markAsViewed(recipe) {
       // Implement mark as viewed logic

@@ -2,6 +2,7 @@
   <div class="search-container">
     <div class="input-group position-relative">
       <input
+        ref="searchInput"
         class="form-control search-input"
         type="search"
         placeholder="Search"
@@ -16,7 +17,7 @@
         class="suggestions-list"
       >
         <li
-          v-for="suggestion in filteredSuggestions"
+          v-for="suggestion in filteredSuggestions.slice(0, 7)"
           :key="suggestion"
           @mousedown.prevent="selectSuggestion(suggestion)"
         >
@@ -40,55 +41,37 @@ export default {
   },
   computed: {
     suggestions() {
-      // Debugging log
       if (this.$root.store.lastSearch?.query?.length > 3) {
-        console.log(
-          "Adding last search query:",
-          this.$root.store.lastSearch.query
-        );
         this.$root.store.previousSearches.add(
           this.$root.store.lastSearch.query
         );
       }
-      console.log(
-        "Previous searches:",
-        Array.from(this.$root.store.previousSearches)
-      );
       return Array.from(this.$root.store.previousSearches);
     },
     filteredSuggestions() {
       const lowerCaseSearch = this.search.toLowerCase();
-      const filtered = this.suggestions.filter((suggestion) =>
+      return this.suggestions.filter((suggestion) =>
         suggestion.toLowerCase().includes(lowerCaseSearch)
       );
-      // Debugging log
-      console.log("Filtered suggestions:", filtered);
-      return filtered;
     },
   },
   methods: {
     debounceSearch: debounce(function() {
       this.onSearch();
-    }, 300), // Debounce for 300ms
+    }, 1000), // Debounce for 300ms
 
     longerDebounceSearch: debounce(function() {
       if (this.search.length > 3) {
-        // Only add search term if it's longer than 3 characters
         this.$root.store.previousSearches.add(this.search); // Add search term to previous searches
       }
-    }, 1000), // Debounce for 3000ms (3 seconds)
+    }, 3000), // Debounce for 3 seconds
 
     handleSearchKeyup(event) {
-      this.$root.toast(
-        "Search keyup event",
-        "this is the body of the toast",
-        "success"
-      );
+      this.longerDebounceSearch(); // Call longer debounce function
+      this.debounceSearch(); // Call debounce function
       if (event.key === "Enter") {
         this.onSearch();
         this.$root.store.previousSearches.add(this.search);
-        // Debugging log
-        console.log("Search term added:", this.search);
       } else if (event.key === "Backspace" || event.key === "Delete") {
         this.updateQueryString();
         this.showSuggestions = true;
@@ -140,10 +123,13 @@ export default {
       this.search = newSearch;
     },
   },
+  mounted() {
+    this.$emit("mounted", this.$refs.searchInput);
+  },
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .search-container {
   width: 100%;
   max-width: 90vw;

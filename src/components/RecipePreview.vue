@@ -31,9 +31,9 @@
             <i class="fas fa-bread-slice"></i> Contains Gluten
           </span>
         </div>
-        <p v-if="recipe.instructions" >
-          <div v-html="formattedInstructions()" class="text-start ms-3"></div>
-        </p>
+        <div v-if="recipe.instructions && !isMainPage">
+          <p v-html="formattedInstructions()" class="text-start ms-3"></p>
+        </div>
         <div class="recipe-indicators" @click="onRecipeClick">
           <i
             class="fa-heart"
@@ -60,6 +60,7 @@ export default {
     return {
       imageLoaded: false,
       isFavorited: this.recipe.isFavorited,
+      isMainPage: this.$route.name === "main",
     };
   },
   props: {
@@ -85,10 +86,23 @@ export default {
     onFavoriteClick() {
       this.isFavorited = !this.isFavorited;
       this.recipe.isFavorited = !this.recipe.isFavorited;
-      if (this.toggleFavorite) this.toggleFavorite(this.recipe);
+      // if (this.toggleFavorite) this.toggleFavorite(this.recipe);
+      if (
+        this.$root.store.favoriteRecipes.filter((r) => r.id === this.recipe.id)
+          .length === 0
+      ) {
+        this.$root.store.favoriteRecipes.push({
+          ...this.recipe,
+          addedDate: new Date(),
+        });
+      } else {
+        this.$root.store.favoriteRecipes = this.$root.store.favoriteRecipes.filter(
+          (r) => r.id !== this.recipe.id
+        );
+      }
     },
     formattedInstructions() {
-      if(!this.recipe.instructions) return '';
+      if (!this.recipe.instructions) return "";
       return this.recipe.instructions
         .substring(0, 100)
         .replace(/\r\n/g, "<br />")
@@ -101,6 +115,7 @@ export default {
     img.onload = () => {
       this.imageLoaded = true;
     };
+    this.isMainPage = this.$route.name === "main";
   },
 };
 </script>

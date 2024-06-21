@@ -79,8 +79,6 @@ export default {
     onchange(e) {
       // Get value from the search input
       let searchValue = document.querySelector("#search input").value;
-
-      console.log(e);
     },
   },
 };

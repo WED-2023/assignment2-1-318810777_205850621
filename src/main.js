@@ -4,16 +4,12 @@ import VueAxios from "vue-axios";
 import axios from "axios";
 import routes from "./routes";
 import VueRouter from "vue-router";
-
-Vue.use(VueRouter);
-const router = new VueRouter({
-  routes,
-});
-
 import Vuelidate from "vuelidate";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
-
+import "bootstrap";
+import "jquery";
+import "popper.js";
 
 import {
   FormGroupPlugin,
@@ -27,18 +23,24 @@ import {
   ToastPlugin,
   LayoutPlugin,
   InputGroupPlugin,
-  BInputGroupAppend,
   FormCheckboxPlugin,
   BFormTextarea,
   VBModal,
+  BButtonGroup,
+  BInputGroupAppend,
+  BPagination,
 } from "bootstrap-vue";
 
-import { BButtonGroup, BButton } from "bootstrap-vue";
-Vue.component("b-button-group", BButtonGroup);
-Vue.component("b-input-group", InputGroupPlugin);
-Vue.component("b-form-textarea", BFormTextarea);
-Vue.component("b-input-group-append", BInputGroupAppend);
-Vue.directive("b-modal", VBModal);
+// Import jQuery and make it available globally
+import jQuery from "jquery";
+window.$ = window.jQuery = jQuery;
+
+Vue.use(VueRouter);
+const router = new VueRouter({
+  routes,
+});
+
+Vue.use(Vuelidate);
 
 [
   FormGroupPlugin,
@@ -52,8 +54,14 @@ Vue.directive("b-modal", VBModal);
   ToastPlugin,
   LayoutPlugin,
   FormCheckboxPlugin,
+  InputGroupPlugin,
 ].forEach((x) => Vue.use(x));
-Vue.use(Vuelidate);
+
+Vue.component("b-button-group", BButtonGroup);
+Vue.component("b-input-group-append", BInputGroupAppend);
+Vue.component("b-form-textarea", BFormTextarea);
+Vue.component("b-pagination", BPagination);
+Vue.directive("b-modal", VBModal);
 
 axios.interceptors.request.use(
   function(config) {

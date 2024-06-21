@@ -1,90 +1,90 @@
 <template>
-  <b-modal id="add-recipe-modal" scrollable title="Create New Recipe" size="lg">
-    <b-form @submit.stop.prevent="onSubmit" class="recipe-form">
-      <b-form-group label="Title" label-for="title">
-        <b-form-input id="title" v-model="form.title" required></b-form-input>
-      </b-form-group>
+  <!-- <b-modal id="add-recipe-modal" scrollable title="Create New Recipe" size="lg"> -->
+  <b-form @submit.stop.prevent="onSubmit" class="recipe-form gradient-effect">
+    <b-form-group label="Title" label-for="title">
+      <b-form-input id="title" v-model="form.title" required></b-form-input>
+    </b-form-group>
 
-      <b-form-group label="Image URL" label-for="image">
-        <b-form-input id="image" v-model="form.image" required></b-form-input>
-      </b-form-group>
+    <b-form-group label="Image URL" label-for="image">
+      <b-form-input id="image" v-model="form.image" required></b-form-input>
+    </b-form-group>
 
-      <b-form-row>
-        <b-col>
-          <b-form-group label="Ready In Minutes" label-for="readyInMinutes">
-            <b-form-input
-              id="readyInMinutes"
-              v-model="form.readyInMinutes"
-              type="number"
-              min="5"
-              required
-            ></b-form-input>
-          </b-form-group>
-        </b-col>
-        <b-col>
-          <b-form-group label="Servings" label-for="servings">
-            <b-form-input
-              id="servings"
-              v-model="form.servings"
-              type="number"
-              min="1"
-              required
-            ></b-form-input>
-          </b-form-group>
-        </b-col>
-      </b-form-row>
-
-      <b-form-group label="Ingredients" label-for="ingredients">
-        <div class="textarea-container">
-          <div class="line-numbers" ref="lineNumbersIngredients">
-            {{ lineNumbers }}
-          </div>
-          <b-form-textarea
-            id="ingredients"
-            v-model="form.ingredients"
-            placeholder="List each ingredient on a new line"
-            rows="5"
+    <b-form-row>
+      <b-col>
+        <b-form-group label="Ready In Minutes" label-for="readyInMinutes">
+          <b-form-input
+            id="readyInMinutes"
+            v-model="form.readyInMinutes"
+            type="number"
+            min="5"
             required
-            @input="updateLineNumbers"
-            @scroll="syncScroll('ingredients')"
-          ></b-form-textarea>
-        </div>
-      </b-form-group>
-
-      <b-form-group label="Instructions" label-for="instructions">
-        <div class="textarea-container">
-          <div class="line-numbers" ref="lineNumbersInstructions">
-            {{ lineNumbersInstructions }}
-          </div>
-          <b-form-textarea
-            id="instructions"
-            v-model="form.instructions"
-            placeholder="List each step on a new line"
-            rows="5"
+          ></b-form-input>
+        </b-form-group>
+      </b-col>
+      <b-col>
+        <b-form-group label="Servings" label-for="servings">
+          <b-form-input
+            id="servings"
+            v-model="form.servings"
+            type="number"
+            min="1"
             required
-            @input="updateLineNumbersInstructions"
-            @scroll="syncScroll('instructions')"
-          ></b-form-textarea>
+          ></b-form-input>
+        </b-form-group>
+      </b-col>
+    </b-form-row>
+
+    <b-form-group label="Ingredients" label-for="ingredients">
+      <div class="textarea-container">
+        <div class="line-numbers" ref="lineNumbersIngredients">
+          {{ lineNumbers }}
         </div>
-      </b-form-group>
-
-      <b-form-group
-        label="Dietary Options"
-        label-for="dietaryOptions"
-        class="dietary-options"
-      >
-        <b-form-checkbox-group v-model="form.dietaryOptions" switches>
-          <b-form-checkbox value="vegetarian">Vegetarian</b-form-checkbox>
-          <b-form-checkbox value="vegan">Vegan</b-form-checkbox>
-          <b-form-checkbox value="glutenFree">Gluten-Free</b-form-checkbox>
-        </b-form-checkbox-group>
-      </b-form-group>
-
-      <div class="button-wrapper">
-        <b-button variant="primary" @click="onSubmit">Submit Recipe</b-button>
+        <b-form-textarea
+          id="ingredients"
+          v-model="form.ingredients"
+          placeholder="List each ingredient on a new line"
+          rows="5"
+          required
+          @input="updateLineNumbers"
+          @scroll="syncScroll('ingredients')"
+        ></b-form-textarea>
       </div>
-    </b-form>
-  </b-modal>
+    </b-form-group>
+
+    <b-form-group label="Instructions" label-for="instructions">
+      <div class="textarea-container">
+        <div class="line-numbers" ref="lineNumbersInstructions">
+          {{ lineNumbersInstructions }}
+        </div>
+        <b-form-textarea
+          id="instructions"
+          v-model="form.instructions"
+          placeholder="List each step on a new line"
+          rows="5"
+          required
+          @input="updateLineNumbersInstructions"
+          @scroll="syncScroll('instructions')"
+        ></b-form-textarea>
+      </div>
+    </b-form-group>
+
+    <b-form-group
+      label="Dietary Options"
+      label-for="dietaryOptions"
+      class="dietary-options"
+    >
+      <b-form-checkbox-group v-model="form.dietaryOptions" switches>
+        <b-form-checkbox value="vegetarian">Vegetarian</b-form-checkbox>
+        <b-form-checkbox value="vegan">Vegan</b-form-checkbox>
+        <b-form-checkbox value="glutenFree">Gluten-Free</b-form-checkbox>
+      </b-form-checkbox-group>
+    </b-form-group>
+
+    <div class="button-wrapper">
+      <b-button variant="primary" @click="onSubmit">Submit Recipe</b-button>
+    </div>
+  </b-form>
+  <!-- </b-modal> -->
 </template>
 
 <script>
@@ -206,6 +206,7 @@ export default {
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
 }
 
 .recipe-form .dietary-options {

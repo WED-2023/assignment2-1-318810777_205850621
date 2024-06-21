@@ -1,15 +1,16 @@
 <template>
   <div>
-    <h1>My Favorites</h1>
+    <h1 class="text-center mb-3">My Favorites</h1>
     <div v-if="recipes.length > 0">
       <RecipePreviewList
         :recipes="recipes"
         :markAsViewed="markAsViewed"
         :toggleFavorite="toggleFavorite"
+        :perRow="3"
       />
     </div>
     <div v-else>
-      <p>No favorite recipes found.</p>
+      <p class="text-center">No favorite recipes found.</p>
     </div>
   </div>
 </template>

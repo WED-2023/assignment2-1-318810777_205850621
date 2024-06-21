@@ -2,7 +2,7 @@
   {
     "id": 1,
     "title": "Pasta with Garlic",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/1/150",
     "readyInMinutes": 30,
     "aggregateLikes": 100,
     "diets": ["Vegetarian"],
@@ -13,7 +13,7 @@
   {
     "id": 2,
     "title": "Vegan Salad",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/2/150",
     "readyInMinutes": 20,
     "aggregateLikes": 50,
     "diets": ["Vegan"],
@@ -24,7 +24,7 @@
   {
     "id": 3,
     "title": "Gluten-Free Pancakes",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/3/150",
     "readyInMinutes": 15,
     "aggregateLikes": 200,
     "diets": ["Vegetarian"],
@@ -35,7 +35,7 @@
   {
     "id": 4,
     "title": "Chicken Curry",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/4/150",
     "readyInMinutes": 45,
     "aggregateLikes": 150,
     "diets": ["Paleo"],
@@ -46,7 +46,7 @@
   {
     "id": 5,
     "title": "Beef Stew",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/5/150",
     "readyInMinutes": 120,
     "aggregateLikes": 250,
     "diets": null,
@@ -57,7 +57,7 @@
   {
     "id": 6,
     "title": "Quinoa Salad",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/6/150",
     "readyInMinutes": 25,
     "aggregateLikes": 80,
     "diets": ["Vegetarian", "Paleo"],
@@ -68,7 +68,7 @@
   {
     "id": 7,
     "title": "Grilled Cheese Sandwich",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/7/150",
     "readyInMinutes": 10,
     "aggregateLikes": 120,
     "diets": ["Vegetarian"],
@@ -79,7 +79,7 @@
   {
     "id": 8,
     "title": "Lemon Chicken",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/8/150",
     "readyInMinutes": 35,
     "aggregateLikes": 170,
     "diets": null,
@@ -90,7 +90,7 @@
   {
     "id": 9,
     "title": "Vegetable Stir Fry",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/9/150",
     "readyInMinutes": 20,
     "aggregateLikes": 90,
     "diets": ["Vegetarian", "Vegan"],
@@ -101,7 +101,7 @@
   {
     "id": 10,
     "title": "Mushroom Risotto",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/10/150",
     "readyInMinutes": 40,
     "aggregateLikes": 110,
     "diets": ["Vegetarian"],
@@ -112,7 +112,7 @@
   {
     "id": 11,
     "title": "Spaghetti Bolognese",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/11/150",
     "readyInMinutes": 60,
     "aggregateLikes": 230,
     "diets": null,
@@ -123,7 +123,7 @@
   {
     "id": 12,
     "title": "Avocado Toast",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/12/150",
     "readyInMinutes": 10,
     "aggregateLikes": 300,
     "diets": ["Vegetarian", "Vegan"],
@@ -134,7 +134,7 @@
   {
     "id": 13,
     "title": "Caesar Salad",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/13/150",
     "readyInMinutes": 15,
     "aggregateLikes": 90,
     "diets": null,
@@ -145,7 +145,7 @@
   {
     "id": 14,
     "title": "Stuffed Bell Peppers",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/14/150",
     "readyInMinutes": 50,
     "aggregateLikes": 140,
     "diets": ["Vegetarian"],
@@ -156,7 +156,7 @@
   {
     "id": 15,
     "title": "Mango Smoothie",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/15/150",
     "readyInMinutes": 5,
     "aggregateLikes": 180,
     "diets": ["Vegetarian", "Vegan"],
@@ -167,7 +167,7 @@
   {
     "id": 16,
     "title": "Chocolate Chip Cookies",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/16/150",
     "readyInMinutes": 25,
     "aggregateLikes": 400,
     "diets": ["Vegetarian"],
@@ -178,7 +178,7 @@
   {
     "id": 17,
     "title": "Shrimp Tacos",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/17/150",
     "readyInMinutes": 20,
     "aggregateLikes": 210,
     "diets": null,
@@ -189,7 +189,7 @@
   {
     "id": 18,
     "title": "Falafel Wrap",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/18/150",
     "readyInMinutes": 30,
     "aggregateLikes": 190,
     "diets": ["Vegetarian", "Vegan"],
@@ -200,7 +200,7 @@
   {
     "id": 19,
     "title": "Stuffed Mushrooms",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/19/150",
     "readyInMinutes": 35,
     "aggregateLikes": 160,
     "diets": ["Vegetarian"],
@@ -211,7 +211,7 @@
   {
     "id": 20,
     "title": "BBQ Ribs",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/20/150",
     "readyInMinutes": 180,
     "aggregateLikes": 500,
     "diets": null,
@@ -222,7 +222,7 @@
   {
     "id": 21,
     "title": "Tomato Basil Soup",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/21/150",
     "readyInMinutes": 40,
     "aggregateLikes": 130,
     "diets": ["Vegetarian"],
@@ -233,7 +233,7 @@
   {
     "id": 22,
     "title": "Greek Yogurt Parfait",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/22/150",
     "readyInMinutes": 10,
     "aggregateLikes": 220,
     "diets": ["Vegetarian"],
@@ -244,7 +244,7 @@
   {
     "id": 23,
     "title": "Caprese Salad",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/23/150",
     "readyInMinutes": 10,
     "aggregateLikes": 240,
     "diets": ["Vegetarian"],
@@ -255,7 +255,7 @@
   {
     "id": 24,
     "title": "Chicken Alfredo",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/24/150",
     "readyInMinutes": 25,
     "aggregateLikes": 310,
     "diets": null,
@@ -266,7 +266,7 @@
   {
     "id": 25,
     "title": "Tuna Salad",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/25/150",
     "readyInMinutes": 15,
     "aggregateLikes": 150,
     "diets": null,
@@ -277,7 +277,7 @@
   {
     "id": 26,
     "title": "Eggplant Parmesan",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/26/150",
     "readyInMinutes": 60,
     "aggregateLikes": 270,
     "diets": ["Vegetarian"],
@@ -288,7 +288,7 @@
   {
     "id": 27,
     "title": "Chili Con Carne",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/27/150",
     "readyInMinutes": 90,
     "aggregateLikes": 350,
     "diets": null,
@@ -299,7 +299,7 @@
   {
     "id": 28,
     "title": "Hummus",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/28/150",
     "readyInMinutes": 10,
     "aggregateLikes": 180,
     "diets": ["Vegetarian", "Vegan"],
@@ -310,7 +310,7 @@
   {
     "id": 29,
     "title": "Fish Tacos",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/29/150",
     "readyInMinutes": 25,
     "aggregateLikes": 210,
     "diets": null,
@@ -321,7 +321,7 @@
   {
     "id": 30,
     "title": "Lentil Soup",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/30/150",
     "readyInMinutes": 45,
     "aggregateLikes": 260,
     "diets": ["Vegetarian", "Vegan"],
@@ -332,7 +332,7 @@
   {
     "id": 31,
     "title": "Shepherd's Pie",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/31/150",
     "readyInMinutes": 75,
     "aggregateLikes": 290,
     "diets": null,
@@ -343,7 +343,7 @@
   {
     "id": 32,
     "title": "Pumpkin Pie",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/32/150",
     "readyInMinutes": 90,
     "aggregateLikes": 320,
     "diets": ["Vegetarian"],
@@ -354,7 +354,7 @@
   {
     "id": 33,
     "title": "Fried Rice",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/33/150",
     "readyInMinutes": 20,
     "aggregateLikes": 200,
     "diets": ["Vegetarian"],
@@ -365,7 +365,7 @@
   {
     "id": 34,
     "title": "Tiramisu",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/34/150",
     "readyInMinutes": 60,
     "aggregateLikes": 280,
     "diets": ["Vegetarian"],
@@ -376,7 +376,7 @@
   {
     "id": 35,
     "title": "Beef Stroganoff",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/35/150",
     "readyInMinutes": 45,
     "aggregateLikes": 220,
     "diets": null,
@@ -387,7 +387,7 @@
   {
     "id": 36,
     "title": "Chicken Fajitas",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/36/150",
     "readyInMinutes": 30,
     "aggregateLikes": 300,
     "diets": null,
@@ -398,7 +398,7 @@
   {
     "id": 37,
     "title": "Vegetable Soup",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/37/150",
     "readyInMinutes": 50,
     "aggregateLikes": 160,
     "diets": ["Vegetarian", "Vegan"],
@@ -409,7 +409,7 @@
   {
     "id": 38,
     "title": "Banana Bread",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/38/150",
     "readyInMinutes": 70,
     "aggregateLikes": 350,
     "diets": ["Vegetarian"],
@@ -420,7 +420,7 @@
   {
     "id": 39,
     "title": "Fish and Chips",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/39/150",
     "readyInMinutes": 40,
     "aggregateLikes": 270,
     "diets": null,
@@ -431,7 +431,7 @@
   {
     "id": 40,
     "title": "Gazpacho",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/40/150",
     "readyInMinutes": 15,
     "aggregateLikes": 130,
     "diets": ["Vegetarian", "Vegan"],
@@ -442,7 +442,7 @@
   {
     "id": 41,
     "title": "Minestrone Soup",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/41/150",
     "readyInMinutes": 55,
     "aggregateLikes": 180,
     "diets": ["Vegetarian"],
@@ -453,7 +453,7 @@
   {
     "id": 42,
     "title": "Pancakes",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/42/150",
     "readyInMinutes": 20,
     "aggregateLikes": 240,
     "diets": ["Vegetarian"],
@@ -464,7 +464,7 @@
   {
     "id": 43,
     "title": "Shrimp Scampi",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/43/150",
     "readyInMinutes": 25,
     "aggregateLikes": 190,
     "diets": null,
@@ -475,7 +475,7 @@
   {
     "id": 44,
     "title": "Egg Salad Sandwich",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/44/150",
     "readyInMinutes": 10,
     "aggregateLikes": 110,
     "diets": ["Vegetarian"],
@@ -486,7 +486,7 @@
   {
     "id": 45,
     "title": "Clam Chowder",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/45/150",
     "readyInMinutes": 40,
     "aggregateLikes": 220,
     "diets": null,
@@ -497,7 +497,7 @@
   {
     "id": 46,
     "title": "Chicken Pot Pie",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/46/150",
     "readyInMinutes": 75,
     "aggregateLikes": 280,
     "diets": null,
@@ -508,7 +508,7 @@
   {
     "id": 47,
     "title": "Lasagna",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/47/150",
     "readyInMinutes": 90,
     "aggregateLikes": 320,
     "diets": null,
@@ -519,7 +519,7 @@
   {
     "id": 48,
     "title": "Bruschetta",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/48/150",
     "readyInMinutes": 15,
     "aggregateLikes": 200,
     "diets": ["Vegetarian"],
@@ -530,7 +530,7 @@
   {
     "id": 49,
     "title": "Eggplant Parmesan",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/49/150",
     "readyInMinutes": 60,
     "aggregateLikes": 270,
     "diets": ["Vegetarian"],
@@ -541,7 +541,7 @@
   {
     "id": 50,
     "title": "Chili Con Carne",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/50/150",
     "readyInMinutes": 90,
     "aggregateLikes": 350,
     "diets": null,
@@ -552,7 +552,7 @@
   {
     "id": 51,
     "title": "Hummus",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/51/150",
     "readyInMinutes": 10,
     "aggregateLikes": 180,
     "diets": ["Vegetarian", "Vegan"],
@@ -563,7 +563,7 @@
   {
     "id": 52,
     "title": "Fish Tacos",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/52/150",
     "readyInMinutes": 25,
     "aggregateLikes": 210,
     "diets": null,
@@ -574,7 +574,7 @@
   {
     "id": 53,
     "title": "Lentil Soup",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/53/150",
     "readyInMinutes": 45,
     "aggregateLikes": 260,
     "diets": ["Vegetarian", "Vegan"],
@@ -585,7 +585,7 @@
   {
     "id": 54,
     "title": "Shepherd's Pie",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/54/150",
     "readyInMinutes": 75,
     "aggregateLikes": 290,
     "diets": null,
@@ -596,7 +596,7 @@
   {
     "id": 55,
     "title": "Pumpkin Pie",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/55/150",
     "readyInMinutes": 90,
     "aggregateLikes": 320,
     "diets": ["Vegetarian"],
@@ -607,7 +607,7 @@
   {
     "id": 56,
     "title": "Fried Rice",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/56/150",
     "readyInMinutes": 20,
     "aggregateLikes": 200,
     "diets": ["Vegetarian"],
@@ -618,7 +618,7 @@
   {
     "id": 57,
     "title": "Lamb Kebabs",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/57/150",
     "readyInMinutes": 30,
     "aggregateLikes": 170,
     "diets": null,
@@ -629,7 +629,7 @@
   {
     "id": 58,
     "title": "Pesto Pasta",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/58/150",
     "readyInMinutes": 20,
     "aggregateLikes": 210,
     "diets": ["Vegetarian"],
@@ -640,7 +640,7 @@
   {
     "id": 59,
     "title": "French Onion Soup",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/59/150",
     "readyInMinutes": 60,
     "aggregateLikes": 150,
     "diets": ["Vegetarian"],
@@ -651,7 +651,7 @@
   {
     "id": 60,
     "title": "Spinach Salad",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/60/150",
     "readyInMinutes": 10,
     "aggregateLikes": 130,
     "diets": ["Vegetarian"],
@@ -662,7 +662,7 @@
   {
     "id": 61,
     "title": "Goulash",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/61/150",
     "readyInMinutes": 80,
     "aggregateLikes": 200,
     "diets": null,
@@ -673,7 +673,7 @@
   {
     "id": 62,
     "title": "Pad Thai",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/62/150",
     "readyInMinutes": 30,
     "aggregateLikes": 260,
     "diets": ["Vegetarian"],
@@ -684,7 +684,7 @@
   {
     "id": 63,
     "title": "Apple Pie",
-    "image": "https://picsum.photos/150",
+    "image": "https://picsum.photos/seed/63/150",
     "readyInMinutes": 90,
     "aggregateLikes": 340,
     "diets": ["Vegetarian"],
