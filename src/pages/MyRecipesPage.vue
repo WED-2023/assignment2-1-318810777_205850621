@@ -8,7 +8,8 @@
         :toggleFavorite="toggleFavorite"
       />
     </div>
-    <div v-else>
+    <div v-else class="no-recipes">
+      <img src="@/assets/food.png" alt="Food" class="food-image" />
       <p class="text-center">No recipes found.</p>
     </div>
   </div>
@@ -44,5 +45,15 @@ export default {
 </script>
 
 <style scoped>
-/* Add styles if needed */
+.no-recipes {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.food-image {
+  width: 100px; /* Adjust size as needed */
+  height: auto;
+  margin-bottom: 20px;
+}
 </style>

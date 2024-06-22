@@ -1,6 +1,9 @@
 <template>
   <div class="family-recipes-container">
     <h1 class="text-center mb-5">My Family Recipes</h1>
+    <div class="image-container">
+      <img src="@/assets/family.jpg" alt="Family gathering" class="family-image" />
+    </div>
     <div
       v-for="recipe in familyRecipes"
       :key="recipe.title"
@@ -35,8 +38,8 @@ export default {
         {
           title: "Baked Chicken and Potatoes",
           image: require("@/assets/chicken.jpg"),
-          by: "Grandma Sarah",
-          occasion: "Family Gatherings on Sundays",
+          by: "Grandma Sol",
+          occasion: "Family Gatherings on Saturdays",
           ingredients: [
             "6 chicken thighs",
             "4 potatoes, sliced",
@@ -56,8 +59,8 @@ export default {
         {
           title: "Meatballs in Tomato Sauce",
           image: require("@/assets/ktzitzot.jpg"),
-          by: "Uncle John",
-          occasion: "Holiday Dinners",
+          by: "Mother Mira",
+          occasion: "Friday Night Dinner",
           ingredients: [
             "1 lb ground beef",
             "1/2 cup breadcrumbs",
@@ -78,8 +81,8 @@ export default {
         {
           title: "Stuffed Peppers",
           image: require("@/assets/pilpelim.jpg"),
-          by: "Aunt Maria",
-          occasion: "Special Family Celebrations",
+          by: "Aunt Rachel",
+          occasion: "Whenever We Need Comfort Food",
           ingredients: [
             "6 bell peppers",
             "1 cup cooked rice",
@@ -108,6 +111,17 @@ export default {
   max-width: 800px;
   margin: auto;
   padding: 20px;
+}
+.image-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5px; /* Move the image more upwards */
+}
+.family-image {
+  width: 60%; /* Make the image smaller */
+  height: auto;
+  border-radius: 8px;
+  margin-top: -50px; /* Adjust the upward position further */
 }
 .recipe-card {
   background-color: #f8f8f8;

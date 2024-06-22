@@ -9,7 +9,8 @@
         :perRow="3"
       />
     </div>
-    <div v-else>
+    <div v-else class="no-favorites">
+      <img src="@/assets/fave.png" alt="No favorites" class="fave-image" />
       <p class="text-center">No favorite recipes found.</p>
     </div>
   </div>
@@ -46,4 +47,16 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.no-favorites {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.fave-image {
+  width: 150px; /* Adjust size as needed */
+  height: auto;
+  margin-bottom: 20px;
+}
+</style>
