@@ -3,8 +3,11 @@
     <div class="image-section"></div>
     <div class="register-form-section">
       <div class="register-form">
+        <img src="@/assets/logo.webp" alt="Logo" class="logo" />
         <h1 class="title">Register</h1>
         <b-form @submit.prevent="onRegister" @reset.prevent="onReset">
+          <!-- Form fields here -->
+          <!-- Username -->
           <b-form-group
             label="Username"
             label-for="username"
@@ -37,6 +40,7 @@
             </b-form-invalid-feedback>
           </b-form-group>
 
+          <!-- First Name -->
           <b-form-group
             label="First Name"
             label-for="firstName"
@@ -53,6 +57,7 @@
             </b-form-invalid-feedback>
           </b-form-group>
 
+          <!-- Last Name -->
           <b-form-group
             label="Last Name"
             label-for="lastName"
@@ -69,6 +74,7 @@
             </b-form-invalid-feedback>
           </b-form-group>
 
+          <!-- Country -->
           <b-form-group
             label="Country"
             label-for="country"
@@ -86,6 +92,7 @@
             </b-form-invalid-feedback>
           </b-form-group>
 
+          <!-- Email -->
           <b-form-group
             label="Email"
             label-for="email"
@@ -106,6 +113,7 @@
             </b-form-invalid-feedback>
           </b-form-group>
 
+          <!-- Password -->
           <b-form-group
             label="Password"
             label-for="password"
@@ -133,6 +141,7 @@
             </b-form-invalid-feedback>
           </b-form-group>
 
+          <!-- Confirm Password -->
           <b-form-group
             label="Confirm Password"
             label-for="confirmPassword"
@@ -179,6 +188,7 @@
     </div>
   </div>
 </template>
+
 
 <script>
 import axios from "axios";
@@ -332,7 +342,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 .register-container {
   display: flex;
@@ -340,13 +349,14 @@ export default {
   max-width: 100vw;
   margin-top: 0;
 }
+
 .image-section {
   flex: 1;
   overflow: hidden;
-  background: url("@/assets/pexels-vanmalidate-784633.jpg") no-repeat center
-    center;
+  background: url("@/assets/pexels-vanmalidate-784633.jpg") no-repeat center center;
   background-size: cover;
 }
+
 .register-form-section {
   flex: 1;
   display: flex;
@@ -356,6 +366,7 @@ export default {
   overflow-x: hidden;
   height: 100%;
 }
+
 .register-form {
   background-color: rgba(255, 255, 255, 0.9);
   padding: 20px;
@@ -363,10 +374,18 @@ export default {
   max-width: 450px;
   width: 100%;
 }
+
+.logo {
+  display: block;
+  margin: 10px auto 20px auto; /* Adjusted margin to move the logo upwards */
+  max-width: 200px;
+}
+
 .title {
   text-align: center;
   margin-bottom: 20px;
 }
+
 .buttons {
   display: flex;
   justify-content: space-between;

@@ -17,10 +17,7 @@
     <p>
       Our development team is dedicated to constantly improving this platform.
       We have worked on various exercises to enhance our skills and bring the
-      best features to you. You can check out our previous exercises on our
-      <a href="https://github.com/WED-2023/205850621" target="_blank"
-        >GitHub repository</a
-      >.
+      best features to you. 
     </p>
 
     <p></p>
@@ -49,6 +46,10 @@
       knowledge, she stays current with industry trends and continuously seeks
       opportunities to improve her skills. Timor’s passion and commitment fuel
       her journey towards mastering the art of full-stack development.
+      You can check out her previous exercises on her
+      <a href="https://github.com/WED-2023/205850621" target="_blank"
+        >GitHub repository</a
+      >.
     </p>
   </div>
 </template>

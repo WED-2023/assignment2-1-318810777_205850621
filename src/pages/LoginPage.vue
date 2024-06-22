@@ -3,6 +3,7 @@
     <div class="image-section"></div>
     <div class="login-form-section">
       <div class="login-form">
+        <img src="@/assets/logo.webp" alt="Logo" class="logo" />
         <h1 class="title">Login</h1>
         <b-form @submit.prevent="onLogin">
           <b-form-group
@@ -17,9 +18,7 @@
               type="text"
               :state="validateState('username')"
             ></b-form-input>
-            <b-form-invalid-feedback
-              >Username is required</b-form-invalid-feedback
-            >
+            <b-form-invalid-feedback>Username is required</b-form-invalid-feedback>
           </b-form-group>
 
           <b-form-group
@@ -34,14 +33,10 @@
               v-model="$v.form.password.$model"
               :state="validateState('password')"
             ></b-form-input>
-            <b-form-invalid-feedback
-              >Password is required</b-form-invalid-feedback
-            >
+            <b-form-invalid-feedback>Password is required</b-form-invalid-feedback>
           </b-form-group>
 
-          <b-button type="submit" variant="primary" class="w-100 mt-4"
-            >Login</b-button
-          >
+          <b-button type="submit" variant="primary" class="w-100 mt-4">Login</b-button>
           <div class="mt-2">
             Do not have an account yet?
             <router-link to="register">Register here</router-link>
@@ -60,7 +55,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import { required } from "vuelidate/lib/validators";
 import { mockLogin } from "../services/auth.js";
@@ -96,15 +90,11 @@ export default {
 
         if (response.response.data.success && response.status === 200) {
           this.$root.store.login(this.form.username);
-          // this.$toast()
-
           this.$router.push("/");
         } else {
-          console.log(response);
           this.form.submitError = response.response.data.message;
         }
       } catch (err) {
-        console.log(err);
         this.form.submitError = err.response.data.message;
       }
     },
@@ -140,11 +130,27 @@ export default {
   height: 100vh;
   width: 100%;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start; /* Changed to flex-start */
+  padding-top: 50px; /* Added padding to move the form down */
   margin: auto;
 }
 
 .login-form {
   background-color: rgba(255, 255, 255, 0.991);
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 400px;
+  width: 100%;
+}
+
+.logo {
+  display: block;
+  margin: 75px auto 30px; /* Adjusted margin to make logo bigger */
+  max-width: 200px;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
 }
 </style>
