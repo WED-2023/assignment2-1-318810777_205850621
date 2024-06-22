@@ -166,7 +166,7 @@ body {
 .hero-section {
   text-align: center;
   padding: 50px 20px;
-  background-image: linear-gradient(to right, #e64956, #feb47b);
+  background-image: linear-gradient(to right, #025680, #60acd2);
   background-size: 150% 150%;
   color: white;
   border-radius: 8px;
