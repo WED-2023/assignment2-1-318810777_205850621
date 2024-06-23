@@ -3,39 +3,83 @@
     <div class="image-section"></div>
     <div class="register-form-section">
       <div class="register-form">
+        <img src="@/assets/logo.webp" alt="Logo" class="logo" />
         <h1 class="title">Register</h1>
         <b-form @submit.prevent="onRegister" @reset.prevent="onReset">
+          <!-- Form fields here -->
+          <!-- Username -->
           <b-form-group
-            id="input-group-username"
-            label-cols-sm="3"
-            label="Username:"
+            label="Username"
             label-for="username"
+            label-cols-md="4"
+            label-cols-lg="4"
           >
             <b-form-input
               id="username"
               v-model="$v.form.username.$model"
-              type="text"
               :state="validateState('username')"
+              @blur="checkUsername"
             ></b-form-input>
             <b-form-invalid-feedback v-if="!$v.form.username.required">
               Username is required
             </b-form-invalid-feedback>
-            <b-form-invalid-feedback v-if="$v.form.username.isTaken">
+            <b-form-invalid-feedback
+              v-if="$v.form.username.$error && form.usernameIsTaken"
+            >
               Username is already taken
             </b-form-invalid-feedback>
-            <b-form-invalid-feedback v-else-if="!$v.form.username.length">
+            <b-form-invalid-feedback
+              v-else-if="
+                !$v.form.username.minLength || !$v.form.username.maxLength
+              "
+            >
               Username length should be between 3-8 characters long
             </b-form-invalid-feedback>
             <b-form-invalid-feedback v-if="!$v.form.username.alpha">
-              Username alpha
+              Username should contain only letters
             </b-form-invalid-feedback>
           </b-form-group>
 
+          <!-- First Name -->
           <b-form-group
-            id="input-group-country"
-            label-cols-sm="3"
-            label="Country:"
+            label="First Name"
+            label-for="firstName"
+            label-cols-md="4"
+            label-cols-lg="4"
+          >
+            <b-form-input
+              id="firstName"
+              v-model="$v.form.firstName.$model"
+              :state="validateState('firstName')"
+            ></b-form-input>
+            <b-form-invalid-feedback v-if="!$v.form.firstName.required">
+              First name is required
+            </b-form-invalid-feedback>
+          </b-form-group>
+
+          <!-- Last Name -->
+          <b-form-group
+            label="Last Name"
+            label-for="lastName"
+            label-cols-md="4"
+            label-cols-lg="4"
+          >
+            <b-form-input
+              id="lastName"
+              v-model="$v.form.lastName.$model"
+              :state="validateState('lastName')"
+            ></b-form-input>
+            <b-form-invalid-feedback v-if="!$v.form.lastName.required">
+              Last name is required
+            </b-form-invalid-feedback>
+          </b-form-group>
+
+          <!-- Country -->
+          <b-form-group
+            label="Country"
             label-for="country"
+            label-cols-md="4"
+            label-cols-lg="4"
           >
             <b-form-select
               id="country"
@@ -48,11 +92,33 @@
             </b-form-invalid-feedback>
           </b-form-group>
 
+          <!-- Email -->
           <b-form-group
-            id="input-group-Password"
-            label-cols-sm="3"
-            label="Password:"
+            label="Email"
+            label-for="email"
+            label-cols-md="4"
+            label-cols-lg="4"
+          >
+            <b-form-input
+              id="email"
+              type="email"
+              v-model="$v.form.email.$model"
+              :state="validateState('email')"
+            ></b-form-input>
+            <b-form-invalid-feedback v-if="!$v.form.email.required">
+              Email is required
+            </b-form-invalid-feedback>
+            <b-form-invalid-feedback v-if="!$v.form.email.email">
+              Enter a valid email
+            </b-form-invalid-feedback>
+          </b-form-group>
+
+          <!-- Password -->
+          <b-form-group
+            label="Password"
             label-for="password"
+            label-cols-md="4"
+            label-cols-lg="4"
           >
             <b-form-input
               id="password"
@@ -63,53 +129,50 @@
             <b-form-invalid-feedback v-if="!$v.form.password.required">
               Password is required
             </b-form-invalid-feedback>
-            <b-form-text
-              v-else-if="$v.form.password.$error"
-              text-variant="info"
-            >
-              Your password should be <strong>strong</strong>. <br />
-              For that, your password should be also:
-            </b-form-text>
             <b-form-invalid-feedback
-              v-if="$v.form.password.required && !$v.form.password.length"
+              v-if="
+                !$v.form.password.minLength ||
+                  !$v.form.password.maxLength ||
+                  !$v.form.password.validPassword
+              "
             >
-              Have length between 5-10 characters long
+              Password must be 5-10 characters long, contain at least one number
+              and one special character
             </b-form-invalid-feedback>
           </b-form-group>
 
+          <!-- Confirm Password -->
           <b-form-group
-            id="input-group-confirmedPassword"
-            label-cols-sm="3"
-            label="Confirm Password:"
-            label-for="confirmedPassword"
+            label="Confirm Password"
+            label-for="confirmPassword"
+            label-cols-md="4"
+            label-cols-lg="4"
           >
             <b-form-input
-              id="confirmedPassword"
+              id="confirmPassword"
               type="password"
-              v-model="$v.form.confirmedPassword.$model"
-              :state="validateState('confirmedPassword')"
+              v-model="$v.form.confirmPassword.$model"
+              :state="validateState('confirmPassword')"
             ></b-form-input>
-            <b-form-invalid-feedback v-if="!$v.form.confirmedPassword.required">
+            <b-form-invalid-feedback v-if="!$v.form.confirmPassword.required">
               Password confirmation is required
             </b-form-invalid-feedback>
             <b-form-invalid-feedback
-              v-else-if="!$v.form.confirmedPassword.sameAsPassword"
+              v-if="!$v.form.confirmPassword.sameAsPassword"
             >
-              The confirmed password is not equal to the original password
+              Passwords must match
             </b-form-invalid-feedback>
           </b-form-group>
 
-          <b-button type="reset" variant="danger">Reset</b-button>
-          <b-button
-            type="submit"
-            variant="primary"
-            style="width:250px;"
-            class="ml-5 w-75"
-            >Register</b-button
-          >
-          <div class="mt-2">
-            You have an account already?
-            <router-link to="login"> Log in here</router-link>
+          <div class="buttons mt-3">
+            <b-button type="reset" variant="danger">Reset</b-button>
+            <b-button type="submit" variant="primary" class="ml-3"
+              >Register</b-button
+            >
+          </div>
+          <div class="mt-2 text-center">
+            Already have an account?
+            <router-link to="login">Log in here</router-link>
           </div>
         </b-form>
         <b-alert
@@ -126,17 +189,23 @@
   </div>
 </template>
 
+
 <script>
-import countries from "../assets/countries";
+import axios from "axios";
 import {
   required,
   minLength,
   maxLength,
   alpha,
-  sameAs,
   email,
+  sameAs,
 } from "vuelidate/lib/validators";
 import { mockGetUser, mockRegister } from "../services/auth.js";
+
+const passwordValidation = (value) => {
+  return /[0-9]/.test(value) && /[!@#$%^&*(),.?":{}|<>]/.test(value);
+};
+
 export default {
   name: "Register",
   data() {
@@ -146,147 +215,180 @@ export default {
         firstName: "",
         lastName: "",
         country: null,
-        password: "",
-        confirmedPassword: "",
         email: "",
+        password: "",
+        confirmPassword: "",
         submitError: undefined,
+        usernameIsTaken: false,
       },
-      countries: [{ value: null, text: "", disabled: true }],
-      errors: [],
-      validated: false,
+      countries: [],
     };
   },
   validations: {
     form: {
       username: {
         required,
-        length: (u) => minLength(3)(u) && maxLength(8)(u),
+        minLength: minLength(3),
+        maxLength: maxLength(8),
         alpha,
-        isTaken: {
-          async validator(u) {
-            if (!u) return true;
-            try {
-              console.log("checking username", u);
-              const response = await mockGetUser(u);
-              return response.status === 200 ? false : true;
-            } catch (err) {
-              console.log(err.response);
-              return false;
-            }
-          },
-          async: true,
+        async isTaken(value) {
+          if (!value) return true;
+          const response = await mockGetUser(value);
+          return response.status !== 200;
         },
       },
-      country: {
-        required,
-      },
+      firstName: { required },
+      lastName: { required },
+      country: { required },
+      email: { required, email },
       password: {
         required,
-        length: (p) => minLength(5)(p) && maxLength(10)(p),
+        minLength: minLength(5),
+        maxLength: maxLength(10),
+        validPassword: passwordValidation,
       },
-      confirmedPassword: {
+      confirmPassword: {
         required,
         sameAsPassword: sameAs("password"),
       },
     },
   },
   mounted() {
-    // console.log("mounted");
-    this.countries.push(...countries);
-    // console.log($v);
+    this.fetchCountries();
   },
   methods: {
+    fetchCountries() {
+      axios
+        .get("https://restcountries.com/v3.1/all")
+        .then((response) => {
+          this.countries = response.data
+            .map((country) => ({
+              value: country.name.common,
+              text: country.name.common,
+            }))
+            .sort((a, b) => a.text.localeCompare(b.text));
+        })
+        .catch((error) => {
+          console.error("Error fetching countries:", error);
+        });
+    },
     validateState(param) {
       const { $dirty, $error } = this.$v.form[param];
       return $dirty ? !$error : null;
     },
-    async Register() {
+    async register() {
       try {
-        // const response = await this.axios.post(
-        //   // "https://test-for-3-2.herokuapp.com/user/Register",
-        //   this.$root.store.server_domain + "/Register",
-
-        //   {
-        //     username: this.form.username,
-        //     password: this.form.password
-        //   }
-        // );
-
         const userDetails = {
           username: this.form.username,
+          firstName: this.form.firstName,
+          lastName: this.form.lastName,
+          country: this.form.country,
+          email: this.form.email,
           password: this.form.password,
         };
+        const response = await mockRegister(userDetails);
 
-        const response = mockRegister(userDetails);
-
-        this.$router.push("/login");
-        // console.log(response);
+        if (response.status === 200) {
+          this.$router.push("/login");
+        }
       } catch (err) {
-        console.log(err.response);
         this.form.submitError = err.response.data.message;
       }
     },
-
     onRegister() {
-      // console.log("register method called");
       this.$v.form.$touch();
       if (this.$v.form.$anyError) {
         return;
       }
-      // console.log("register method go");
-      this.Register();
+      this.register();
     },
+
     onReset() {
       this.form = {
         username: "",
         firstName: "",
         lastName: "",
         country: null,
-        password: "",
-        confirmedPassword: "",
         email: "",
+        password: "",
+        confirmPassword: "",
+        submitError: undefined,
+        usernameIsTaken: false,
       };
       this.$nextTick(() => {
         this.$v.$reset();
       });
     },
+    async checkUsername() {
+      if (
+        !this.$v.form.username.required ||
+        !this.$v.form.username.alpha ||
+        !this.$v.form.username.minLength ||
+        !this.$v.form.username.maxLength
+      ) {
+        return;
+      }
+      try {
+        const response = await mockGetUser(this.form.username);
+        if (response.status === 200) {
+          this.form.usernameIsTaken = true;
+        } else {
+          this.form.usernameIsTaken = false;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
 };
 </script>
-
-<style lang="scss" scoped>
+<style scoped>
 .register-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  position: absolute;
-  height: 100vh;
-  width: 100vw;
-  inset: 0;
+  display: flex;
+  max-height: 100%;
+  max-width: 100vw;
+  margin-top: 0;
 }
 
 .image-section {
-  background: url("@/assets/pexels-vanmalidate-784633.jpg") no-repeat center
-    center;
+  flex: 1;
+  overflow: hidden;
+  background: url("@/assets/pexels-vanmalidate-784633.jpg") no-repeat center center;
   background-size: cover;
 }
 
 .register-form-section {
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 100%;
 }
 
 .register-form {
   background-color: rgba(255, 255, 255, 0.9);
   padding: 20px;
   border-radius: 8px;
-
-  max-width: 500px;
+  max-width: 450px;
   width: 100%;
+}
+
+.logo {
+  display: block;
+  margin: 10px auto 20px auto; /* Adjusted margin to move the logo upwards */
+  max-width: 200px;
 }
 
 .title {
   text-align: center;
   margin-bottom: 20px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>

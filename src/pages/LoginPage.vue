@@ -3,6 +3,7 @@
     <div class="image-section"></div>
     <div class="login-form-section">
       <div class="login-form">
+        <img src="@/assets/logo.webp" alt="Logo" class="logo" />
         <h1 class="title">Login</h1>
         <b-form @submit.prevent="onLogin">
           <b-form-group
@@ -17,9 +18,7 @@
               type="text"
               :state="validateState('username')"
             ></b-form-input>
-            <b-form-invalid-feedback>
-              Username is required
-            </b-form-invalid-feedback>
+            <b-form-invalid-feedback>Username is required</b-form-invalid-feedback>
           </b-form-group>
 
           <b-form-group
@@ -34,21 +33,13 @@
               v-model="$v.form.password.$model"
               :state="validateState('password')"
             ></b-form-input>
-            <b-form-invalid-feedback>
-              Password is required
-            </b-form-invalid-feedback>
+            <b-form-invalid-feedback>Password is required</b-form-invalid-feedback>
           </b-form-group>
 
-          <b-button
-            type="submit"
-            variant="primary"
-            style="width:100px;display:block;"
-            class="mx-auto w-100"
-            >Login</b-button
-          >
+          <b-button type="submit" variant="primary" class="w-100 mt-4">Login</b-button>
           <div class="mt-2">
             Do not have an account yet?
-            <router-link to="register"> Register here</router-link>
+            <router-link to="register">Register here</router-link>
           </div>
         </b-form>
         <b-alert
@@ -64,7 +55,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import { required } from "vuelidate/lib/validators";
 import { mockLogin } from "../services/auth.js";
@@ -82,12 +72,8 @@ export default {
   },
   validations: {
     form: {
-      username: {
-        required,
-      },
-      password: {
-        required,
-      },
+      username: { required },
+      password: { required },
     },
   },
   methods: {
@@ -95,20 +81,20 @@ export default {
       const { $dirty, $error } = this.$v.form[param];
       return $dirty ? !$error : null;
     },
-    async Login() {
+    async login() {
       try {
-        const success = true; // modify this to test the error handling
-        const response = mockLogin(
-          this.form.username,
-          this.form.password,
-          success
-        );
+        const response = await mockLogin({
+          username: this.form.username,
+          password: this.form.password,
+        });
 
-        console.log(this.$root.store.login);
-        this.$root.store.login(this.form.username);
-        this.$router.push("/");
+        if (response.response.data.success && response.status === 200) {
+          this.$root.store.login(this.form.username);
+          this.$router.push("/");
+        } else {
+          this.form.submitError = response.response.data.message;
+        }
       } catch (err) {
-        console.log(err.response);
         this.form.submitError = err.response.data.message;
       }
     },
@@ -118,13 +104,13 @@ export default {
       if (this.$v.form.$anyError) {
         return;
       }
-      this.Login();
+      this.login();
     },
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .login-container {
   display: grid;
   position: absolute;
@@ -135,8 +121,7 @@ export default {
 }
 
 .image-section {
-  /*background: url("@/assets/food-background.jpg") no-repeat center center; NOT WORKING */
-  background-image: url("@/assets/copy-space-italian-food-ingredients.jpg"); /* TODO: Change Me */
+  background-image: url("@/assets/copy-space-italian-food-ingredients.jpg");
   background-size: cover;
 }
 
@@ -145,7 +130,8 @@ export default {
   height: 100vh;
   width: 100%;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start; /* Changed to flex-start */
+  padding-top: 50px; /* Added padding to move the form down */
   margin: auto;
 }
 
@@ -155,6 +141,12 @@ export default {
   border-radius: 8px;
   max-width: 400px;
   width: 100%;
+}
+
+.logo {
+  display: block;
+  margin: 75px auto 30px; /* Adjusted margin to make logo bigger */
+  max-width: 200px;
 }
 
 .title {

@@ -1,48 +1,71 @@
 <template>
-  <div class="container d-flex m-auto">
+  <div class="container">
     <div v-if="recipe">
-      <div class="recipe-header mt-3 mb-4">
-        <h1>{{ recipe.title }}</h1>
-        <img :src="recipe.image" class="center" />
-      </div>
-      <div class="recipe-body">
-        <div class="wrapper">
-          <div class="wrapped">
-            <div class="mb-3">
-              <div>Ready in {{ recipe.readyInMinutes }} minutes</div>
-              <div>Likes: {{ recipe.aggregateLikes }} likes</div>
-            </div>
-            Ingredients:
+      <div class="recipe-card gradient-effect">
+        <div class="recipe-header mt-3 mb-4 text-center">
+          <h1>{{ recipe.title }}</h1>
+          <img :src="recipe.image" alt="recipe image" class="recipe-image" />
+          <div class="recipe-details mt-3">
+            <span class="detail-item">
+              <i class="fas fa-clock"></i> {{ recipe.readyInMinutes }} mins
+            </span>
+            <span class="detail-item">
+              <i class="fas fa-heart"></i> {{ recipe.aggregateLikes }} likes
+            </span>
+            <span class="detail-item" v-if="recipe.vegetarian">
+              <i class="fas fa-seedling"></i> Vegetarian
+            </span>
+            <span class="detail-item" v-else>
+              <i class="fas fa-drumstick-bite"></i> Non-Vegetarian
+            </span>
+            <span class="detail-item" v-if="recipe.glutenFree">
+              <i class="fas fa-bread-slice"></i> Gluten-Free
+            </span>
+            <span class="detail-item" v-else>
+              <i class="fas fa-bread-slice"></i> Contains Gluten
+            </span>
+            <span class="detail-item">
+              <i class="fas fa-eye"></i>
+              {{ recipe.isViewed ? "Viewed" : "Not Viewed" }}
+            </span>
+            <span class="detail-item">
+              <i class="fas fa-star"></i>
+              {{ recipe.isFavorited ? "Favorited" : "Not Favorited" }}
+            </span>
+          </div>
+        </div>
+        <div class="additional-info mt-4 text-center">
+          <p><strong>Ready in:</strong> {{ recipe.readyInMinutes }} minutes</p>
+          <p><strong>Likes:</strong> {{ recipe.aggregateLikes }} likes</p>
+          <p><strong>Servings:</strong> {{ recipe.servings }}</p>
+        </div>
+        <div class="family-recipes-container">
+          <div class="recipe-body">
+            <h3>Ingredients:</h3>
             <ul>
               <li
-                v-for="(r, index) in recipe.extendedIngredients"
-                :key="index + '_' + r.id"
+                v-for="(ingredient, index) in recipe.extendedIngredients"
+                :key="index + '_' + ingredient.id"
               >
-                {{ r.original }}
+                {{ ingredient.original }}
               </li>
             </ul>
-          </div>
-          <div class="wrapped">
-            Instructions:
+            <h3>Instructions:</h3>
             <ol>
-              <li v-for="s in recipe._instructions" :key="s.number">
-                {{ s.step }}
+              <li v-for="step in recipe._instructions" :key="step.number">
+                {{ step.step }}
               </li>
             </ol>
           </div>
         </div>
       </div>
-      <!-- <pre>
-      {{ $route.params }}
-      {{ recipe }}
-    </pre
-      > -->
     </div>
   </div>
 </template>
 
 <script>
 import { mockGetRecipeFullDetails } from "../services/recipes.js";
+
 export default {
   data() {
     return {
@@ -51,28 +74,15 @@ export default {
   },
   async created() {
     try {
-      let response;
-      // response = this.$route.params.response;
+      const recipeId = this.$route.params.recipeId;
+      const response = mockGetRecipeFullDetails(recipeId);
 
-      try {
-        // response = await this.axios.get(
-        //   this.$root.store.server_domain + "/recipes/" + this.$route.params.recipeId,
-        //   {
-        //     withCredentials: true
-        //   }
-        // );
-
-        response = mockGetRecipeFullDetails(this.$route.params.recipeId);
-
-        // console.log("response.status", response.status);
-        if (response.status !== 200) this.$router.replace("/NotFound");
-      } catch (error) {
-        console.log("error.response.status", error.response.status);
-        this.$router.replace("/NotFound");
+      if (!response.data || !response.data.recipe) {
+        this.$router.replace("/notFound");
         return;
       }
 
-      let {
+      const {
         analyzedInstructions,
         instructions,
         extendedIngredients,
@@ -80,16 +90,22 @@ export default {
         readyInMinutes,
         image,
         title,
+        servings,
+        vegetarian,
+        vegan,
+        glutenFree,
+        isViewed,
+        isFavorited,
       } = response.data.recipe;
 
-      let _instructions = analyzedInstructions
-        .map((fstep) => {
-          fstep.steps[0].step = fstep.name + fstep.steps[0].step;
-          return fstep.steps;
-        })
-        .reduce((a, b) => [...a, ...b], []);
+      const _instructions = analyzedInstructions
+        .flatMap((fstep) => fstep.steps)
+        .map((step, index) => ({
+          ...step,
+          number: index + 1,
+        }));
 
-      let _recipe = {
+      this.recipe = {
         instructions,
         _instructions,
         analyzedInstructions,
@@ -98,30 +114,77 @@ export default {
         readyInMinutes,
         image,
         title,
+        servings,
+        vegetarian,
+        vegan,
+        glutenFree,
+        isViewed,
+        isFavorited,
       };
-
-      this.recipe = _recipe;
     } catch (error) {
       console.log(error);
+      this.$router.replace("/notFound");
     }
   },
 };
 </script>
 
 <style scoped>
-.wrapper {
-  display: flex;
+.container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
 }
-.wrapped {
-  width: 50%;
-}
-.center {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
-}
-/* .recipe-header{
 
-} */
+.recipe-card {
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.recipe-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.family-recipes-container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+}
+
+.recipe-body h3 {
+  margin-top: 0;
+}
+
+.recipe-body ul,
+.recipe-body ol {
+  padding-left: 20px;
+}
+
+.recipe-body li {
+  margin-bottom: 10px;
+}
+
+.recipe-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 1em;
+}
+
+.additional-info p {
+  margin-bottom: 0.5rem;
+}
 </style>

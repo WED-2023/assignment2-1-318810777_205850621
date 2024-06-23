@@ -12,4 +12,3 @@ import recipe_preview from "../assets/mocks/recipe_preview.json";
 
   }
   
-  

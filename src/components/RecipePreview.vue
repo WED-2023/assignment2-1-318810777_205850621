@@ -4,10 +4,10 @@
       :to="{ name: 'recipe', params: { recipeId: recipe.id } }"
       class="recipe-preview"
     >
-      <div class="recipe-body">
-        <img v-if="image_load" :src="recipe.image" class="recipe-image" />
+      <div class="recipe-body" @click.stop="onRecipeClick">
+        <img v-if="imageLoaded" :src="recipe.image" class="recipe-image" />
       </div>
-      <div class="recipe-footer">
+      <div class="recipe-footer" @click="onRecipeClick">
         <div class="recipe-title" :title="recipe.title">
           {{ recipe.title }}
         </div>
@@ -31,11 +31,23 @@
             <i class="fas fa-bread-slice"></i> Contains Gluten
           </span>
         </div>
-        <div class="recipe-indicators">
+        <div v-if="recipe.instructions && !isMainPage">
+          <p v-html="formattedInstructions()" class="text-start ms-3"></p>
+        </div>
+        <div class="recipe-indicators" @click="onRecipeClick">
+          <i
+            class="fa-heart"
+            @click.stop.prevent="onFavoriteClick"
+            :class="{
+              favoritedIcon: this.isFavorited,
+              'fa-regular': !this.isFavorited,
+              fas: this.isFavorited,
+            }"
+          ></i>
           <span v-if="recipe.isViewed" class="indicator viewed">Viewed</span>
-          <span v-if="recipe.isFavorited" class="indicator favorited"
+          <!-- <span v-if="recipe.isFavorited" class="indicator favorited"
             >Favorited</span
-          >
+          > -->
         </div>
       </div>
     </router-link>
@@ -44,14 +56,11 @@
 
 <script>
 export default {
-  mounted() {
-    this.axios.get(this.recipe.image).then(() => {
-      this.image_load = true;
-    });
-  },
   data() {
     return {
-      image_load: false,
+      imageLoaded: false,
+      isFavorited: this.recipe.isFavorited,
+      isMainPage: this.$route.name === "main",
     };
   },
   props: {
@@ -59,6 +68,54 @@ export default {
       type: Object,
       required: true,
     },
+    markAsViewed: {
+      type: Function,
+      required: false,
+    },
+    toggleFavorite: {
+      type: Function,
+      required: false,
+    },
+  },
+  methods: {
+    onRecipeClick() {
+      if (this.markAsViewed) {
+        this.markAsViewed(this.recipe);
+      }
+    },
+    onFavoriteClick() {
+      this.isFavorited = !this.isFavorited;
+      this.recipe.isFavorited = !this.recipe.isFavorited;
+      // if (this.toggleFavorite) this.toggleFavorite(this.recipe);
+      if (
+        this.$root.store.favoriteRecipes.filter((r) => r.id === this.recipe.id)
+          .length === 0
+      ) {
+        this.$root.store.favoriteRecipes.push({
+          ...this.recipe,
+          addedDate: new Date(),
+        });
+      } else {
+        this.$root.store.favoriteRecipes = this.$root.store.favoriteRecipes.filter(
+          (r) => r.id !== this.recipe.id
+        );
+      }
+    },
+    formattedInstructions() {
+      if (!this.recipe.instructions) return "";
+      return this.recipe.instructions
+        .substring(0, 100)
+        .replace(/\r\n/g, "<br />")
+        .replace(/\n/g, "<br />");
+    },
+  },
+  mounted() {
+    const img = new Image();
+    img.src = this.recipe.image;
+    img.onload = () => {
+      this.imageLoaded = true;
+    };
+    this.isMainPage = this.$route.name === "main";
   },
 };
 </script>
@@ -84,6 +141,7 @@ export default {
   text-decoration: none;
   color: inherit;
 }
+
 .recipe-preview:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
@@ -101,6 +159,7 @@ export default {
   object-fit: cover;
   transition: transform 0.3s ease;
 }
+
 .recipe-preview:hover .recipe-image {
   transform: scale(1.05);
 }
@@ -151,6 +210,10 @@ export default {
 
 .favorited {
   background-color: #ffe0e0;
+  color: #ff0000;
+}
+
+.favoritedIcon {
   color: #ff0000;
 }
 </style>

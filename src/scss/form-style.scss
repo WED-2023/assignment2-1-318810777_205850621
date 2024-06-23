@@ -1,0 +1,63 @@
+:root {
+  --primary-color: #9af09a;
+  --secondary-color: #aeebaeda;
+  --tertiary-color: #71b571;
+  --quaternary-color: #f0f0f0;
+  --quinary-color: #f0f0f0;
+  --senary-color: #f0f0f0;
+  --septenary-color: #f0f0f0;
+  --octonary-color: #f0f0f0;
+  --nonary-color: #f0f0f0;
+  --denary-color: #f0f0f0;
+}
+
+.gradient-effect {
+  background-image: linear-gradient(
+    to left,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  background-size: 200% 200%;
+  // border-radius: 8px;
+  margin-bottom: 1rem;
+  animation: gradientAnimation 6s ease infinite;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 25%;
+  }
+  100% {
+    background-position: 0% 75%;
+  }
+}
+
+h1 {
+  font-size: 3em;
+  margin-bottom: 1em;
+  font-family: "Playwrite NZ", cursive;
+  font-optical-sizing: auto;
+  font-weight: 100;
+  font-style: normal;
+}
+
+h2 {
+  font-size: 2.5em;
+  margin-bottom: 1em;
+  font-family: "Playwrite NZ", cursive;
+  font-optical-sizing: auto;
+  font-weight: 100;
+  font-style: normal;
+}
+
+h3 {
+  font-size: 2.5em;
+  margin-bottom: 1em;
+  font-family: "Playwrite NZ", cursive;
+  font-optical-sizing: auto;
+  font-weight: 100;
+  font-style: normal;
+}

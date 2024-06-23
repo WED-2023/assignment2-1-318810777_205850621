@@ -2,17 +2,14 @@ import Vue from "vue";
 import App from "./App.vue";
 import VueAxios from "vue-axios";
 import axios from "axios";
-
 import routes from "./routes";
 import VueRouter from "vue-router";
-Vue.use(VueRouter);
-const router = new VueRouter({
-  routes,
-});
-
 import Vuelidate from "vuelidate";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
+import "bootstrap";
+import "jquery";
+import "popper.js";
 
 import {
   FormGroupPlugin,
@@ -26,13 +23,25 @@ import {
   ToastPlugin,
   LayoutPlugin,
   InputGroupPlugin,
+  FormCheckboxPlugin,
+  BFormTextarea,
+  VBModal,
+  BButtonGroup,
   BInputGroupAppend,
+  BPagination,
 } from "bootstrap-vue";
 
-import { BButtonGroup, BButton } from "bootstrap-vue";
-Vue.component("b-button-group", BButtonGroup);
-Vue.component("b-input-group", InputGroupPlugin);
-Vue.component("b-input-group-append", BInputGroupAppend);
+// Import jQuery and make it available globally
+import jQuery from "jquery";
+window.$ = window.jQuery = jQuery;
+
+Vue.use(VueRouter);
+const router = new VueRouter({
+  routes,
+});
+
+Vue.use(Vuelidate);
+
 [
   FormGroupPlugin,
   FormPlugin,
@@ -44,28 +53,30 @@ Vue.component("b-input-group-append", BInputGroupAppend);
   AlertPlugin,
   ToastPlugin,
   LayoutPlugin,
+  FormCheckboxPlugin,
+  InputGroupPlugin,
 ].forEach((x) => Vue.use(x));
-Vue.use(Vuelidate);
+
+Vue.component("b-button-group", BButtonGroup);
+Vue.component("b-input-group-append", BInputGroupAppend);
+Vue.component("b-form-textarea", BFormTextarea);
+Vue.component("b-pagination", BPagination);
+Vue.directive("b-modal", VBModal);
 
 axios.interceptors.request.use(
   function(config) {
-    // Do something before request is sent
     return config;
   },
   function(error) {
-    // Do something with request error
     return Promise.reject(error);
   }
 );
 
-// Add a response interceptor
 axios.interceptors.response.use(
   function(response) {
-    // Do something with response data
     return response;
   },
   function(error) {
-    // Do something with response error
     return Promise.reject(error);
   }
 );
@@ -76,20 +87,23 @@ Vue.config.productionTip = false;
 
 const shared_data = {
   server_domain: "http://localhost:3000",
-  username: localStorage.username,
+  username: localStorage.getItem("username") || undefined,
+  randomRecipes: [],
+  lastViewedRecipes: [],
+  favoriteRecipes: [],
+  previousSearches: new Set(),
+  myRecipes: [],
+  lastQuery: "",
+  lastSearch: JSON.parse(localStorage.getItem("lastSearch")) || null,
   login(username) {
     localStorage.setItem("username", username);
     this.username = username;
-    console.log("login", this.username);
   },
   logout() {
-    console.log("logout");
     localStorage.removeItem("username");
     this.username = undefined;
   },
 };
-console.log(shared_data);
-// Vue.prototype.$root.store = shared_data;
 
 new Vue({
   router,
@@ -99,15 +113,22 @@ new Vue({
     };
   },
   methods: {
-    toast(title, content, variant = null, append = false) {
-      this.$bvToast.toast(`${content}`, {
-        title: `${title}`,
-        toaster: "b-toaster-top-center",
+    toast(title, content, variant = null, append = true) {
+      this.toastCount++;
+      this.$bvToast.toast(content, {
+        title: title,
+        appendToast: append,
         variant: variant,
         solid: true,
-        appendToast: append,
-        autoHideDelay: 3000,
       });
+    },
+  },
+  watch: {
+    "store.lastSearch": {
+      handler(val) {
+        localStorage.setItem("lastSearch", JSON.stringify(val));
+      },
+      deep: true,
     },
   },
   render: (h) => h(App),
