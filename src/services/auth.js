@@ -1,4 +1,75 @@
 // src/services/auth.js
+const axios = require("axios");
+const API_URL = "http://localhost:80/users";
+
+export async function login(credentials) {
+  try {
+    const response = await axios.post(`${API_URL}/Login`, credentials);
+    // Set the logged-in user in localStorage
+    localStorage.setItem("username", credentials.username);
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+}
+
+export async function register(userDetails) {
+  try {
+    const userCheckResponse = await getUser(userDetails.username);
+
+    if (userCheckResponse.status === 200) {
+      console.error("Username already taken");
+      return {
+        status: 409,
+        response: { data: { message: "Username taken", success: false } },
+      };
+    }
+    userDetails = {
+      username: userDetails.username,
+      firstname: userDetails.firstName,
+      lastname: userDetails.lastName,
+      country: userDetails.country,
+      password: userDetails.password,
+      email: userDetails.email,
+      profilePic: userDetails.profilePic,
+    };
+    const response = await axios.post(`${API_URL}/Register`, userDetails);
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+}
+
+export async function logout() {
+  try {
+    const response = await axios.post(`${API_URL}/Logout`);
+    // Remove the logged-in user from localStorage
+    localStorage.removeItem("username");
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+}
+
+export async function getUser(username) {
+  try {
+    const response = await axios.get(`${API_URL}/users/${username}`, {
+      muteHttpExceptions: true,
+    });
+    //console.log(response);
+    return response;
+  } catch (error) {
+    if (error.response.status === 404) {
+      return {
+        status: 404,
+        response: { data: { message: "User not found", success: true } },
+      };
+    }
+    // console.error(error);
+    return error.response;
+  }
+}
+
 export function mockLogin(credentials) {
   let success = true;
   // Check if a user is already logged in

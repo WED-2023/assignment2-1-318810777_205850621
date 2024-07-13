@@ -189,7 +189,6 @@
   </div>
 </template>
 
-
 <script>
 import axios from "axios";
 import {
@@ -200,7 +199,12 @@ import {
   email,
   sameAs,
 } from "vuelidate/lib/validators";
-import { mockGetUser, mockRegister } from "../services/auth.js";
+import {
+  mockGetUser,
+  mockRegister,
+  getUser,
+  register,
+} from "../services/auth.js";
 
 const passwordValidation = (value) => {
   return /[0-9]/.test(value) && /[!@#$%^&*(),.?":{}|<>]/.test(value);
@@ -233,7 +237,8 @@ export default {
         alpha,
         async isTaken(value) {
           if (!value) return true;
-          const response = await mockGetUser(value);
+          const response = await getUser(value);
+          // console.log(response);
           return response.status !== 200;
         },
       },
@@ -286,10 +291,14 @@ export default {
           email: this.form.email,
           password: this.form.password,
         };
-        const response = await mockRegister(userDetails);
+        const response = await register(userDetails);
 
-        if (response.status === 200) {
-          this.$router.push("/login");
+        if (response.status === 200 || response.status === 201) {
+          this.$root.store.login(this.form.username);
+          // Save cookie
+          this.$router.push("/");
+
+          // this.$router.push("/login");
         }
       } catch (err) {
         this.form.submitError = err.response.data.message;
@@ -329,14 +338,18 @@ export default {
         return;
       }
       try {
-        const response = await mockGetUser(this.form.username);
+        const response = await getUser(this.form.username);
         if (response.status === 200) {
           this.form.usernameIsTaken = true;
         } else {
           this.form.usernameIsTaken = false;
         }
       } catch (err) {
-        console.log(err);
+        if (err.response.status === 404) {
+          this.form.usernameIsTaken = false;
+        } else {
+          console.log(err);
+        }
       }
     },
   },
@@ -353,7 +366,8 @@ export default {
 .image-section {
   flex: 1;
   overflow: hidden;
-  background: url("@/assets/pexels-vanmalidate-784633.jpg") no-repeat center center;
+  background: url("@/assets/pexels-vanmalidate-784633.jpg") no-repeat center
+    center;
   background-size: cover;
 }
 

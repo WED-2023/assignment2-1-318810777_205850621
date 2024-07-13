@@ -18,7 +18,9 @@
               type="text"
               :state="validateState('username')"
             ></b-form-input>
-            <b-form-invalid-feedback>Username is required</b-form-invalid-feedback>
+            <b-form-invalid-feedback
+              >Username is required</b-form-invalid-feedback
+            >
           </b-form-group>
 
           <b-form-group
@@ -33,10 +35,14 @@
               v-model="$v.form.password.$model"
               :state="validateState('password')"
             ></b-form-input>
-            <b-form-invalid-feedback>Password is required</b-form-invalid-feedback>
+            <b-form-invalid-feedback
+              >Password is required</b-form-invalid-feedback
+            >
           </b-form-group>
 
-          <b-button type="submit" variant="primary" class="w-100 mt-4">Login</b-button>
+          <b-button type="submit" variant="primary" class="w-100 mt-4"
+            >Login</b-button
+          >
           <div class="mt-2">
             Do not have an account yet?
             <router-link to="register">Register here</router-link>
@@ -57,7 +63,7 @@
 </template>
 <script>
 import { required } from "vuelidate/lib/validators";
-import { mockLogin } from "../services/auth.js";
+import { mockLogin, login } from "../services/auth.js";
 
 export default {
   name: "Login",
@@ -83,19 +89,20 @@ export default {
     },
     async login() {
       try {
-        const response = await mockLogin({
+        const response = await login({
           username: this.form.username,
           password: this.form.password,
         });
-
-        if (response.response.data.success && response.status === 200) {
+        console.log(response);
+        if (response.data.success && response.status === 200) {
           this.$root.store.login(this.form.username);
           this.$router.push("/");
         } else {
           this.form.submitError = response.response.data.message;
         }
       } catch (err) {
-        this.form.submitError = err.response.data.message;
+        console.error(err);
+        this.form.submitError = err.response;
       }
     },
     onLogin() {
