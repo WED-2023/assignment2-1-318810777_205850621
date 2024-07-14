@@ -1,6 +1,6 @@
 // src/services/auth.js
 const axios = require("axios");
-const API_URL = this.$root.store.server_domain + "/users";
+const API_URL = "https://foodgod.cs.bgu.ac.il" + "/users";
 console.log(API_URL);
 
 export async function login(credentials) {
