@@ -87,7 +87,7 @@ Vue.config.productionTip = false;
 
 const shared_data = {
   server_domain: "http://localhost:3000",
-  // server_domain: "https://foodgod.cs.bgu.ac.il/",
+  //server_domain: "https://foodgod.cs.bgu.ac.il/",
   username: localStorage.getItem("username") || undefined,
   randomRecipes: [],
   lastViewedRecipes: [],
