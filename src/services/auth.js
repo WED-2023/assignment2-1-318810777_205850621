@@ -1,6 +1,7 @@
 // src/services/auth.js
 const axios = require("axios");
-const API_URL = "http://localhost:80/users";
+const API_URL = this.$root.store.server_domain + "/users";
+console.log(API_URL);
 
 export async function login(credentials) {
   try {
