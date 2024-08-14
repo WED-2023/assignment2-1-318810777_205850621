@@ -1,6 +1,7 @@
 // src/services/auth.js
 const axios = require("axios");
-const API_URL = "https://foodgod.cs.bgu.ac.il" + "/users";
+require("dotenv").config();
+const API_URL = process.env.HOST_ADDR + "/users";
 console.log(API_URL);
 
 export async function login(credentials) {

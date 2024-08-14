@@ -8,7 +8,7 @@
       <div class="left-column">
         <div class="recipe-section content-background gradient-effect">
           <RecipePreviewList
-            :recipes="randomRecipes"
+            :recipes="randomRecipes.slice(0, 3)"
             :lastViewedRecipes="lastViewedRecipes"
             :markAsViewed="markAsViewed"
             :toggleFavorite="toggleFavorite"
@@ -54,7 +54,10 @@
 
 <script>
 import RecipePreviewList from "../components/RecipePreviewList.vue";
-import { mockGetRecipesPreview } from "../services/recipes.js";
+import {
+  getRecipeFromServer,
+  mockGetRecipesPreview,
+} from "../services/recipes.js";
 
 export default {
   components: {
@@ -70,7 +73,8 @@ export default {
   },
   methods: {
     fetchRandomRecipes() {
-      const response = mockGetRecipesPreview(3, {}, this.randomRecipes.length);
+      const response = getRecipesFromServer();
+      // const response = mockGetRecipesPreview(3, {}, this.randomRecipes.length);
       this.randomRecipes = response.data.recipes;
 
       this.randomRecipes.forEach((recipe) => {

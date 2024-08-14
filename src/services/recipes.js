@@ -1,6 +1,9 @@
 import recipe_full_view from "../assets/mocks/recipe_full_view.json";
 import recipe_preview from "../assets/mocks/recipe_preview.json";
 import sampleRecipes from "../assets/mocks/sample_recipes.json";
+const axios = require("axios");
+require("dotenv").config();
+const API_URL = process.env.HOST_ADDR + "/recipes";
 
 export function mockGetRecipesPreview(amount = 1, filters = {}, offset = 0) {
   // Select 3 random recipes from the sample recipes, up to the amount requested
@@ -132,4 +135,12 @@ export function mockGetRecipeFullDetails(recipeId) {
       },
     },
   };
+}
+
+export function getRecipesFromServer() {
+  return { recipes: axios(API_URL) };
+}
+
+export function getRecipeFromServer(recipeId) {
+  return { recipes: axios(`${API_URL}/${recipeId}`) };
 }
