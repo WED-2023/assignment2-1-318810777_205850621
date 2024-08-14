@@ -64,67 +64,81 @@
 </template>
 
 <script>
-import { mockGetRecipeFullDetails } from "../services/recipes.js";
+import {
+  getRecipeFromServer,
+  mockGetRecipeFullDetails,
+} from "../services/recipes.js";
 
 export default {
+  // props: {
+  //   recipe: {
+  //     type: Object,
+  //     required: true,
+  //   },
+  // },
   data() {
-    return {
-      recipe: null,
-    };
+    return { recipe: {} };
   },
   async created() {
-    try {
-      const recipeId = this.$route.params.recipeId;
-      const response = mockGetRecipeFullDetails(recipeId);
+    // try {
+    const recipeId = this.$route.params.recipeId;
+    const response = await getRecipeFromServer(recipeId);
+    console.log(response);
 
-      if (!response.data || !response.data.recipe) {
-        this.$router.replace("/notFound");
-        return;
-      }
+    // if (!response.data || !response.data.recipe) {
+    //   this.$router.replace("/notFound");
+    //   return;
+    // }
 
-      const {
-        analyzedInstructions,
-        instructions,
-        extendedIngredients,
-        aggregateLikes,
-        readyInMinutes,
-        image,
-        title,
-        servings,
-        vegetarian,
-        vegan,
-        glutenFree,
-        isViewed,
-        isFavorited,
-      } = response.data.recipe;
+    const {
+      id,
+      analyzedInstructions,
+      instructions,
+      extendedIngredients,
+      aggregateLikes,
+      readyInMinutes,
+      image,
+      title,
+      servings,
+      vegetarian,
+      vegan,
+      glutenFree,
+    } = response;
+    console.log(response);
+    let isFavorited = this.$root.store.favoriteRecipes.some(
+      (fav) => fav.id === id
+    );
+    let isViewed = this.$root.store.lastViewedRecipes.some(
+      (viewed) => viewed.id === id
+    );
 
-      const _instructions = analyzedInstructions
-        .flatMap((fstep) => fstep.steps)
-        .map((step, index) => ({
-          ...step,
-          number: index + 1,
-        }));
+    const _instructions = (analyzedInstructions || [])
+      .flatMap((fstep) => fstep.steps)
+      .map((step, index) => ({
+        ...step,
+        number: index + 1,
+      }));
 
-      this.recipe = {
-        instructions,
-        _instructions,
-        analyzedInstructions,
-        extendedIngredients,
-        aggregateLikes,
-        readyInMinutes,
-        image,
-        title,
-        servings,
-        vegetarian,
-        vegan,
-        glutenFree,
-        isViewed,
-        isFavorited,
-      };
-    } catch (error) {
-      console.log(error);
-      this.$router.replace("/notFound");
-    }
+    this.recipe = {
+      instructions,
+      _instructions,
+      analyzedInstructions,
+      extendedIngredients,
+      aggregateLikes,
+      readyInMinutes,
+      image,
+      title,
+      servings,
+      vegetarian,
+      vegan,
+      glutenFree,
+      isViewed,
+      isFavorited,
+    };
+    // } catch (error) {
+    //   console.log(error);
+    //   this.$router.replace("/notFound");
+    // }
   },
 };
 </script>

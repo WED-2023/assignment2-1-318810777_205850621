@@ -16,7 +16,7 @@
             <i class="fas fa-clock"></i> {{ recipe.readyInMinutes }} mins
           </span>
           <span class="detail-item">
-            <i class="fas fa-heart"></i> {{ recipe.aggregateLikes }} likes
+            <i class="fas fa-heart"></i> {{ recipe.popularity }} likes
           </span>
           <span class="detail-item" v-if="recipe.vegetarian">
             <i class="fas fa-seedling"></i> Vegetarian
@@ -79,27 +79,17 @@ export default {
   },
   methods: {
     onRecipeClick() {
-      if (this.markAsViewed) {
-        this.markAsViewed(this.recipe);
-      }
+      // if (this.markAsViewed) {
+      //   this.markAsViewed(this.recipe);
+      // }
+      // this.isFavorited = this.recipe.isFavorited; // Update the local state based on the parent's state
+      this.$parent.markAsViewed(this.recipe);
     },
     onFavoriteClick() {
-      this.isFavorited = !this.isFavorited;
-      this.recipe.isFavorited = !this.recipe.isFavorited;
-      // if (this.toggleFavorite) this.toggleFavorite(this.recipe);
-      if (
-        this.$root.store.favoriteRecipes.filter((r) => r.id === this.recipe.id)
-          .length === 0
-      ) {
-        this.$root.store.favoriteRecipes.push({
-          ...this.recipe,
-          addedDate: new Date(),
-        });
-      } else {
-        this.$root.store.favoriteRecipes = this.$root.store.favoriteRecipes.filter(
-          (r) => r.id !== this.recipe.id
-        );
-      }
+      // if (this.toggleFavorite) {
+      //   this.toggleFavorite(this.recipe);
+      // }
+      this.$parent.toggleFavorite(this.recipe);
     },
     formattedInstructions() {
       if (!this.recipe.instructions) return "";
@@ -116,6 +106,19 @@ export default {
       this.imageLoaded = true;
     };
     this.isMainPage = this.$route.name === "main";
+  },
+  computed: {
+    isFavorited() {
+      return this.recipe.isFavorited;
+    },
+    isViewed() {
+      return this.recipe.isViewed;
+    },
+  },
+  watch: {
+    "recipe.isFavorited"(newVal) {
+      this.isFavorited = newVal;
+    },
   },
 };
 </script>

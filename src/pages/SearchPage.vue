@@ -52,7 +52,7 @@
             :variant="
               lastSort === 'aggregateLikes' ? 'primary' : 'outline-primary'
             "
-            @click="sortResults('aggregateLikes')"
+            @click="sortResults('popularity')"
           >
             Sort by Popularity
           </b-button>
@@ -60,13 +60,13 @@
       </div>
     </b-form>
 
-    <div v-if="recipes.length > 1">
+    <div v-if="totalRecipes > 0">
       <b-pagination
         v-model="page"
         class="mt-3"
         :total-rows="totalRecipes"
         :per-page="resultsPerPage"
-        @input="performSearch"
+        @input="handlePageChange"
         first-number
         last-number
         align="center"
@@ -82,7 +82,7 @@
           class="mx-auto mt-3"
           :total-rows="totalRecipes"
           :per-page="resultsPerPage"
-          @input="performSearch"
+          @input="handlePageChange"
           first-number
           last-number
           align="center"
@@ -98,7 +98,7 @@
 <script>
 import RecipePreviewList from "../components/RecipePreviewList.vue";
 import SearchBar from "../components/SearchBar.vue";
-import { searchRecipes } from "../services/recipes.js";
+import { searchRecipesFromServer } from "../services/recipes.js";
 
 export default {
   name: "SearchPage",
@@ -120,10 +120,10 @@ export default {
       diets: ["No Filter", "Vegetarian", "Vegan", "Paleo"],
       intolerances: ["No Filter", "Dairy", "Gluten", "Peanut"],
       resultsOptions: [5, 10, 15],
-      lastSearch: this.$root.store.lastSearch,
       page: 1,
       sortDesc: false,
       lastSort: "",
+      fetchedPages: {}, // Track fetched pages to avoid redundant API calls
     };
   },
   methods: {
@@ -135,41 +135,80 @@ export default {
       const query = this.searchQuery || this.$route.query.search;
       const filters = {
         diet:
-          this.selectedDiet !== "No Filter" && this.selectedDiet !== ""
+          this.selectedDiet?.toLowerCase() !== "no filter" && this.selectedDiet !== ""
             ? this.selectedDiet
             : "",
         cuisines:
-          this.selectedCuisine !== "No Filter" && this.selectedCuisine !== ""
+          this.selectedCuisine?.toLowerCase() !== "no filter" && this.selectedCuisine !== ""
             ? this.selectedCuisine
             : "",
         intolerances:
-          this.selectedIntolerance !== "No Filter" &&
+          this.selectedIntolerance?.toLowerCase() !== "no filter" &&
           this.selectedIntolerance !== ""
             ? this.selectedIntolerance
             : "",
       };
 
-      const response = await searchRecipes(
-        query,
-        this.page,
-        this.resultsPerPage,
-        filters
-      );
+      const offset = (this.page - 1) * this.resultsPerPage;
 
-      console.log("Search response:", response);
+      // Clear the fetched pages if the query has changed
+      if (this.searchPerformed && (query !== this.lastSearchQuery || JSON.stringify(filters) !== JSON.stringify(this.lastSearchFilters))) {
+        this.fetchedPages = {};
+        this.page = 1;
+      }
+
+      // Check if the data for the current page is already fetched
+      if (this.fetchedPages[this.page]) {
+        this.recipes = this.fetchedPages[this.page];
+        return;
+      }
+
+      const response = await searchRecipesFromServer({
+        query,
+        page: this.page,
+        resultsPerPage: this.resultsPerPage,
+        filters,
+        offset,
+      });
+
+      console.log(
+        "Search response for ",
+        this.resultsPerPage,
+        " results:",
+        response
+      );
 
       this.recipes = response.data.recipes;
       this.totalRecipes = response.data.total;
       this.searchPerformed = true;
 
-      this.$root.store.lastSearch = {
+      // Save the current query and filters for comparison in future searches
+      this.lastSearchQuery = query;
+      this.lastSearchFilters = filters;
+
+      // Save fetched data for the current page
+      this.fetchedPages[this.page] = this.recipes;
+
+      this.saveLastSearch();
+    },
+    handlePageChange(newPage) {
+      this.page = newPage;
+      this.performSearch(); // Fetch data for the new page
+    },
+    saveLastSearch() {
+      const lastSearch = {
         searchQuery: this.searchQuery,
-        selectedCuisine: this.selectedCuisine,
-        selectedDiet: this.selectedDiet,
-        selectedIntolerance: this.selectedIntolerance,
+        selectedCuisine: this.selectedCuisine || "No Filter",
+        selectedDiet: this.selectedDiet || "No Filter",
+        selectedIntolerance: this.selectedIntolerance || "No Filter",
         resultsPerPage: this.resultsPerPage,
         recipes: this.recipes,
+        totalRecipes: this.totalRecipes,
+        page: this.page,
+        fetchedPages: this.fetchedPages, // Save fetched pages data
       };
+      this.$root.store.lastSearch = lastSearch;
+      localStorage.setItem("lastSearch", JSON.stringify(lastSearch));
     },
     sortResults(sortBy) {
       let polarity = 1;
@@ -190,30 +229,32 @@ export default {
         return 0;
       });
     },
+    
   },
   created() {
-    if (this.$root.store.lastSearch) {
-      const lastSearch = this.$root.store.lastSearch;
+    const storedLastSearch = localStorage.getItem("lastSearch");
+    if (this.$root.store.lastSearch || storedLastSearch) {
+      const lastSearch = this.$root.store.lastSearch || JSON.parse(storedLastSearch);
       this.searchQuery = lastSearch.searchQuery;
-      this.selectedCuisine = lastSearch.selectedCuisine;
-      this.selectedDiet = lastSearch.selectedDiet;
-      this.selectedIntolerance = lastSearch.selectedIntolerance;
-      this.resultsPerPage = lastSearch.resultsPerPage;
-      this.recipes = lastSearch.recipes;
+      this.selectedCuisine = lastSearch.selectedCuisine || "No Filter";
+      this.selectedDiet = lastSearch.selectedDiet || "No Filter";
+      this.selectedIntolerance = lastSearch.selectedIntolerance || "No Filter";
+      this.resultsPerPage = lastSearch.resultsPerPage || 5;
+      this.recipes = lastSearch.recipes || [];
       this.totalRecipes = lastSearch.totalRecipes || this.recipes.length;
+      this.page = lastSearch.page || 1;
+      this.fetchedPages = lastSearch.fetchedPages || {};
+      this.searchPerformed = true;
     } else {
-      if (this.searchQuery) {
-        this.performSearch();
-      }
+      // Set defaults if no search history is found
+      this.selectedCuisine = "No Filter";
+      this.selectedDiet = "No Filter";
+      this.selectedIntolerance = "No Filter";
     }
   },
   mounted() {
-    if (this.$route.query.search) {
+    if (this.$route.query.search && !this.searchPerformed) {
       this.searchQuery = this.$route.query.search;
-      this.selectedCuisine = "";
-      this.selectedDiet = "";
-      this.selectedIntolerance = "";
-      this.resultsPerPage = 5;
       this.performSearch();
     }
   },
@@ -223,15 +264,7 @@ export default {
       this.performSearch();
     },
     recipes(newValue) {
-      this.$root.store.lastSearch = {
-        searchQuery: this.searchQuery,
-        selectedCuisine: this.selectedCuisine,
-        selectedDiet: this.selectedDiet,
-        selectedIntolerance: this.selectedIntolerance,
-        resultsPerPage: this.resultsPerPage,
-        recipes: newValue,
-        totalRecipes: this.totalRecipes,
-      };
+      this.saveLastSearch();
     },
   },
 };

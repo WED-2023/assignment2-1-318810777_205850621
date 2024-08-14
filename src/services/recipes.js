@@ -2,8 +2,7 @@ import recipe_full_view from "../assets/mocks/recipe_full_view.json";
 import recipe_preview from "../assets/mocks/recipe_preview.json";
 import sampleRecipes from "../assets/mocks/sample_recipes.json";
 const axios = require("axios");
-require("dotenv").config();
-const API_URL = process.env.HOST_ADDR + "/recipes";
+const API_URL = "https://foodgod.cs.bgu.ac.il" + "/recipes";
 
 export function mockGetRecipesPreview(amount = 1, filters = {}, offset = 0) {
   // Select 3 random recipes from the sample recipes, up to the amount requested
@@ -117,8 +116,9 @@ export function mockGetLastViewedRecipes() {
   return { data: { recipes: [] } };
 }
 
-export function mockGetRecipeFullDetails(recipeId) {
-  let recipePreview = sampleRecipes.find((recipe) => recipe.id == recipeId);
+export async function mockGetRecipeFullDetails(recipeId) {
+  let recipePreview = await getRecipeFromServer(recipeId); //sampleRecipes.find((recipe) => recipe.id == recipeId);
+  console.log(recipePreview);
   if (!recipePreview) {
     console.error("Recipe not found in sample recipes");
     return { data: { recipe: null } };
@@ -137,10 +137,69 @@ export function mockGetRecipeFullDetails(recipeId) {
   };
 }
 
-export function getRecipesFromServer() {
-  return { recipes: axios(API_URL) };
+export async function getRecipesFromServer(settings) {
+  const { offset, number } = settings;
+  try {
+    let url = API_URL + "/search?";
+    if (offset) url += `offset=${offset}`;
+    if (number) {
+      if (offset) url += "&"; // Add '&' if 'offset' was already appended
+      url += `number=${number}`;
+    }
+    const response = await fetch(url);
+    const data = await response.json();
+
+    // Assuming the backend returns { recipes: [...], total: ... }
+    return { data }; // Return the data directly, without additional nesting
+  } catch (error) {
+    console.error("Error fetching recipes:", error);
+    return { data: { recipes: [], total: 0 } }; // Return an empty array or handle the error appropriately
+  }
 }
 
-export function getRecipeFromServer(recipeId) {
-  return { recipes: axios(`${API_URL}/${recipeId}`) };
+export async function searchRecipesFromServer(settings) {
+  const { query = "", page = 1, resultsPerPage = 5, filters = {} } = settings;
+
+  try {
+    // Set up the query parameters based on the settings object
+    const params = {
+      recipeName: query,
+      cuisine: filters.cuisines || "",
+      diet: filters.diet || "",
+      intolerance: filters.intolerances || "",
+      number: resultsPerPage,
+      offset: (page - 1) * resultsPerPage,
+    };
+
+    // Make the GET request to the server
+    const response = await axios.get(`${API_URL}/search`, { params });
+
+    // Extract the recipes and total number of results from the server response
+    const { recipes, total } = response.data;
+
+    return {
+      data: {
+        recipes,
+        total,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching recipes from server:", error);
+    return {
+      data: {
+        recipes: [],
+        total: 0,
+      },
+    };
+  }
+}
+
+export async function getRecipeFromServer(recipeId) {
+  try {
+    const response = await axios.get(`${API_URL}/${recipeId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching recipe details:", error);
+    return { data: null }; // Handle error appropriately
+  }
 }

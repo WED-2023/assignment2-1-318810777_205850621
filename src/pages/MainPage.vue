@@ -8,13 +8,11 @@
       <div class="left-column">
         <div class="recipe-section content-background gradient-effect">
           <RecipePreviewList
-            :recipes="randomRecipes.slice(0, 3)"
+            :recipes="randomRecipes"
             :lastViewedRecipes="lastViewedRecipes"
-            :markAsViewed="markAsViewed"
-            :toggleFavorite="toggleFavorite"
             :title="`Explore These Recipes`"
           />
-          <button class="btn btn-primary mt-3" @click.stop="fetchRandomRecipes">
+          <button class="btn btn-primary mt-3" @click.stop="handleMoreClick">
             More
           </button>
         </div>
@@ -33,9 +31,7 @@
           <div v-else>
             <div v-if="lastViewedRecipes.length > 0">
               <RecipePreviewList
-                :recipes="lastViewedRecipes.slice(0, 3)"
-                :markAsViewed="markAsViewed"
-                :toggleFavorite="toggleFavorite"
+                :recipes="lastViewedRecipes"
                 :title="`Last Watched Recipes`"
               />
               <button class="btn btn-primary mt-3" @click="clearHistory">
@@ -54,10 +50,7 @@
 
 <script>
 import RecipePreviewList from "../components/RecipePreviewList.vue";
-import {
-  getRecipeFromServer,
-  mockGetRecipesPreview,
-} from "../services/recipes.js";
+import { getRecipesFromServer } from "../services/recipes.js";
 
 export default {
   components: {
@@ -65,83 +58,69 @@ export default {
   },
   data() {
     return {
-      randomRecipes: [],
+      randomRecipes: this.$root.store.randomRecipes || [],
       username: this.$root.store.username,
-      lastViewedRecipes: this.$root.store.lastViewedRecipes,
-      favorites: this.$root.store.favoriteRecipes,
+      lastViewedRecipes: this.$root.store.lastViewedRecipes || [],
+      favorites: this.$root.store.favoriteRecipes || [],
     };
   },
   methods: {
-    fetchRandomRecipes() {
-      const response = getRecipesFromServer();
-      // const response = mockGetRecipesPreview(3, {}, this.randomRecipes.length);
-      this.randomRecipes = response.data.recipes;
+    async fetchRandomRecipes(offset = 0, number = 3) {
+      const response = await getRecipesFromServer({ offset, number });
+      console.log(response);
+      const newRecipes = response.data.recipes;
 
-      this.randomRecipes.forEach((recipe) => {
-        recipe.isViewed = this.lastViewedRecipes?.filter(
-          (r) => r.id === recipe.id
-        ).length;
-        recipe.isFavorited = this.favorites?.some((r) => r.id === recipe.id);
-      });
-      this.lastViewedRecipes.forEach((recipe) => {
-        recipe.isViewed = true;
-        recipe.isFavorited = this.favorites?.some((r) => r.id === recipe.id);
-      });
-    },
-    markAsViewed(recipe) {
-      if (
-        this.lastViewedRecipes.filter((r) => r.id === recipe.id).length === 0
-      ) {
-        this.lastViewedRecipes.push({
-          ...recipe,
-          addedDate: new Date(),
-          lastViewedDate: new Date(),
-        });
-      } else {
-        this.lastViewedRecipes.find(
-          (r) => r.id === recipe.id
-        ).lastViewedDate = new Date();
-      }
-      if (this.lastViewedRecipes.length > 1) {
-        this.lastViewedRecipes.sort(
-          (a, b) => b.lastViewedDate - a.lastViewedDate
-        );
-      }
-      this.$root.store.lastViewedRecipes = this.lastViewedRecipes;
+      // Update local data and global store
+      this.randomRecipes = [...this.randomRecipes, ...newRecipes];
+      this.$root.store.randomRecipes = this.randomRecipes;
+
+      // Update each recipe's view and favorite status
+      this.updateRecipeStatus(newRecipes);
+      
+      // Save the updated recipes to localStorage
+      localStorage.setItem("randomRecipes", JSON.stringify(this.randomRecipes));
     },
     navigateTo(routeName) {
       this.$router.push({ name: routeName });
     },
     clearHistory() {
       this.lastViewedRecipes = [];
+      this.$root.store.lastViewedRecipes = [];
       localStorage.removeItem("viewedRecipes");
     },
-    toggleFavorite(recipe) {
-      console.log("Toggling favorite", recipe.id, this.favorites);
-      if (this.favorites.filter((r) => r.id === recipe.id).length === 0) {
-        this.favorites.push({
-          ...recipe,
-          addedDate: new Date(),
-        });
-      } else {
-        this.favorites = this.favorites.filter((r) => r.id !== recipe.id);
-      }
-      if (this.favorites.length > 1) {
-        this.lastViewedRecipes.sort((a, b) => b.addedDate - a.addedDate);
-      }
-      // Update the last viewed recipes as well
-
-      this.$root.store.favoriteRecipes = this.favorites;
+    handleMoreClick() {
+      this.fetchRandomRecipes(this.randomRecipes.length, 3);
     },
   },
   created() {
-    this.fetchRandomRecipes();
+    const storedRecipes = localStorage.getItem("randomRecipes");
+    const storedViewedRecipes = localStorage.getItem("viewedRecipes");
+    const storedFavorites = localStorage.getItem("favoriteRecipes");
+
+    if (storedRecipes) {
+      this.randomRecipes = JSON.parse(storedRecipes);
+      this.$root.store.randomRecipes = this.randomRecipes;
+    } else {
+      this.fetchRandomRecipes(0, 3);
+    }
+
+    if (storedViewedRecipes) {
+      this.lastViewedRecipes = JSON.parse(storedViewedRecipes);
+      this.$root.store.lastViewedRecipes = this.lastViewedRecipes;
+    }
+
+    if (storedFavorites) {
+      this.favorites = JSON.parse(storedFavorites);
+      this.$root.store.favoriteRecipes = this.favorites;
+    }
   },
   watch: {
     "$root.store.username"(newUsername) {
       if (!newUsername || newUsername === "") {
         this.lastViewedRecipes = [];
         this.username = "";
+        localStorage.removeItem("viewedRecipes");
+        localStorage.removeItem("favoriteRecipes");
       }
     },
   },

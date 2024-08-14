@@ -1,7 +1,6 @@
 // src/services/auth.js
 const axios = require("axios");
-require("dotenv").config();
-const API_URL = process.env.HOST_ADDR + "/users";
+const API_URL = "https://foodgod.cs.bgu.ac.il" + "/users";
 console.log(API_URL);
 
 export async function login(credentials) {
@@ -47,6 +46,9 @@ export async function logout() {
     const response = await axios.post(`${API_URL}/Logout`);
     // Remove the logged-in user from localStorage
     localStorage.removeItem("username");
+    localStorage.removeItem("favoriteRecipes");
+    localStorage.removeItem("lastSearch");
+
     return response;
   } catch (error) {
     return error.response;

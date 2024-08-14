@@ -40,26 +40,22 @@ export default {
       type: Array,
       required: true,
     },
-    lastViewedRecipes: {
-      type: Array,
-      required: false,
-    },
-    markAsViewed: {
-      type: Function,
-      required: false,
-    },
-    toggleFavorite: {
-      type: Function,
-      required: false,
-    },
-    favorites: {
-      type: Array,
-      required: false,
-    },
     perRow: {
       type: Number,
       required: false,
     },
+    // lastViewedRecipes: {
+    //   type: Array,
+    //   required: false,
+    // },
+    // markAsViewed: {
+    //   type: Function,
+    //   required: false,
+    // },
+    // toggleFavorite: {
+    //   type: Function,
+    //   required: false,
+    // },
   },
   data() {
     return {
@@ -68,20 +64,60 @@ export default {
     };
   },
   mounted() {
+    // Load favorites from localStorage
+    // const storedFavorites = localStorage.getItem("favoriteRecipes");
+    // this.favorites = storedFavorites ? JSON.parse(storedFavorites) : this.$root.store.favoriteRecipes;
+
+    // // Set the favorites in the store
+    // this.$root.store.favoriteRecipes = this.favorites;
+
     this.itemsPerRow = this.perRow ? 12 / this.perRow : 12 / 2;
-    if (this.recipes.length !== 0) {
-      this.recipes.forEach((recipe) => {
-        // Check if the recipe is in the viewedRecipes array
-        if (this.lastViewedRecipes?.includes(recipe)) {
-          recipe.isViewed = true;
-        }
-        if (this.favorites?.includes(recipe)) {
-          recipe.isFavorited = true;
-        }
-      });
-    }
+    this.updateRecipeIndicators();
   },
   methods: {
+    updateRecipeIndicators() {
+      this.recipes.forEach((recipe) => {
+        recipe.isFavorited = this.$root.store.favoriteRecipes.some(
+          (fav) => fav.id === recipe.id
+        );
+        recipe.isViewed = this.$root.store.lastViewedRecipes.some(
+          (viewed) => viewed.id === recipe.id
+        );
+      });
+    },
+    toggleFavorite(recipe) {
+      const recipeIndex = this.$root.store.favoriteRecipes.findIndex(
+        (r) => r.id === recipe.id
+      );
+      if (recipeIndex !== -1) {
+        // Remove from favorites
+        this.$root.store.favoriteRecipes.splice(recipeIndex, 1);
+        recipe.isFavorited = false;
+      } else {
+        // Add to favorites
+        this.$root.store.favoriteRecipes.push(recipe);
+        recipe.isFavorited = true;
+      }
+
+      // Persist favorites to localStorage
+      localStorage.setItem(
+        "favoriteRecipes",
+        JSON.stringify(this.$root.store.favoriteRecipes)
+      );
+      this.$forceUpdate(); // Force component re-render
+    },
+    markAsViewed(recipe) {
+      if (!this.$root.store.lastViewedRecipes.some((r) => r.id === recipe.id)) {
+        this.$root.store.lastViewedRecipes.push(recipe);
+      }
+      recipe.isViewed = true;
+
+      // Persist viewed recipes to localStorage
+      localStorage.setItem(
+        "viewedRecipes",
+        JSON.stringify(this.$root.store.lastViewedRecipes)
+      );
+    },
     async updateRecipes() {
       try {
         const amountToFetch = 10; // Set this to how many recipes you want to fetch
